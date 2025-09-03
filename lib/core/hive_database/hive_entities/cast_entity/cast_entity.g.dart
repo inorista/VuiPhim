@@ -1,0 +1,69 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'cast_entity.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class CastEntityAdapter extends TypeAdapter<CastEntity> {
+  @override
+  final int typeId = 2;
+
+  @override
+  CastEntity read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return CastEntity(
+      id: fields[0] as int,
+      name: fields[1] as String,
+      character: fields[2] as String,
+      profilePath: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, CastEntity obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.character)
+      ..writeByte(3)
+      ..write(obj.profilePath);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CastEntityAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+CastEntity _$CastEntityFromJson(Map<String, dynamic> json) => CastEntity(
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  character: json['character'] as String,
+  profilePath: json['profile_path'] as String?,
+);
+
+Map<String, dynamic> _$CastEntityToJson(CastEntity instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'character': instance.character,
+      'profile_path': instance.profilePath,
+    };
