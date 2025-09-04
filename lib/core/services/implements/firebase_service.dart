@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
-import 'package:vuiphim/core/services/interfaces/ikeychain_storage.dart';
+import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
 
 class FirebaseService implements IFirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final IKeychainStorageService _keychainStorageService =
+      locator<IKeychainStorageService>();
 
   @override
   Future<List<Map<String, dynamic>>> getDataFromCollection(
@@ -30,13 +32,13 @@ class FirebaseService implements IFirebaseService {
   @override
   Future<void> getTmdbApiKey() async {
     final data = await getDocumentFromCollection(
-      ApiConstants.apiCollection,
-      ApiConstants.apiDocument,
+      ApiConstants.collectionPath,
+      ApiConstants.documentPath,
     );
     if (data != null) {
-      await locator<IKeychainStorage>().saveData(
-        ApiConstants.tmdbApiKey,
-        data[ApiConstants.tmdbApiKey],
+      await locator<IKeychainStorageService>().saveData(
+        ApiConstants.tmdbKey,
+        data[ApiConstants.tmdbKey],
       );
     }
   }

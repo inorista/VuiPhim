@@ -54,11 +54,11 @@ class CastEntityAdapter extends TypeAdapter<CastEntity> {
 // **************************************************************************
 
 CastEntity _$CastEntityFromJson(Map<String, dynamic> json) => CastEntity(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
-  character: json['character'] as String,
-  profilePath: json['profile_path'] as String?,
-);
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+      character: json['character'] as String,
+      profilePath: json['profile_path'] as String?,
+    );
 
 Map<String, dynamic> _$CastEntityToJson(CastEntity instance) =>
     <String, dynamic>{

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/core/bloc/dash_board_cubit.dart';
+import 'package:vuiphim/core/bloc/dash_board/dash_board_cubit.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
