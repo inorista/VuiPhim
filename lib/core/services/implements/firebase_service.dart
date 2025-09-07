@@ -36,7 +36,7 @@ class FirebaseService implements IFirebaseService {
       ApiConstants.documentPath,
     );
     if (data != null) {
-      await locator<IKeychainStorageService>().saveData(
+      await _keychainStorageService.saveData(
         ApiConstants.tmdbKey,
         data[ApiConstants.tmdbKey],
       );

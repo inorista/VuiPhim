@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:vuiphim/core/hive_database/hive_database.dart';
 
 part 'cast_entity.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: HiveBoxIds.castBoxId)
 @JsonSerializable()
 class CastEntity extends Equatable {
   @HiveField(0)

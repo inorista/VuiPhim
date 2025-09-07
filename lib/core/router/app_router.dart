@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/ui/main_screen/main_screen.dart';
+import 'package:vuiphim/core/ui/movie_detail_screen/movie_detail_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
@@ -11,6 +12,14 @@ final GoRouter router = GoRouter(
       path: '/main',
       builder: (context, state) {
         return const MainScreen();
+      },
+    ),
+    GoRoute(
+      name: 'movie_detail',
+      path: '/movie_detail/:id',
+      builder: (context, state) {
+        final movieId = state.pathParameters['id'];
+        return MovieDetailScreen(movieId: movieId!);
       },
     ),
   ],

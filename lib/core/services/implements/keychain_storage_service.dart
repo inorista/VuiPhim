@@ -2,7 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
 
 class KeychainStorageService implements IKeychainStorageService {
-  final storage = FlutterSecureStorage();
+  static const storage = FlutterSecureStorage();
 
   @override
   Future<void> saveData(String key, String value) async {

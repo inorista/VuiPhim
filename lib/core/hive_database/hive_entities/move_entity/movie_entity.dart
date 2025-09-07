@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:vuiphim/core/dtos/movie_dto/movie_dto.dart';
+import 'package:vuiphim/core/hive_database/hive_database.dart';
 import 'package:vuiphim/core/utils/enum.dart';
 
 part 'movie_entity.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: HiveBoxIds.movieBoxId)
 @JsonSerializable()
 class MovieEntity extends Equatable {
   @HiveField(0)
@@ -70,25 +72,45 @@ class MovieEntity extends Equatable {
 
   Map<String, dynamic> toJson() => _$MovieEntityToJson(this);
 
-  String get posterUrl => 'https://image.tmdb.org/t/p/w500$posterPath';
-  String get backdropUrl => 'https://image.tmdb.org/t/p/w500$backdropPath';
+  String get posterUrl => 'https://image.tmdb.org/t/p/original$posterPath';
+  String get backdropUrl => 'https://image.tmdb.org/t/p/original$backdropPath';
+
+  factory MovieEntity.fromDto(MovieDto dto, {MovieCategory? category}) {
+    return MovieEntity(
+      adult: dto.adult,
+      backdropPath: dto.backdropPath ?? '',
+      genreIds: dto.genreIds,
+      id: dto.id,
+      originalLanguage: dto.originalLanguage,
+      originalTitle: dto.originalTitle,
+      overview: dto.overview,
+      popularity: dto.popularity,
+      posterPath: dto.posterPath ?? '',
+      releaseDate: dto.releaseDate,
+      title: dto.title,
+      video: dto.video,
+      voteAverage: dto.voteAverage,
+      voteCount: dto.voteCount,
+      category: category,
+    );
+  }
 
   @override
   List<Object?> get props => [
-        adult,
-        backdropPath,
-        genreIds,
-        id,
-        originalLanguage,
-        originalTitle,
-        overview,
-        popularity,
-        posterPath,
-        releaseDate,
-        title,
-        video,
-        voteAverage,
-        voteCount,
-        category,
-      ];
+    adult,
+    backdropPath,
+    genreIds,
+    id,
+    originalLanguage,
+    originalTitle,
+    overview,
+    popularity,
+    posterPath,
+    releaseDate,
+    title,
+    video,
+    voteAverage,
+    voteCount,
+    category,
+  ];
 }
