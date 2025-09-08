@@ -1,12 +1,10 @@
-import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/core/blocs/movie_detail/movie_detail_cubit.dart';
 import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_backdrop_widget.dart';
 import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_header_info_widget.dart';
 import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_overview_widget.dart';
+import 'package:vuiphim/core/ui/utils/custom_animation_appbar.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final String movieId;
@@ -15,24 +13,36 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController _scrollController = ScrollController();
     return BlocProvider<MovieDetailCubit>(
       create: (context) => MovieDetailCubit()..fetchMovieDetailFromId(movieId),
-      child: const Scaffold(
+      child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(
           alignment: Alignment.topCenter,
           children: [
-            MovieDetailBackdropWidget(),
+            const MovieDetailBackdropWidget(),
             CustomScrollView(
-              physics: BouncingScrollPhysics(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
               ),
-              slivers: [
+              slivers: const [
                 SliverToBoxAdapter(child: SizedBox(height: 75)),
                 SliverToBoxAdapter(child: MovieDetailHeaderInfoWidget()),
-                SliverToBoxAdapter(child: SizedBox(height: 20)),
                 SliverToBoxAdapter(child: MovieDetailOverviewWidget()),
               ],
+            ),
+            BlocBuilder<MovieDetailCubit, MovieDetailState>(
+              builder: (context, state) {
+                if (state is MovieDetailLoaded) {
+                  return CustomAnimationAppbar(
+                    title: state.movieDetail.title,
+                    scrollController: _scrollController,
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ],
         ),

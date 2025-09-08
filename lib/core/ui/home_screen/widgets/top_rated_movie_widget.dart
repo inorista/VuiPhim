@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart' show SvgPicture;
+import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 
@@ -48,16 +49,24 @@ class TopRatedMovieWidget extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return Container(
-                        height: 200,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                              movies[index].posterUrl,
+                      return InkWell(
+                        onTap: () {
+                          context.push(
+                            '/movie_detail/${movies[index].id}',
+                            extra: {'id': movies[index].id.toString()},
+                          );
+                        },
+                        child: Container(
+                          height: 200,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                movies[index].posterUrl,
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
                         ),
                       );
