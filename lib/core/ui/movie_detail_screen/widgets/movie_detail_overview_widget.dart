@@ -92,7 +92,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                                       ),
                                     ),
                                     child: Text(
-                                      genre.name.replaceAll('Phim', ""),
+                                      genre.name.replaceAll('Phim', '').trim(),
                                       style: const TextStyle(
                                         color: Color(0xFFbe2b27),
                                         fontSize: 14,
