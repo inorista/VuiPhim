@@ -104,6 +104,9 @@ class MovieDetailEntity extends Equatable {
     );
   }
 
+  String get posterUrl => 'https://image.tmdb.org/t/p/original$posterPath';
+  String get backdropUrl => 'https://image.tmdb.org/t/p/original$backdropPath';
+
   @override
   List<Object?> get props => [
     adult,

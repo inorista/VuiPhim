@@ -39,7 +39,7 @@ class BackdropWidget extends StatelessWidget {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                     child: Container(
-                      height: height * 0.5,
+                      height: height * 0.55,
                       width: double.infinity,
                       color: Colors.black.withAlpha(5),
                     ),
