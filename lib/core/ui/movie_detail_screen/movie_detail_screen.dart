@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/core/blocs/movie_detail/movie_detail_cubit.dart';
 import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_backdrop_widget.dart';
+import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_blurred_appbar.dart';
 import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_header_info_widget.dart';
 import 'package:vuiphim/core/ui/movie_detail_screen/widgets/movie_detail_overview_widget.dart';
-import 'package:vuiphim/core/ui/utils/custom_animation_appbar.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final String movieId;
@@ -33,17 +33,7 @@ class MovieDetailScreen extends StatelessWidget {
                 SliverToBoxAdapter(child: MovieDetailOverviewWidget()),
               ],
             ),
-            BlocBuilder<MovieDetailCubit, MovieDetailState>(
-              builder: (context, state) {
-                if (state is MovieDetailLoaded) {
-                  return CustomAnimationAppbar(
-                    title: state.movieDetail.title,
-                    scrollController: _scrollController,
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
+            MovieDetailBlurredAppBar(scrollController: _scrollController),
           ],
         ),
       ),

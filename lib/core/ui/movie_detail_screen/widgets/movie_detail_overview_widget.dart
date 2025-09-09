@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/core/blocs/movie_detail/movie_detail_cubit.dart';
@@ -23,6 +24,8 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: const BoxDecoration(color: Colors.black),
@@ -42,7 +45,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                         children: [
                           const Text(
                             'Ngày phát hành',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
@@ -50,7 +53,9 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            '${DateFormat('dd/MM/yyyy').format(DateTime.parse(state.movieDetail.releaseDate))}',
+                            DateFormat('dd/MM/yyyy').format(
+                              DateTime.parse(state.movieDetail.releaseDate),
+                            ),
                             style: const TextStyle(
                               color: Color(0xff9198a1),
                               fontSize: 15,
@@ -112,6 +117,63 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                 // const Divider(color: Color(0xffaaaaaa), thickness: 0.5),
                 const SizedBox(height: 30),
                 const Text(
+                  "Diễn viên",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: width,
+                  height: 100,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: CachedNetworkImage(
+                              imageUrl: state.cast[index].fullProfilePath,
+                              width: 65,
+                              height: 65,
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) {
+                                return const CircleShimmer(size: 65);
+                              },
+                              fadeOutDuration: const Duration(
+                                milliseconds: 100,
+                              ),
+                              fadeInDuration: const Duration(milliseconds: 100),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Flexible(
+                            child: Text(
+                              state.cast[index].name,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color(0xffebebeb),
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 15);
+                    },
+                    itemCount: state.cast.length,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const Text(
                   "Nội dung phim",
                   style: TextStyle(
                     color: Colors.white,
@@ -126,8 +188,8 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                       TextSpan(
                         text: isExpanded
                             ? state.movieDetail.overview
-                            : (state.movieDetail.overview.length > 150
-                                  ? "${state.movieDetail.overview.substring(0, 150)}... "
+                            : (state.movieDetail.overview.length > 200
+                                  ? "${state.movieDetail.overview.substring(0, 200)}... "
                                   : "${state.movieDetail.overview} "),
                         style: const TextStyle(
                           height: 1.5,

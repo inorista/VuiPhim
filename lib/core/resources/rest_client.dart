@@ -1,6 +1,7 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
+import 'package:vuiphim/core/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/core/dtos/genre_response_dto/genre_response_dto.dart';
 import 'package:vuiphim/core/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/core/dtos/movie_response_dto/movie_response_dto.dart';
@@ -56,6 +57,13 @@ abstract class RestClient {
 
   @GET("/movie/{movie_id}")
   Future<MovieDetailDto> fetchMovieDetailFromId(
+    @Path("movie_id") String movieId, {
+    @Query('language') String? language = 'vi-VN',
+    @CancelRequest() CancelToken? cancelToken,
+  });
+
+  @GET("/movie/{movie_id}/credits")
+  Future<CastResponseDto> fetchMovieCreditsFromId(
     @Path("movie_id") String movieId, {
     @Query('language') String? language = 'vi-VN',
     @CancelRequest() CancelToken? cancelToken,

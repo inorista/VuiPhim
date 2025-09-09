@@ -13,9 +13,19 @@ class MovieDetailLoading extends MovieDetailState {}
 
 class MovieDetailLoaded extends MovieDetailState {
   final MovieDetailEntity movieDetail;
+  final List<CastEntity> cast;
 
-  const MovieDetailLoaded(this.movieDetail);
+  const MovieDetailLoaded({required this.movieDetail, this.cast = const []});
 
   @override
-  List<Object> get props => [movieDetail];
+  List<Object> get props => [movieDetail, cast];
+}
+
+class MovieDetailError extends MovieDetailState {
+  final String message;
+
+  const MovieDetailError({required this.message});
+
+  @override
+  List<Object> get props => [message];
 }

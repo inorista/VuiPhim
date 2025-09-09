@@ -1,4 +1,5 @@
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/core/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/core/dtos/movie_response_dto/movie_response_dto.dart';
 import 'package:vuiphim/core/hive_database/hive_daos/movie_dao.dart';
@@ -84,16 +85,38 @@ class MovieService implements IMovieService {
   }
 
   @override
-  Future<MovieDetailDto> fetchMovieDetailFromId(
+  Future<MovieDetailDto?> fetchMovieDetailFromId(
     String movieId, {
     String language = 'vi-VN',
   }) async {
     CancelToken cancelToken = CancelToken();
-    final movieDetailDto = await getRestClient().fetchMovieDetailFromId(
-      movieId,
-      language: language,
-      cancelToken: cancelToken,
-    );
-    return movieDetailDto;
+    try {
+      final movieDetailDto = await getRestClient().fetchMovieDetailFromId(
+        movieId,
+        language: language,
+        cancelToken: cancelToken,
+      );
+      return movieDetailDto;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<CastResponseDto?> fetchMovieCreditsFromId(
+    String movieId, {
+    String language = 'vi-VN',
+  }) async {
+    CancelToken cancelToken = CancelToken();
+    try {
+      final castDto = await getRestClient().fetchMovieCreditsFromId(
+        movieId,
+        language: language,
+        cancelToken: cancelToken,
+      );
+      return castDto;
+    } catch (e) {
+      return null;
+    }
   }
 }

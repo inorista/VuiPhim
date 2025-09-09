@@ -1,3 +1,4 @@
+import 'package:vuiphim/core/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/core/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/core/dtos/movie_response_dto/movie_response_dto.dart';
 import 'package:vuiphim/core/hive_database/hive_entities/move_entity/movie_entity.dart';
@@ -25,7 +26,12 @@ abstract class IMovieService {
     String language = 'vi-VN',
   });
 
-  Future<MovieDetailDto> fetchMovieDetailFromId(
+  Future<MovieDetailDto?> fetchMovieDetailFromId(
+    String movieId, {
+    String language = 'vi-VN',
+  });
+
+  Future<CastResponseDto?> fetchMovieCreditsFromId(
     String movieId, {
     String language = 'vi-VN',
   });

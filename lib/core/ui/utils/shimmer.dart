@@ -29,8 +29,8 @@ class CircleShimmer extends StatelessWidget {
     return Container(
       height: size,
       width: size,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+      decoration: const BoxDecoration(
+        color: Color(0xfff1f1f1),
         shape: BoxShape.circle,
       ),
     );
