@@ -1,5 +1,5 @@
 import 'package:vuiphim/core/di/locator.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/genre_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
 
 class BackgroundSync implements IBackgroundSync {

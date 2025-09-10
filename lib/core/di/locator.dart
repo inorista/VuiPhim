@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/cast_dao.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/genre_dao.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/movie_dao.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/movie_detail_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/core/resources/rest_client.dart';
 import 'package:vuiphim/core/services/implements/background_sync.dart';
 import 'package:vuiphim/core/services/implements/firebase_service.dart';

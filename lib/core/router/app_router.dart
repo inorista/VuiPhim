@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vuiphim/core/ui/main_screen/main_screen.dart';
-import 'package:vuiphim/core/ui/movie_detail_screen/movie_detail_screen.dart';
+import 'package:vuiphim/presentation/screens/main_screen/main_screen.dart';
+import 'package:vuiphim/presentation/screens/movie_detail_screen/movie_detail_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(

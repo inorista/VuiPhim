@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vuiphim/core/di/locator.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/cast_dao.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/movie_detail_dao.dart';
-import 'package:vuiphim/core/hive_database/hive_entities/cast_entity/cast_entity.dart';
-import 'package:vuiphim/core/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/cast_entity/cast_entity.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart';
 
 part 'movie_detail_state.dart';

@@ -1,10 +1,10 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
-import 'package:vuiphim/core/dtos/cast_response_dto/cast_response_dto.dart';
-import 'package:vuiphim/core/dtos/genre_response_dto/genre_response_dto.dart';
-import 'package:vuiphim/core/dtos/movie_detail_dto/movie_detail_dto.dart';
-import 'package:vuiphim/core/dtos/movie_response_dto/movie_response_dto.dart';
+import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
+import 'package:vuiphim/data/dtos/genre_response_dto/genre_response_dto.dart';
+import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
+import 'package:vuiphim/data/dtos/movie_response_dto/movie_response_dto.dart';
 
 part 'rest_client.g.dart';
 

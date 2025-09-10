@@ -1,9 +1,9 @@
 import 'package:vuiphim/core/di/locator.dart';
-import 'package:vuiphim/core/dtos/cast_response_dto/cast_response_dto.dart';
-import 'package:vuiphim/core/dtos/movie_detail_dto/movie_detail_dto.dart';
-import 'package:vuiphim/core/dtos/movie_response_dto/movie_response_dto.dart';
-import 'package:vuiphim/core/hive_database/hive_daos/movie_dao.dart';
-import 'package:vuiphim/core/hive_database/hive_entities/move_entity/movie_entity.dart';
+import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
+import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
+import 'package:vuiphim/data/dtos/movie_response_dto/movie_response_dto.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/move_entity/movie_entity.dart';
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart';
 import 'package:dio/dio.dart';
 
