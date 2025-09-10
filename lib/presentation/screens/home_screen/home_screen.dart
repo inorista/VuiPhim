@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/core/blocs/home/popular_movie/popular_movie_cubit.dart';
-import 'package:vuiphim/core/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
-import 'package:vuiphim/core/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
 import 'package:vuiphim/presentation/screens/home_screen/widgets/backdrop_widget.dart';
 import 'package:vuiphim/presentation/screens/home_screen/widgets/popular_movie_widget.dart';
 import 'package:vuiphim/presentation/screens/home_screen/widgets/top_rated_movie_widget.dart';

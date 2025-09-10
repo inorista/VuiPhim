@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/core/blocs/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_detail/movie_detail_cubit.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_backdrop_widget.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_blurred_appbar.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_header_info_widget.dart';

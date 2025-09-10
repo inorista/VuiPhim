@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/core/blocs/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_detail/movie_detail_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 
 class MovieDetailBlurredAppBar extends StatelessWidget {

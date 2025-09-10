@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart' show SvgPicture;
 import 'package:go_router/go_router.dart';
-import 'package:vuiphim/core/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 
 class TopRatedMovieWidget extends StatelessWidget {

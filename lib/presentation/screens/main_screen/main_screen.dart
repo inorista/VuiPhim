@@ -3,7 +3,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/core/blocs/dash_board/dash_board_cubit.dart';
+import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 import 'package:vuiphim/presentation/screens/home_screen/home_screen.dart';
 import 'package:vuiphim/presentation/screens/main_screen/widgets/bottom_navigation_item.dart';

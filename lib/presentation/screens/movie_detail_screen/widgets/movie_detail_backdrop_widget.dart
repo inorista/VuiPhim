@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/core/blocs/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_detail/movie_detail_cubit.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class MovieDetailBackdropWidget extends StatelessWidget {

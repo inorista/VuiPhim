@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vuiphim/core/blocs/home/popular_movie/popular_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 
 class PopularMovieWidget extends StatelessWidget {

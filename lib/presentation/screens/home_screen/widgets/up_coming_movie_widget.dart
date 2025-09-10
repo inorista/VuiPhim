@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart' show SvgPicture;
-import 'package:vuiphim/core/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 
 class UpComingMovieWidget extends StatelessWidget {
