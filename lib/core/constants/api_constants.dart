@@ -4,4 +4,5 @@ class ApiConstants {
   static const String tmdbKey = 'tmdb_key';
   static const String documentPath = 'KshCq50AoSV9S6FQQO7P';
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+  static const String kkphimBaseUrl = 'https://phimapi.com/';
 }

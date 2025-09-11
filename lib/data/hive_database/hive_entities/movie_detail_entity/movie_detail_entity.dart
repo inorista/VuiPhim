@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/genre_entity/genre_entity.dart';
 part 'movie_detail_entity.g.dart';
 
@@ -51,8 +52,10 @@ class MovieDetailEntity extends Equatable {
   final double voteAverage;
   @HiveField(21)
   final int voteCount;
+  @HiveField(22)
+  List<EpisodeEntity> episodes;
 
-  const MovieDetailEntity({
+  MovieDetailEntity({
     required this.adult,
     required this.backdropPath,
     required this.budget,
@@ -75,6 +78,7 @@ class MovieDetailEntity extends Equatable {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    this.episodes = const [],
   });
 
   factory MovieDetailEntity.fromDto(MovieDetailDto dto) {
@@ -131,5 +135,6 @@ class MovieDetailEntity extends Equatable {
     video,
     voteAverage,
     voteCount,
+    episodes,
   ];
 }

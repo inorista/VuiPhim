@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/presentation/blocs/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_infomation/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_infomation/movie_source/movie_source_cubit.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_backdrop_widget.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_blurred_appbar.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_header_info_widget.dart';
@@ -14,8 +15,14 @@ class MovieDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScrollController _scrollController = ScrollController();
-    return BlocProvider<MovieDetailCubit>(
-      create: (context) => MovieDetailCubit()..fetchMovieDetailFromId(movieId),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MovieDetailCubit>(
+          create: (context) =>
+              MovieDetailCubit()..fetchMovieDetailFromId(movieId),
+        ),
+        BlocProvider<MovieSourceCubit>(create: (context) => MovieSourceCubit()),
+      ],
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(

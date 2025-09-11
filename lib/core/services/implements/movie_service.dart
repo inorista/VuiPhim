@@ -1,4 +1,5 @@
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/data/dtos/movie_response_dto/movie_response_dto.dart';
@@ -19,7 +20,7 @@ class MovieService implements IMovieService {
   Future<MovieEntity?> getMovieById(int id) async {
     final movieList = await _movieDao.getAll();
     if (movieList.isNotEmpty) {
-      return movieList.firstWhere((movie) => movie.id == id);
+      return movieList.firstOrDefault((movie) => movie.id == id);
     }
     return null;
   }

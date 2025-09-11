@@ -5,6 +5,7 @@ import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
+import 'package:vuiphim/data/resources/kkphim_rest_client.dart';
 import 'package:vuiphim/data/resources/rest_client.dart';
 import 'package:vuiphim/core/services/implements/background_sync.dart';
 import 'package:vuiphim/core/services/implements/firebase_service.dart';
@@ -17,7 +18,6 @@ import 'package:vuiphim/core/services/interfaces/imovie_service.dart'
     show IMovieService;
 
 final locator = GetIt.instance;
-final Dio dio = Dio();
 
 class EnvironmentLocator {
   static Future<void> setupServiceLocator() async {
@@ -37,6 +37,8 @@ class EnvironmentLocator {
   }
 
   static Future<void> setupRestClient() async {
+    final dio = Dio();
+    final kkphimDio = Dio();
     // Register RestClient
     final apiKey = await locator<IKeychainStorageService>().getData(
       ApiConstants.tmdbKey,
@@ -47,10 +49,18 @@ class EnvironmentLocator {
       headers: {"Authorization": "Bearer $apiKey"},
     );
 
+    kkphimDio.options = BaseOptions(baseUrl: ApiConstants.kkphimBaseUrl);
     locator.registerLazySingleton<RestClient>(() => RestClient(dio));
+    locator.registerLazySingleton<KKPhimRestClient>(
+      () => KKPhimRestClient(kkphimDio),
+    );
   }
 }
 
 RestClient getRestClient() {
   return locator<RestClient>();
+}
+
+KKPhimRestClient getKKPhimRestClient() {
+  return locator<KKPhimRestClient>();
 }

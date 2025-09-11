@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/presentation/blocs/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_infomation/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_infomation/movie_source/movie_source_cubit.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 import 'package:intl/intl.dart';
 
@@ -25,7 +27,6 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: const BoxDecoration(color: Colors.black),
@@ -36,6 +37,70 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
+                BlocBuilder<MovieSourceCubit, MovieSourceState>(
+                  builder: (context, state) {
+                    if (state is MovieSourceLoading) {
+                      return CupertinoActivityIndicator();
+                    } else if (state is MovieSourceLoaded) {
+                      return Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Handle watch button press
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFbe2b27),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            child: const Text(
+                              'Xem Phim',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          OutlinedButton(
+                            onPressed: () {
+                              // Handle watch trailer button press
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                color: Color(0xFFbe2b27),
+                                width: 2,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            child: const Text(
+                              'Xem Trailer',
+                              style: TextStyle(
+                                color: Color(0xFFbe2b27),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

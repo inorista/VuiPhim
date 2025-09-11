@@ -12,6 +12,8 @@ class PopularMovieWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     final popularScrollControler = ScrollController();
     return Padding(
       padding: const EdgeInsets.only(top: 65),
@@ -44,8 +46,8 @@ class PopularMovieWidget extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(14),
                           child: SizedBox(
-                            height: 400,
-                            width: 400,
+                            height: height * 0.9,
+                            width: width * 0.9,
                             child: CachedNetworkImage(
                               imageUrl: movie.backdropUrl,
                               fit: BoxFit.cover,
