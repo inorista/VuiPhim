@@ -37,6 +37,8 @@ class MovieSourceCubit extends Cubit<MovieSourceState> {
           movieDetail.episodes = sources;
           emit(MovieSourceLoaded(sources: sources));
           await _movieDetailDao.update(movieDetail.id, movieDetail);
+        } else {
+          emit(const MovieSourceError(message: "Movie source not found."));
         }
       } catch (e) {
         emit(const MovieSourceError(message: "Fetch movie sources failed."));

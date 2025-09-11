@@ -40,7 +40,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                 BlocBuilder<MovieSourceCubit, MovieSourceState>(
                   builder: (context, state) {
                     if (state is MovieSourceLoading) {
-                      return CupertinoActivityIndicator();
+                      return const CupertinoActivityIndicator();
                     } else if (state is MovieSourceLoaded) {
                       return Row(
                         children: [
@@ -101,6 +101,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                     }
                   },
                 ),
+                const SizedBox(height: 15),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -192,7 +193,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                 const SizedBox(height: 10),
                 SizedBox(
                   width: width,
-                  height: 100,
+                  height: 140,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -201,11 +202,11 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(40),
+                            borderRadius: BorderRadius.circular(12),
                             child: CachedNetworkImage(
                               imageUrl: state.cast[index].fullProfilePath,
-                              width: 65,
-                              height: 65,
+                              width: 120,
+                              height: 120,
                               fit: BoxFit.cover,
                               errorWidget: (context, url, error) {
                                 return const CircleShimmer(size: 65);
@@ -224,7 +225,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 color: Color(0xffebebeb),
-                                fontSize: 14,
+                                fontSize: 13,
                               ),
                             ),
                           ),
@@ -232,7 +233,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const SizedBox(width: 15);
+                      return const SizedBox(width: 20);
                     },
                     itemCount: state.cast.length,
                   ),
