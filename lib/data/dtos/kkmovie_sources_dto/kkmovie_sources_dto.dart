@@ -451,7 +451,7 @@ class Imdb {
 
   final dynamic id;
 
-  Imdb copyWith({dynamic? id}) {
+  Imdb copyWith({dynamic id}) {
     return Imdb(id: id ?? this.id);
   }
 
@@ -482,7 +482,7 @@ class Tmdb {
   Tmdb copyWith({
     String? type,
     String? id,
-    dynamic? season,
+    dynamic season,
     double? voteAverage,
     int? voteCount,
   }) {

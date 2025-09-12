@@ -7,6 +7,7 @@ import 'package:vuiphim/data/hive_database/hive_entities/genre_entity/genre_enti
 part 'movie_detail_entity.g.dart';
 
 @HiveType(typeId: HiveBoxIds.movieDetailBoxId)
+// ignore: must_be_immutable
 class MovieDetailEntity extends Equatable {
   @HiveField(0)
   final bool adult;

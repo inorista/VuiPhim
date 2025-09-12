@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
-import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
 

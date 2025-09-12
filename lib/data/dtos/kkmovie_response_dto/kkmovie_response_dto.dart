@@ -98,9 +98,9 @@ class Data {
 
   Map<String, dynamic> toJson() => {
     "seoOnPage": seoOnPage?.toJson(),
-    "breadCrumb": breadCrumb.map((x) => x?.toJson()).toList(),
+    "breadCrumb": breadCrumb.map((x) => x.toJson()).toList(),
     "titlePage": titlePage,
-    "items": items.map((x) => x?.toJson()).toList(),
+    "items": items.map((x) => x.toJson()).toList(),
     "params": params?.toJson(),
     "type_list": typeList,
     "APP_DOMAIN_FRONTEND": appDomainFrontend,
@@ -289,8 +289,8 @@ class Item {
     "quality": quality,
     "lang": lang,
     "year": year,
-    "category": category.map((x) => x?.toJson()).toList(),
-    "country": country.map((x) => x?.toJson()).toList(),
+    "category": category.map((x) => x.toJson()).toList(),
+    "country": country.map((x) => x.toJson()).toList(),
   };
 }
 
@@ -337,7 +337,7 @@ class Imdb {
 
   final dynamic id;
 
-  Imdb copyWith({dynamic? id}) {
+  Imdb copyWith({dynamic id}) {
     return Imdb(id: id ?? this.id);
   }
 
