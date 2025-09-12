@@ -7,19 +7,24 @@ import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_d
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_header_info_widget.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/widgets/movie_detail_overview_widget.dart';
 
-class MovieDetailScreen extends StatelessWidget {
+class MovieDetailScreen extends StatefulWidget {
   final String movieId;
 
   const MovieDetailScreen({super.key, required this.movieId});
 
   @override
+  State<MovieDetailScreen> createState() => _MovieDetailScreenState();
+}
+
+class _MovieDetailScreenState extends State<MovieDetailScreen> {
+  final ScrollController scrollController = ScrollController();
+  @override
   Widget build(BuildContext context) {
-    final ScrollController _scrollController = ScrollController();
     return MultiBlocProvider(
       providers: [
         BlocProvider<MovieDetailCubit>(
           create: (context) =>
-              MovieDetailCubit()..fetchMovieDetailFromId(movieId),
+              MovieDetailCubit()..fetchMovieDetailFromId(widget.movieId),
         ),
         BlocProvider<MovieSourceCubit>(create: (context) => MovieSourceCubit()),
       ],
@@ -30,17 +35,18 @@ class MovieDetailScreen extends StatelessWidget {
           children: [
             const MovieDetailBackdropWidget(),
             CustomScrollView(
-              controller: _scrollController,
+              controller: scrollController,
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
               ),
               slivers: const [
                 SliverToBoxAdapter(child: SizedBox(height: 75)),
                 SliverToBoxAdapter(child: MovieDetailHeaderInfoWidget()),
+                SliverToBoxAdapter(child: SizedBox(height: 15)),
                 SliverToBoxAdapter(child: MovieDetailOverviewWidget()),
               ],
             ),
-            MovieDetailBlurredAppBar(scrollController: _scrollController),
+            MovieDetailBlurredAppBar(scrollController: scrollController),
           ],
         ),
       ),

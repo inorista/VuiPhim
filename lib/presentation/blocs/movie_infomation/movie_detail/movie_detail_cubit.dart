@@ -18,6 +18,21 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
 
   void fetchMovieDetailFromId(String movieId) async {
     emit(MovieDetailLoading());
+
+    // LOAD FROM HIVE DB FIRST
+    final movieDetailEntity = await _movieDetailDao.getMovieDetailById(
+      int.tryParse(movieId) ?? 0,
+    );
+
+    if (movieDetailEntity != null) {
+      final castEntities = movieDetailEntity.casts;
+      emit(
+        MovieDetailLoaded(movieDetail: movieDetailEntity, cast: castEntities),
+      );
+      return;
+    }
+
+    // IF NOT FOUND, FETCH FROM API
     final movieDetailDto = await _movieService.fetchMovieDetailFromId(movieId);
     final castResponseDto = await _movieService.fetchMovieCreditsFromId(
       movieId,
@@ -29,6 +44,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
           castResponseDto?.cast.map((castDto) => castDto.toEntity()).toList() ??
           [];
       emit(MovieDetailLoaded(movieDetail: movieEntity, cast: castEntities));
+      movieEntity.casts = castEntities;
       await _movieDetailDao.add(movieEntity);
       await _castDao.addAll(castEntities);
     } else {

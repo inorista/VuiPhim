@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/presentation/blocs/movie_infomation/movie_detail/movie_detail_cubit.dart';
-import 'package:vuiphim/presentation/blocs/movie_infomation/movie_source/movie_source_cubit.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 import 'package:intl/intl.dart';
 
@@ -36,71 +34,6 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
-                BlocBuilder<MovieSourceCubit, MovieSourceState>(
-                  builder: (context, state) {
-                    if (state is MovieSourceLoading) {
-                      return const CupertinoActivityIndicator();
-                    } else if (state is MovieSourceLoaded) {
-                      return Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              // Handle watch button press
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFbe2b27),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            child: const Text(
-                              'Xem Phim',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 15),
-                          OutlinedButton(
-                            onPressed: () {
-                              // Handle watch trailer button press
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Color(0xFFbe2b27),
-                                width: 2,
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            child: const Text(
-                              'Xem Trailer',
-                              style: TextStyle(
-                                color: Color(0xFFbe2b27),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
                 const SizedBox(height: 15),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,16 +138,17 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                             borderRadius: BorderRadius.circular(12),
                             child: CachedNetworkImage(
                               imageUrl: state.cast[index].fullProfilePath,
-                              width: 120,
-                              height: 120,
+                              width: 90,
+                              height: 90,
                               fit: BoxFit.cover,
                               errorWidget: (context, url, error) {
-                                return const CircleShimmer(size: 65);
+                                return const Shimmer(height: 90, width: 90);
                               },
-                              fadeOutDuration: const Duration(
-                                milliseconds: 100,
-                              ),
-                              fadeInDuration: const Duration(milliseconds: 100),
+                              placeholder: (context, url) {
+                                return const Shimmer(height: 90, width: 90);
+                              },
+                              fadeOutDuration: const Duration(milliseconds: 10),
+                              fadeInDuration: const Duration(milliseconds: 10),
                             ),
                           ),
                           const SizedBox(height: 5),

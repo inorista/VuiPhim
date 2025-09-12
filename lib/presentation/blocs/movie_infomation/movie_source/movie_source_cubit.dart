@@ -16,6 +16,13 @@ class MovieSourceCubit extends Cubit<MovieSourceState> {
     final movieDetail = await _movieDetailDao.getMovieDetailById(movieId);
     if (movieDetail != null) {
       try {
+        // LOAD FROM DB FIRST
+        if (movieDetail.episodes.isNotEmpty) {
+          emit(MovieSourceLoaded(sources: movieDetail.episodes));
+          return;
+        }
+
+        // IF NOT FOUND, FETCH FROM API
         final movieSearchResponseDto = await getKKPhimRestClient().searchMovies(
           movieDetail.title,
         );

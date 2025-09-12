@@ -34,6 +34,8 @@ class BackdropWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: height * 0.5,
+                  fadeInDuration: const Duration(milliseconds: 10),
+                  fadeOutDuration: const Duration(milliseconds: 10),
                 ),
                 ClipRRect(
                   child: BackdropFilter(

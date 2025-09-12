@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Shimmer extends StatelessWidget {
-  const Shimmer({super.key, this.height, this.width});
+  final double borderRadius;
+  const Shimmer({super.key, this.height, this.width, this.borderRadius = 8});
 
   final double? height, width;
 
@@ -11,9 +12,9 @@ class Shimmer extends StatelessWidget {
       height: height,
       width: width,
       padding: const EdgeInsets.all(14),
-      decoration: const BoxDecoration(
-        color: Color(0xfff1f1f1),
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+      decoration: BoxDecoration(
+        color: const Color(0xfff1f1f1),
+        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       ),
     );
   }

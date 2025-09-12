@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class CustomAnimationAppbar extends StatefulWidget {
 }
 
 class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
-  final _appBarHeight = 115.0;
+  final _appBarHeight = Platform.isIOS ? 115.0 : 80.0;
   double _opacity = 0.0;
 
   @override

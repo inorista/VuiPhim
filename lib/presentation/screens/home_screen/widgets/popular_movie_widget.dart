@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
+import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class PopularMovieWidget extends StatelessWidget {
   const PopularMovieWidget({super.key});
@@ -51,6 +52,16 @@ class PopularMovieWidget extends StatelessWidget {
                             child: CachedNetworkImage(
                               imageUrl: movie.backdropUrl,
                               fit: BoxFit.cover,
+                              fadeInDuration: const Duration(milliseconds: 10),
+                              fadeOutDuration: const Duration(milliseconds: 10),
+                              placeholder: (context, url) => Shimmer(
+                                height: height * 0.9,
+                                width: width * 0.9,
+                              ),
+                              errorWidget: (context, url, error) => Shimmer(
+                                height: height * 0.9,
+                                width: width * 0.9,
+                              ),
                             ),
                           ),
                         ),

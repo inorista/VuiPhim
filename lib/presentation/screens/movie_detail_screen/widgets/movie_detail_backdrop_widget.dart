@@ -32,6 +32,8 @@ class MovieDetailBackdropWidget extends StatelessWidget {
                     imageUrl: state.movieDetail.backdropUrl,
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.425,
+                    fadeInDuration: const Duration(milliseconds: 10),
+                    fadeOutDuration: const Duration(milliseconds: 10),
                     fit: BoxFit.cover,
                   ),
                 ),

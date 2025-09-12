@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
+
+class VideoPlayerScreen extends StatefulWidget {
+  final ServerDataEntity serverData;
+  const VideoPlayerScreen({super.key, required this.serverData});
+
+  @override
+  State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late VideoPlayerController _controller;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        VideoPlayerController.networkUrl(
+            Uri.parse("${widget.serverData.linkM3U8}"),
+          )
+          ..initialize().then((_) {
+            _controller.play();
+            setState(() {});
+          });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: _controller.value.isInitialized
+          ? Center(
+              child: AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+
+                  children: [
+                    VideoPlayer(_controller),
+                    VideoProgressIndicator(_controller, allowScrubbing: true),
+                  ],
+                ),
+              ),
+            )
+          : const Center(child: CircularProgressIndicator()),
+    );
+  }
+}

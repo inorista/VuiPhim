@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vuiphim/presentation/blocs/movie_infomation/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_infomation/movie_source/movie_source_cubit.dart';
+import 'package:vuiphim/presentation/utils/custom_button.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class MovieDetailHeaderInfoWidget extends StatelessWidget {
@@ -25,7 +28,11 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
                         imageUrl: state.movieDetail.posterUrl,
-                        width: 150,
+                        width: 160,
+                        height: 250,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const Shimmer(width: 160, height: 250),
                       ),
                     ),
                   ),
@@ -34,6 +41,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                     flex: 4,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           state.movieDetail.title,
@@ -88,6 +96,40 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+
+                        BlocBuilder<MovieSourceCubit, MovieSourceState>(
+                          builder: (context, sourceState) {
+                            if (sourceState is MovieSourceLoading) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 15),
+                                child: Shimmer(height: 40, width: 120),
+                              );
+                            } else if (sourceState is MovieSourceLoaded) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: CustomButton(
+                                  height: 40,
+                                  width: 120,
+                                  onTap: () {
+                                    context.push(
+                                      '/select_movie_episode',
+                                      extra: state.movieDetail,
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Xem Phim',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox();
+                          },
                         ),
                       ],
                     ),
