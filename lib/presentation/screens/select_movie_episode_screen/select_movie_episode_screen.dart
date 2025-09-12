@@ -29,9 +29,9 @@ class SelectMovieEpisodeScreen extends StatelessWidget {
               children: [
                 CachedNetworkImage(
                   imageUrl: movieDetail.backdropUrl,
-                  height: height * 0.35,
+                  height: height * 0.425,
                   placeholder: (context, url) =>
-                      Shimmer(height: height * 0.35, width: width),
+                      Shimmer(height: height * 0.425, width: width),
                   fit: BoxFit.cover,
                   fadeInDuration: const Duration(milliseconds: 1),
                   fadeOutDuration: const Duration(milliseconds: 1),
@@ -72,6 +72,9 @@ class SelectMovieEpisodeScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 50,
                                   child: ListView.separated(
+                                    physics: const BouncingScrollPhysics(
+                                      parent: AlwaysScrollableScrollPhysics(),
+                                    ),
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, dataIndex) {
                                       final currentSourceData =

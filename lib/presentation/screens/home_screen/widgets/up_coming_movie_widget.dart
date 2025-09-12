@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart' show SvgPicture;
+import 'package:go_router/go_router.dart';
 import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
+import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class UpComingMovieWidget extends StatelessWidget {
   const UpComingMovieWidget({super.key});
@@ -48,28 +50,35 @@ class UpComingMovieWidget extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return Container(
-                        height: 200,
-                        width: 150,
-                        decoration: BoxDecoration(
+                      return InkWell(
+                        onTap: () {
+                          context.push(
+                            '/movie_detail/${movies[index].id}',
+                            extra: {'id': movies[index].id.toString()},
+                          );
+                        },
+                        child: ClipRRect(
                           borderRadius: BorderRadius.circular(14),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                              movies[index].posterUrl,
-                            ),
+                          child: CachedNetworkImage(
+                            imageUrl: movies[index].posterUrl,
                             fit: BoxFit.cover,
+                            fadeInDuration: const Duration(milliseconds: 10),
+                            fadeOutDuration: const Duration(milliseconds: 10),
+                            width: 170,
+                            placeholder: (context, url) =>
+                                const Shimmer(width: 170, height: 220),
                           ),
                         ),
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const SizedBox(width: 10);
+                      return const SizedBox(width: 15);
                     },
                     itemCount: movies.length,
                   ),
                 );
               } else if (state is UpcomingMovieLoading) {
-                return const Center(child: CupertinoActivityIndicator());
+                return const SizedBox(height: 250);
               }
               return const SizedBox();
             },

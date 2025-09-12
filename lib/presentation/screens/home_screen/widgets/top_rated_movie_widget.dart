@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart' show SvgPicture;
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
+import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class TopRatedMovieWidget extends StatelessWidget {
   const TopRatedMovieWidget({super.key});
@@ -56,29 +57,29 @@ class TopRatedMovieWidget extends StatelessWidget {
                             extra: {'id': movies[index].id.toString()},
                           );
                         },
-                        child: Container(
-                          height: 200,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                movies[index].posterUrl,
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(14),
+                          child: CachedNetworkImage(
+                            imageUrl: movies[index].posterUrl,
+                            fit: BoxFit.cover,
+                            fadeInDuration: const Duration(milliseconds: 10),
+                            fadeOutDuration: const Duration(milliseconds: 10),
+                            width: 170,
+                            height: 220,
+                            placeholder: (context, url) =>
+                                const Shimmer(width: 170, height: 220),
                           ),
                         ),
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const SizedBox(width: 10);
+                      return const SizedBox(width: 15);
                     },
                     itemCount: movies.length,
                   ),
                 );
               } else if (state is TopRatedMovieLoading) {
-                return const Center(child: CupertinoActivityIndicator());
+                return const SizedBox(height: 250);
               }
               return const SizedBox();
             },

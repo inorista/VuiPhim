@@ -42,7 +42,6 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
               slivers: const [
                 SliverToBoxAdapter(child: SizedBox(height: 75)),
                 SliverToBoxAdapter(child: MovieDetailHeaderInfoWidget()),
-                SliverToBoxAdapter(child: SizedBox(height: 15)),
                 SliverToBoxAdapter(child: MovieDetailOverviewWidget()),
               ],
             ),
