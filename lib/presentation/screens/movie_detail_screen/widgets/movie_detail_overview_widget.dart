@@ -226,7 +226,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                 children: [
                   Shimmer(height: 20, width: 120),
                   SizedBox(height: 15),
-                  Shimmer(height: 60, width: double.infinity),
+                  Row(children: [Shimmer(height: 60, width: double.infinity)]),
                 ],
               );
             }

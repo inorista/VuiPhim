@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/core/router/app_router.dart';
@@ -14,6 +15,7 @@ void main() async {
   await EnvironmentLocator.setupRestClient();
   await HiveDatabase().setupHiveDatabase();
   await locator<IBackgroundSync>().syncGenres();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 
