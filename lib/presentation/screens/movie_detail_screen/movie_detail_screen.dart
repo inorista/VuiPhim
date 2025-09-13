@@ -17,9 +17,18 @@ class MovieDetailScreen extends StatefulWidget {
 }
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
-  final ScrollController scrollController = ScrollController();
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    scrollController = ScrollController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return MultiBlocProvider(
       providers: [
         BlocProvider<MovieDetailCubit>(
@@ -34,16 +43,20 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           alignment: Alignment.topCenter,
           children: [
             const MovieDetailBackdropWidget(),
-            CustomScrollView(
-              controller: scrollController,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
+            SizedBox(
+              height: height,
+              width: width,
+              child: CustomScrollView(
+                controller: scrollController,
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                slivers: const [
+                  SliverToBoxAdapter(child: SizedBox(height: 75)),
+                  SliverToBoxAdapter(child: MovieDetailHeaderInfoWidget()),
+                  SliverToBoxAdapter(child: MovieDetailOverviewWidget()),
+                ],
               ),
-              slivers: const [
-                SliverToBoxAdapter(child: SizedBox(height: 75)),
-                SliverToBoxAdapter(child: MovieDetailHeaderInfoWidget()),
-                SliverToBoxAdapter(child: MovieDetailOverviewWidget()),
-              ],
             ),
             MovieDetailBlurredAppBar(scrollController: scrollController),
           ],

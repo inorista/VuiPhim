@@ -221,12 +221,20 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                 ],
               );
             } else if (state is MovieDetailLoading) {
-              return const Column(
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Shimmer(height: 20, width: 120),
-                  SizedBox(height: 15),
-                  Row(children: [Shimmer(height: 60, width: double.infinity)]),
+                  const Row(
+                    children: [
+                      Expanded(child: Shimmer(height: 60)),
+                      SizedBox(width: 10),
+                      Expanded(child: Shimmer(height: 60)),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Shimmer(height: 20, width: 120),
+                  const SizedBox(height: 15),
+                  Shimmer(height: 250, width: width),
                 ],
               );
             }

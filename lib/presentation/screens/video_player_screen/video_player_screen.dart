@@ -21,6 +21,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     return true;
   }
 
+  void toggleControls() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+      } else {
+        _controller.play();
+      }
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -58,21 +68,65 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: _controller.value.isInitialized
-            ? SizedBox(
-                width: width,
-                height: height,
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Positioned.fill(child: VideoPlayer(_controller)),
-                        VideoProgressIndicator(
-                          _controller,
-                          allowScrubbing: true,
-                        ),
-                      ],
+            ? InkWell(
+                onTap: () {
+                  toggleControls();
+                },
+                child: SizedBox(
+                  width: width,
+                  height: height,
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Positioned.fill(child: VideoPlayer(_controller)),
+                          Visibility(
+                            visible: !_controller.value.isPlaying,
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: !_controller.value.isPlaying ? 1.0 : 0.0,
+                              child: Container(
+                                width: width,
+                                height: height,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: IconButton(
+                                        iconSize: 80,
+                                        color: Colors.white,
+                                        icon: _controller.value.isPlaying
+                                            ? const Icon(Icons.pause_circle)
+                                            : const Icon(Icons.play_circle),
+                                        onPressed: () {
+                                          toggleControls();
+                                        },
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 20,
+                                      child: SizedBox(
+                                        height: 10,
+                                        width: width * 0.9,
+                                        child: VideoProgressIndicator(
+                                          _controller,
+                                          allowScrubbing: true,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
