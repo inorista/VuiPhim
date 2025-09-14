@@ -1,10 +1,52 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
-import 'package:vuiphim/core/native/brightness_native.dart';
+
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
+
+class VideoProgressSlider extends StatelessWidget {
+  final VideoPlayerController controller;
+  const VideoProgressSlider({required this.controller, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<VideoPlayerValue>(
+      valueListenable: controller,
+      builder: (context, value, child) {
+        if (controller.value.isInitialized) {
+          return Slider(
+            activeColor: const Color(0xffff7b7b),
+            min: 0,
+            max: value.duration.inSeconds > 0
+                ? value.duration.inSeconds.toDouble()
+                : 1.0,
+            value: value.position.inSeconds
+                .clamp(0, value.duration.inSeconds)
+                .toDouble(),
+            onChanged: (newValue) {
+              controller.seekTo(Duration(seconds: newValue.toInt()));
+            },
+            onChangeStart: (value) {
+              if (controller.value.isPlaying) {
+                controller.pause();
+              }
+            },
+            onChangeEnd: (value) {
+              if (!controller.value.isPlaying) {
+                controller.play();
+              }
+            },
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+}
 
 class VideoPlayerScreen extends StatefulWidget {
   final ServerDataEntity serverData;
@@ -23,21 +65,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
   double? _brightness;
   bool _showControls = false;
-
-  Stream<double> get _positionStream =>
-      Stream.periodic(const Duration(milliseconds: 100), (int _) {
-        if (_controller.value.isInitialized) {
-          return _controller.value.position.inSeconds.toDouble();
-        }
-        return 0.0;
-      });
-
-  Future<bool> _onWillPop() async {
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    return true;
-  }
-
   void toggleControls() {
     setState(() {
       _showControls = !_showControls;
@@ -54,6 +81,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
   }
 
+  Stream<double> get _positionStream =>
+      Stream.periodic(const Duration(milliseconds: 100), (int _) {
+        if (_controller.value.isInitialized) {
+          return _controller.value.position.inSeconds.toDouble();
+        }
+        return 0.0;
+      });
+
+  Future<bool> _onWillPop() async {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    return true;
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -62,15 +103,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final brightness = await BrightnessNative.getBrightness();
-      setState(() {
-        _brightness = brightness;
-      });
-    });
-
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
@@ -85,6 +117,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             _controller.play();
             setState(() {});
           });
+
+    super.initState();
   }
 
   @override
@@ -92,6 +126,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     final height = MediaQuery.sizeOf(context).height;
     final width = MediaQuery.sizeOf(context).width;
     return PopScope(
+      canPop: _showControls ? true : false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           await _onWillPop();
@@ -109,7 +144,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   height: height,
                   child: Center(
                     child: Stack(
-                      alignment: Alignment.bottomCenter,
+                      alignment: Alignment.center,
                       children: [
                         AspectRatio(
                           aspectRatio: _controller.value.aspectRatio,
@@ -129,6 +164,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
+                                  Positioned(
+                                    top: 20,
+                                    right: 40,
+                                    child: InkWell(
+                                      onTap: () {
+                                        context.pop();
+                                      },
+                                      child: const Center(
+                                        child: Icon(
+                                          CupertinoIcons.xmark,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Align(
                                     alignment: Alignment.center,
                                     child: InkWell(
@@ -169,34 +220,35 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                           children: [
                                             Image.asset(
                                               'assets/images/vuiphim_logo_transparent.png',
-                                              width: 55,
+                                              width: 60,
                                             ),
                                             const SizedBox(width: 10),
                                             SizedBox(
-                                              width: 160,
+                                              width: 150,
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Flexible(
-                                                    child: Text(
-                                                      widget.movieDetail.title,
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.white,
-                                                      ),
+                                                  Text(
+                                                    widget.movieDetail.title,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 7),
+                                                  const SizedBox(height: 3),
                                                   Text(
-                                                    "${_controller.value.position.inHours.toString().padLeft(2, '0')}:${_controller.value.position.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_controller.value.position.inSeconds.remainder(60).toString().padLeft(2, '0')} / ${_controller.value.duration.inHours.toString().padLeft(2, '0')}:${_controller.value.duration.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_controller.value.duration.inSeconds.remainder(60).toString().padLeft(2, '0')}",
+                                                    "${_controller.value.duration.inHours.toString().padLeft(_controller.value.duration.inHours < 10 ? 1 : 2, '0')}h ${_controller.value.duration.inMinutes.remainder(60).toString().padLeft(2, '0')}m",
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -218,32 +270,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Expanded(
-                                            child: Slider(
-                                              activeColor: const Color(
-                                                0xffff7b7b,
-                                              ),
-
-                                              min: 0,
-                                              max: _controller
-                                                  .value
-                                                  .duration
-                                                  .inSeconds
-                                                  .toDouble(),
-                                              value: _controller
-                                                  .value
-                                                  .position
-                                                  .inSeconds
-                                                  .toDouble(),
-                                              onChanged: (value) {
-                                                _controller.seekTo(
-                                                  Duration(
-                                                    seconds: value.toInt(),
-                                                  ),
-                                                );
-                                                setState(() {});
-                                              },
+                                            child: VideoProgressSlider(
+                                              controller: _controller,
                                             ),
                                           ),
+
                                           StreamBuilder(
                                             stream: _positionStream,
                                             builder: (context, asyncSnapshot) {
