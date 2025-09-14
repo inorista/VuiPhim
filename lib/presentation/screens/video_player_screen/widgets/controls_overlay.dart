@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cubit.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_state.dart';
-import 'package:vuiphim/presentation/screens/video_player_screen/video_player_screen.dart';
-import 'package:vuiphim/presentation/screens/video_player_screen/widgets/video_player_progress_indicator.dart';
+import 'package:vuiphim/presentation/screens/video_player_screen/widgets/smooth_slider_indicator.dart';
 
 class ControlsOverlay extends StatelessWidget {
   final String title;
@@ -134,14 +133,31 @@ class ControlsOverlay extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Expanded(child: VideoPlayerProgressIndicator()),
-                    Text(
-                      state.position.toFormattedString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
+                    // Sử dụng SmoothVideoProgressSlider thay vì VideoProgressSlider
+                    const Expanded(child: SmoothVideoProgressSlider()),
+                    BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
+                      buildWhen: (previous, current) {
+                        // Chỉ rebuild time text khi cần thiết
+                        if (current is VideoPlayerReady &&
+                            previous is VideoPlayerReady) {
+                          return current.position.inSeconds !=
+                              previous.position.inSeconds;
+                        }
+                        return true;
+                      },
+                      builder: (context, state) {
+                        if (state is VideoPlayerReady) {
+                          return Text(
+                            state.position.toFormattedString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
                     ),
                   ],
                 ),
