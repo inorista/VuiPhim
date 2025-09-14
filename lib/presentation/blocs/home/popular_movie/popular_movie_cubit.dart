@@ -27,6 +27,8 @@ class PopularMovieCubit extends Cubit<PopularMovieState> {
         )
         .toList();
     emit(PopularMovieLoaded(movies: movieEntites));
-    await _movieDao.addAll(movieEntites);
+    await _movieDao.updateAll({
+      for (var movie in movieEntites) movie.id: movie,
+    });
   }
 }

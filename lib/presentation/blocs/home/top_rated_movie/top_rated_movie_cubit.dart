@@ -29,6 +29,8 @@ class TopRatedMovieCubit extends Cubit<TopRatedMovieState> {
         .toList();
 
     emit(TopRatedMovieLoaded(movies: movieEntities));
-    await _movieDao.addAll(movieEntities);
+    await _movieDao.updateAll({
+      for (var movie in movieEntities) movie.id: movie,
+    });
   }
 }

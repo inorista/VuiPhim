@@ -37,8 +37,13 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRouter.videoPlayer,
       builder: (context, state) {
-        final serverData = state.extra as ServerDataEntity;
-        return VideoPlayerScreen(serverData: serverData);
+        final data = state.extra as Map<String, dynamic>;
+        final movieDetail = data['movieDetail'] as MovieDetailEntity;
+        final serverData = data['serverData'] as ServerDataEntity;
+        return VideoPlayerScreen(
+          movieDetail: movieDetail,
+          serverData: serverData,
+        );
       },
     ),
   ],

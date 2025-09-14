@@ -32,6 +32,11 @@ abstract class BaseDao<T> {
     await box.put(key, item);
   }
 
+  Future<void> updateAll(Map<dynamic, T> items) async {
+    final box = await _box;
+    await box.putAll(items);
+  }
+
   Future<void> delete(dynamic key) async {
     final box = await _box;
     await box.delete(key);

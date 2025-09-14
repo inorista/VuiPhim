@@ -55,7 +55,7 @@ class MovieDetailEntity extends Equatable {
   @HiveField(21)
   final int voteCount;
   @HiveField(22)
-  List<EpisodeEntity> episodes;
+  List<EpisodeEntity> episodes = [];
   @HiveField(23)
   List<CastEntity> casts = [];
 
@@ -110,6 +110,8 @@ class MovieDetailEntity extends Equatable {
       video: dto.video,
       voteAverage: dto.voteAverage,
       voteCount: dto.voteCount,
+      episodes: const [],
+      casts: const [],
     );
   }
 

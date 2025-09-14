@@ -30,6 +30,8 @@ class UpcomingMovieCubit extends Cubit<UpcomingMovieState> {
         .toList();
 
     emit(UpcomingMovieLoaded(movies: movieEntities));
-    await _movieDao.addAll(movieEntities);
+    await _movieDao.updateAll({
+      for (var movie in movieEntities) movie.id: movie,
+    });
   }
 }

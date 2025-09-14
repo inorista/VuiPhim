@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vuiphim/core/di/locator.dart';
@@ -33,6 +35,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
     }
 
     // IF NOT FOUND, FETCH FROM API
+
     final movieDetailDto = await _movieService.fetchMovieDetailFromId(movieId);
     final castResponseDto = await _movieService.fetchMovieCreditsFromId(
       movieId,
@@ -45,8 +48,8 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
           [];
       emit(MovieDetailLoaded(movieDetail: movieEntity, cast: castEntities));
       movieEntity.casts = castEntities;
-      await _movieDetailDao.add(movieEntity);
-      await _castDao.addAll(castEntities);
+      await _movieDetailDao.update(movieEntity.id, movieEntity);
+      await _castDao.updateAll({for (var cast in castEntities) cast.id: cast});
     } else {
       emit(const MovieDetailError(message: 'Failed to fetch movie details'));
     }

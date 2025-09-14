@@ -83,7 +83,10 @@ class SelectMovieEpisodeScreen extends StatelessWidget {
                                         onTap: () {
                                           context.push(
                                             AppRouter.videoPlayer,
-                                            extra: currentSourceData,
+                                            extra: {
+                                              'movieDetail': movieDetail,
+                                              'serverData': currentSourceData,
+                                            },
                                           );
                                         },
                                         width: 65,
