@@ -11,47 +11,48 @@ import UIKit
         let brightnessChannel = FlutterMethodChannel(name: "native/brightness",
                                                      binaryMessenger: controller.binaryMessenger)
 
-        let volumeChannel = FlutterMethodChannel(name: "native/volume", binaryMessenger: controller.binaryMessenger)
-    
-        volumeChannel.setMethodCallHandler {
-            call, _ in
-            // set volume
-            if call.method == "setVoule" {}
-        }
-        
         brightnessChannel.setMethodCallHandler {
-            call, result in
-            if call.method == "setBrightness" {
-                if let brightness = call.arguments as? Double {
-                    self.setBrightness(brightness)
-                    result(nil)
-                    return
-                }
-            }
-            if call.method == "getBrightness" {
-                var brightness = self.getBrightness()
-                result(brightness)
+            [weak self] call, result in
+            guard let self = self else {
+                result(FlutterError(code: "UNAVAILABLE", message: "AppDelegate is nil", details: nil))
                 return
             }
-            result(FlutterMethodNotImplemented)
+            
+            switch call.method {
+            case "setBrightness":
+                if let args = call.arguments as? [String: Any],
+                   let brightness = args["brightness"] as? Double
+                {
+                    self.setBrightness(brightness)
+                    result(nil)
+                } else {
+                    result(FlutterError(code: "INVALID_ARGUMENT", message: "Brightness value is missing or invalid", details: nil))
+                }
+                
+            case "getBrightness":
+                let brightness = self.getBrightness()
+                result(brightness)
+                
+            case "resetBrightness":
+                self.resetBrightness()
+                result(nil)
+                
+            default:
+                result(FlutterMethodNotImplemented)
+            }
         }
     
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-//    private func setVolume(_ value: Double){
-//        let volume = CGFloat(value)
-//        UIDevice.
-//    }
-    
     private func setBrightness(_ value: Double) {
-        let brightnessFLoat = CGFloat(value)
-        UIScreen.main.brightness = brightnessFLoat
+        let brightnessFloat = CGFloat(value)
+        UIScreen.main.brightness = brightnessFloat
     }
     
     private func getBrightness() -> Double {
-        return UIScreen.main.brightness
+        return Double(UIScreen.main.brightness)
     }
     
     private func resetBrightness() {

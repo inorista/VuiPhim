@@ -8,25 +8,38 @@ class BrightnessNative {
   static Future<void> setBrightness(double brightness) async {
     try {
       await _channel.invokeMethod('setBrightness', {'brightness': brightness});
-    } on PlatformException catch (e) {}
+    } on PlatformException catch (e) {
+      log('PlatformException when setting brightness: $e');
+    } on MissingPluginException catch (e) {
+      log('MissingPluginException when setting brightness: $e');
+    } catch (e) {
+      log('Unknown error when setting brightness: $e');
+    }
   }
 
   static Future<double> getBrightness() async {
     try {
       final currentBrightness = await _channel.invokeMethod('getBrightness');
-      return currentBrightness;
+      return currentBrightness as double;
+    } on PlatformException catch (e) {
+      log('PlatformException when getting brightness: $e');
+    } on MissingPluginException catch (e) {
+      log('MissingPluginException when getting brightness: $e');
     } catch (e) {
-      return 1.0;
+      log('Unknown error when getting brightness: $e');
     }
+    return 1.0;
   }
 
   static Future<void> resetBrightness() async {
     try {
-      await const MethodChannel(
-        'native/brightness',
-      ).invokeMethod('resetBrightness');
+      await _channel.invokeMethod('resetBrightness');
+    } on PlatformException catch (e) {
+      log('PlatformException when resetting brightness: $e');
+    } on MissingPluginException catch (e) {
+      log('MissingPluginException when resetting brightness: $e');
     } catch (e) {
-      log(e.toString());
+      log('Unknown error when resetting brightness: $e');
     }
   }
 }

@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_state.dart';
+import 'package:vuiphim/presentation/blocs/video_player/brightness/brightness_cubit.dart';
+import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
+import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/widgets/smooth_slider_indicator.dart';
+import 'package:vuiphim/presentation/utils/vertical_track_slider.dart';
 
 class ControlsOverlay extends StatelessWidget {
   final String title;
@@ -33,12 +38,57 @@ class ControlsOverlay extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Close button
+            Positioned(
+              left: 0,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/sun_light_icon.svg',
+                      width: 25,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 10),
+                    BlocBuilder<BrightnessCubit, BrightnessState>(
+                      builder: (context, state) {
+                        if (state is BrightnessError) {
+                          return const SizedBox();
+                        }
+                        if (state is BrightnessLoaded) {
+                          return VerticalTrackSlider(
+                            value: state.brightness,
+                            min: 0,
+                            max: 1,
+                            activeColor: Colors.white,
+                            height: 120,
+                            onChanged: (value) async {
+                              try {
+                                await context
+                                    .read<BrightnessCubit>()
+                                    .setBrightness(value);
+                              } catch (e) {
+                                log('Error setting brightness: ');
+                              }
+                            },
+                            width: 15,
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             Positioned(
               top: 20,
               right: 40,
               child: InkWell(
-                onTap: () => context.pop(),
+                onTap: () async {
+                  context.pop();
+                  await context.read<VideoPlayerCubit>().disposeVideo();
+                },
                 child: const Center(
                   child: Icon(
                     CupertinoIcons.xmark,
@@ -49,7 +99,6 @@ class ControlsOverlay extends StatelessWidget {
               ),
             ),
 
-            // Play/Pause button
             Align(
               alignment: Alignment.center,
               child: InkWell(

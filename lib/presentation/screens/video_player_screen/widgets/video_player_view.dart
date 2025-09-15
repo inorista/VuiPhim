@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_state.dart';
+import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
+import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/widgets/controls_overlay.dart';
 
 class VideoPlayerView extends StatelessWidget {
@@ -18,12 +18,7 @@ class VideoPlayerView extends StatelessWidget {
     final width = MediaQuery.sizeOf(context).width;
 
     return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) {
-          context.read<VideoPlayerCubit>().dispose();
-        }
-      },
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: BlocBuilder<VideoPlayerCubit, VideoPlayerState>(

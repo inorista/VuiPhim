@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_state.dart';
+import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
+import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 
 class SmoothVideoProgressSlider extends StatefulWidget {
   const SmoothVideoProgressSlider({super.key});
