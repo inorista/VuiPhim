@@ -5,12 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAnimationAppbar extends StatefulWidget {
-  final String title;
+  final String? title;
+  final Widget? leading;
+  final List<Widget>? actions;
   final ScrollController? scrollController;
+  final double? appBarHeight;
+  final bool isBackable;
   const CustomAnimationAppbar({
     super.key,
-    required this.title,
+    this.title,
     this.scrollController,
+    this.appBarHeight,
+    this.leading,
+    this.actions,
+    this.isBackable = true,
   });
 
   @override
@@ -18,7 +26,8 @@ class CustomAnimationAppbar extends StatefulWidget {
 }
 
 class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
-  final _appBarHeight = Platform.isIOS ? 115.0 : 80.0;
+  double get _appBarHeight =>
+      widget.appBarHeight ?? (Platform.isIOS ? 115.0 : 80.0);
   double _opacity = 0.0;
 
   @override
@@ -52,12 +61,15 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
       children: [
         Opacity(
           opacity: _opacity,
-          child: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-              child: Container(
-                height: _appBarHeight,
-                color: Colors.black.withAlpha(150),
+          child: SizedBox(
+            height: _appBarHeight,
+            child: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  height: _appBarHeight,
+                  color: Colors.white.withAlpha(40),
+                ),
               ),
             ),
           ),
@@ -69,51 +81,48 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
-                    context.pop();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(150),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(CupertinoIcons.back, color: Colors.black),
-                  ),
-                ),
+                widget.leading != null
+                    ? widget.leading!
+                    : widget.isBackable
+                    ? InkWell(
+                        onTap: () {
+                          context.pop();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(150),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            CupertinoIcons.back,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                widget.title != null
+                    ? Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          child: Text(
+                            widget.title ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(_opacity),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
 
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: Text(
-                      widget.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(_opacity),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // On SHARE
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(150),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      CupertinoIcons.share_up,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+                if (widget.actions != null)
+                  Row(children: widget.actions!)
+                else
+                  const SizedBox(width: 14),
               ],
             ),
           ),

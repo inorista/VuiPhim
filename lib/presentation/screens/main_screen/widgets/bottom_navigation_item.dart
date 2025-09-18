@@ -24,8 +24,8 @@ class BottomNavigationItem extends StatelessWidget {
         children: [
           SvgPicture.asset(
             iconPath,
-            width: 24,
-            height: 24,
+            width: 22,
+            height: 22,
             colorFilter: ColorFilter.mode(
               !isSelected ? Colors.white : const Color(0xffff7b7b),
               BlendMode.srcIn,
@@ -36,7 +36,7 @@ class BottomNavigationItem extends StatelessWidget {
             label,
             style: TextStyle(
               fontFamily: 'Roboto',
-              fontSize: 15,
+              fontSize: 12,
               color: !isSelected ? Colors.white : const Color(0xffff7b7b),
             ),
           ),

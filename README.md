@@ -159,7 +159,7 @@ Distributed under the MIT License. Xem `LICENSE` để biết thêm thông tin.
 
 ## 👨‍💻 Tác giả
 
-**Your Name** - [your-email@example.com](mailto:your-email@example.com)
+**Your Name** - [your-email@example.com](mailto:ngotu2102@gmail.com)
 
 ## 🙏 Lời cảm ơn
 

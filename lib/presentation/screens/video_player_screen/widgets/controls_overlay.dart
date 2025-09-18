@@ -171,8 +171,6 @@ class ControlsOverlay extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Progress slider and time
             Positioned(
               bottom: 30,
               child: SizedBox(
@@ -182,11 +180,9 @@ class ControlsOverlay extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Sử dụng SmoothVideoProgressSlider thay vì VideoProgressSlider
                     const Expanded(child: SmoothVideoProgressSlider()),
                     BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
                       buildWhen: (previous, current) {
-                        // Chỉ rebuild time text khi cần thiết
                         if (current is VideoPlayerReady &&
                             previous is VideoPlayerReady) {
                           return current.position.inSeconds !=
