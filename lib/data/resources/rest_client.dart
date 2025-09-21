@@ -68,4 +68,11 @@ abstract class RestClient {
     @Query('language') String? language = 'vi-VN',
     @CancelRequest() CancelToken? cancelToken,
   });
+
+  @GET("/movie/now_playing")
+  Future<MovieResponseDto> getNowPlayingMovies({
+    @Query('language') String? language = 'vi-VN',
+    @Query('page') int page = 1,
+    @CancelRequest() CancelToken? cancelToken,
+  });
 }

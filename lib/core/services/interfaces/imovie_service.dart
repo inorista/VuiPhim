@@ -6,9 +6,6 @@ import 'package:vuiphim/data/hive_database/hive_entities/move_entity/movie_entit
 abstract class IMovieService {
   Future<List<MovieEntity>> getAllMovies();
   Future<MovieEntity?> getMovieById(int id);
-  Future<void> addMovie(MovieEntity movie);
-  Future<void> updateMovie(MovieEntity movie);
-  Future<void> deleteMovie(String id);
 
   // FETCH MOVIE FROM SERVER
   Future<MovieResponseDto> getPopularMovies({

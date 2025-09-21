@@ -14,6 +14,7 @@ class BackdropWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final random = Random();
     return SizedBox(
       width: double.infinity,
       height: height * 0.5,
@@ -22,10 +23,7 @@ class BackdropWidget extends StatelessWidget {
           if (state is PopularMovieLoading) {
             return const Center(child: CupertinoActivityIndicator());
           } else if (state is PopularMovieLoaded) {
-            final movies = state.movies;
-            final random = Random();
-            final movie = movies[random.nextInt(movies.length)];
-
+            final movie = state.movies[random.nextInt(state.movies.length)];
             return Stack(
               alignment: Alignment.topCenter,
               children: [

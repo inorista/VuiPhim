@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart' show SvgPicture;
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/native/vibration_native.dart';
+import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
@@ -51,6 +53,9 @@ class UpComingMovieWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
+                          VibrationNative.impactFeedback(
+                            VibrateStyle.medium.name,
+                          );
                           context.push(
                             '/movie_detail/${movies[index].id}',
                             extra: {'id': movies[index].id.toString()},

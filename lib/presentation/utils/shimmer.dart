@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 
 class Shimmer extends StatelessWidget {
   final double borderRadius;
-  const Shimmer({super.key, this.height, this.width, this.borderRadius = 8});
+  final bool showLoading;
+  const Shimmer({
+    super.key,
+    this.height,
+    this.width,
+    this.borderRadius = 8,
+    this.showLoading = true,
+  });
 
   final double? height, width;
 
@@ -16,6 +23,9 @@ class Shimmer extends StatelessWidget {
         color: const Color(0xfff1f1f1),
         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       ),
+      child: showLoading
+          ? Center(child: Image.asset('assets/icons/loading_icon.gif'))
+          : const SizedBox.shrink(),
     );
   }
 }
@@ -34,6 +44,7 @@ class CircleShimmer extends StatelessWidget {
         color: Color(0xfff1f1f1),
         shape: BoxShape.circle,
       ),
+      child: Center(child: Image.asset('assets/icons/loading_icon.gif')),
     );
   }
 }

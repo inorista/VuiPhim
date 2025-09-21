@@ -1,4 +1,5 @@
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
@@ -10,6 +11,7 @@ import 'package:dio/dio.dart';
 
 class MovieService implements IMovieService {
   final _movieDao = locator<MovieDao>();
+  final _networkService = locator<INetworkService>();
 
   @override
   Future<List<MovieEntity>> getAllMovies() async {
@@ -26,35 +28,22 @@ class MovieService implements IMovieService {
   }
 
   @override
-  Future<void> addMovie(MovieEntity movie) async {
-    // TODO: Implement addMovie
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateMovie(MovieEntity movie) async {
-    // TODO: Implement updateMovie
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteMovie(String id) async {
-    // TODO: Implement deleteMovie
-    throw UnimplementedError();
-  }
-
-  @override
   Future<MovieResponseDto> getPopularMovies({
     int page = 1,
     String language = 'vi-VN',
   }) async {
     CancelToken cancelToken = CancelToken();
-    final movieDto = await getRestClient().getPopularMovies(
-      page: page,
-      language: language,
-      cancelToken: cancelToken,
-    );
-    return movieDto;
+    try {
+      final movieDto = await _networkService.getPopularMovies(
+        page: page,
+        language: language,
+        cancelToken: cancelToken,
+      );
+      return movieDto;
+    } catch (e) {
+      cancelToken.cancel();
+      rethrow;
+    }
   }
 
   @override
@@ -63,12 +52,17 @@ class MovieService implements IMovieService {
     String language = 'vi-VN',
   }) async {
     CancelToken cancelToken = CancelToken();
-    final movieDto = await getRestClient().getTopRatedMovies(
-      page: page,
-      language: language,
-      cancelToken: cancelToken,
-    );
-    return movieDto;
+    try {
+      final movieDto = await _networkService.getTopRatedMovies(
+        page: page,
+        cancelToken: cancelToken,
+      );
+
+      return movieDto;
+    } catch (e) {
+      cancelToken.cancel();
+      rethrow;
+    }
   }
 
   @override
@@ -77,12 +71,17 @@ class MovieService implements IMovieService {
     String language = 'vi-VN',
   }) async {
     CancelToken cancelToken = CancelToken();
-    final movieDto = await getRestClient().getUpcomingMovies(
-      page: page,
-      language: language,
-      cancelToken: cancelToken,
-    );
-    return movieDto;
+    try {
+      final movieDto = await _networkService.getUpcomingMovies(
+        page: page,
+        cancelToken: cancelToken,
+      );
+
+      return movieDto;
+    } catch (e) {
+      cancelToken.cancel();
+      rethrow;
+    }
   }
 
   @override
@@ -92,13 +91,13 @@ class MovieService implements IMovieService {
   }) async {
     CancelToken cancelToken = CancelToken();
     try {
-      final movieDetailDto = await getRestClient().fetchMovieDetailFromId(
-        movieId,
-        language: language,
+      final movieDetailDto = await _networkService.fetchMovieDetailFromId(
+        movieId: movieId,
         cancelToken: cancelToken,
       );
       return movieDetailDto;
     } catch (e) {
+      cancelToken.cancel();
       return null;
     }
   }
@@ -110,13 +109,14 @@ class MovieService implements IMovieService {
   }) async {
     CancelToken cancelToken = CancelToken();
     try {
-      final castDto = await getRestClient().fetchMovieCreditsFromId(
-        movieId,
-        language: language,
+      final castDto = await _networkService.fetchMovieCreditsFromId(
+        movieId: movieId,
+        language: 'vi-VN',
         cancelToken: cancelToken,
       );
       return castDto;
     } catch (e) {
+      cancelToken.cancel();
       return null;
     }
   }

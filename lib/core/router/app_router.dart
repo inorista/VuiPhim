@@ -54,4 +54,6 @@ class AppRouter {
   static String movieDetail = '/movie_detail/:id';
   static String selectMovieEpisode = '/select_movie_episode';
   static String videoPlayer = '/video_player';
+  static String vibrationDemo = '/vibration_demo';
+  static String adaptiveStatusBarDemo = '/adaptive_status_bar_demo';
 }

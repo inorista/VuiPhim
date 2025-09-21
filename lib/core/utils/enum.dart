@@ -11,3 +11,5 @@ enum MovieCategory {
   @HiveField(2)
   upcoming,
 }
+
+enum VibrateStyle { light, medium, heavy, soft, rigid } // Styles:

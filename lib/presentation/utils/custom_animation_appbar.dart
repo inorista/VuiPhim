@@ -68,7 +68,7 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
                 filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: Container(
                   height: _appBarHeight,
-                  color: Colors.white.withAlpha(40),
+                  color: Colors.black.withAlpha(40),
                 ),
               ),
             ),
