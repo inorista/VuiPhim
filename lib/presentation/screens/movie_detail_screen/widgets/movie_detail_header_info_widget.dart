@@ -18,7 +18,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
         builder: (context, state) {
           if (state is MovieDetailLoaded) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.all(14),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

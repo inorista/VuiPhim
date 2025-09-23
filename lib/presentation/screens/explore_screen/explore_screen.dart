@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
@@ -105,43 +108,37 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Hero(
-                                            tag: "${currentItem.id}_explore",
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight: Radius.circular(
-                                                      8,
-                                                    ),
-                                                  ),
-                                              child: CachedNetworkImage(
-                                                fit: BoxFit.cover,
-                                                height: 270,
-                                                fadeOutDuration: const Duration(
-                                                  microseconds: 1,
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  topRight: Radius.circular(8),
                                                 ),
-                                                fadeInDuration: const Duration(
-                                                  microseconds: 1,
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) {
-                                                      return const Shimmer(
-                                                        height: 270,
-                                                        width: double.infinity,
-                                                        borderRadius: 0,
-                                                        showLoading: false,
-                                                      );
-                                                    },
-                                                imageUrl:
-                                                    currentItem.backdropUrl,
-                                                placeholder: (context, url) =>
-                                                    const Shimmer(
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
+                                              height: 270,
+                                              fadeOutDuration: const Duration(
+                                                microseconds: 1,
+                                              ),
+                                              fadeInDuration: const Duration(
+                                                microseconds: 1,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                    return const Shimmer(
                                                       height: 270,
                                                       width: double.infinity,
                                                       borderRadius: 0,
-                                                    ),
-                                              ),
+                                                      showLoading: false,
+                                                    );
+                                                  },
+                                              imageUrl: currentItem.backdropUrl,
+                                              placeholder: (context, url) =>
+                                                  const Shimmer(
+                                                    height: 270,
+                                                    width: double.infinity,
+                                                    borderRadius: 0,
+                                                  ),
                                             ),
                                           ),
 
@@ -282,8 +279,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       ),
                     ),
                   ),
-                  actions: const [
-                    Padding(
+                  actions: [
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       child: Icon(
                         CupertinoIcons.arrow_down_to_line,
@@ -292,16 +289,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Icon(
-                        CupertinoIcons.search,
-                        color: Colors.white,
-                        size: 30,
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: InkWell(
+                        onTap: () {
+                          context.push(AppRouter.search);
+                        },
+                        child: const Icon(
+                          CupertinoIcons.search,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ],
                   scrollController: scrollController,
-                  appBarHeight: 110,
+                  appBarHeight: Platform.isIOS ? 110 : 80,
                 ),
               ),
             ], //

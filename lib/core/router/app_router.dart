@@ -4,13 +4,14 @@ import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/mov
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 import 'package:vuiphim/presentation/screens/main_screen/main_screen.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/movie_detail_screen.dart';
+import 'package:vuiphim/presentation/screens/search_screen/search_screen.dart';
 import 'package:vuiphim/presentation/screens/select_movie_episode_screen/select_movie_episode_screen.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/video_player_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/main',
+  initialLocation: AppRouter.main,
   routes: [
     GoRoute(
       path: AppRouter.main,
@@ -35,6 +36,13 @@ final GoRouter router = GoRouter(
     ),
 
     GoRoute(
+      path: AppRouter.search,
+      builder: (context, state) {
+        return const SearchScreen();
+      },
+    ),
+
+    GoRoute(
       path: AppRouter.videoPlayer,
       builder: (context, state) {
         final data = state.extra as Map<String, dynamic>;
@@ -49,11 +57,13 @@ final GoRouter router = GoRouter(
   ],
 );
 
+// Export the navigator key so it can be used in other files
+GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
+
 class AppRouter {
   static String main = '/main';
   static String movieDetail = '/movie_detail/:id';
   static String selectMovieEpisode = '/select_movie_episode';
   static String videoPlayer = '/video_player';
-  static String vibrationDemo = '/vibration_demo';
-  static String adaptiveStatusBarDemo = '/adaptive_status_bar_demo';
+  static String search = '/search';
 }

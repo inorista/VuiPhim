@@ -1,7 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
+import 'package:vuiphim/core/services/implements/background_sync.dart';
+import 'package:vuiphim/core/services/implements/firebase_service.dart';
+import 'package:vuiphim/core/services/implements/keychain_storage_service.dart';
+import 'package:vuiphim/core/services/implements/movie_service.dart';
 import 'package:vuiphim/core/services/implements/network_service.dart';
+import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
+import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
+import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
+import 'package:vuiphim/core/services/interfaces/imovie_service.dart'
+    show IMovieService;
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
@@ -9,15 +18,6 @@ import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/data/resources/kkphim_rest_client.dart';
 import 'package:vuiphim/data/resources/rest_client.dart';
-import 'package:vuiphim/core/services/implements/background_sync.dart';
-import 'package:vuiphim/core/services/implements/firebase_service.dart';
-import 'package:vuiphim/core/services/implements/keychain_storage_service.dart';
-import 'package:vuiphim/core/services/implements/movie_service.dart';
-import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
-import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
-import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
-import 'package:vuiphim/core/services/interfaces/imovie_service.dart'
-    show IMovieService;
 
 final locator = GetIt.instance;
 
