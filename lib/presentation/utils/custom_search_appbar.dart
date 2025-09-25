@@ -1,12 +1,25 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomSearchAppbar extends StatelessWidget
     implements PreferredSizeWidget {
-  const CustomSearchAppbar({super.key});
+  final Function(String)? onChanged;
+  final Function(String)? onFieldSubmitted;
+  final String? hintText;
+  final TextEditingController controller;
+  final double? textFieldHeight;
+  final double? appbarHeight;
+
+  const CustomSearchAppbar({
+    required this.onChanged,
+    required this.onFieldSubmitted,
+    required this.controller,
+    this.hintText,
+    this.textFieldHeight = 45,
+    this.appbarHeight = 65,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,31 +29,33 @@ class CustomSearchAppbar extends StatelessWidget
         child: AppBar(
           backgroundColor: Colors.black,
           centerTitle: false,
-          title: TextFormField(
-            style: const TextStyle(
-              color: Color(0xff7f7f7f),
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Tìm kiếm phim, TV show...',
-              hintStyle: const TextStyle(
+          title: SizedBox(
+            height: textFieldHeight,
+            child: TextFormField(
+              style: const TextStyle(
                 color: Color(0xff7f7f7f),
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
               ),
-
-              prefixIcon: const Icon(
-                CupertinoIcons.search,
-                color: Color(0xff7f7f7f),
-                size: 28,
-              ),
-              filled: true,
-              fillColor: const Color(0xff323232),
-              contentPadding: const EdgeInsets.all(2),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+              decoration: InputDecoration(
+                hintText: hintText ?? 'Tìm kiếm...',
+                hintStyle: const TextStyle(
+                  color: Color(0xff7f7f7f),
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+                prefixIcon: const Icon(
+                  CupertinoIcons.search,
+                  color: Color(0xff7f7f7f),
+                  size: 28,
+                ),
+                filled: true,
+                fillColor: const Color(0xff323232),
+                contentPadding: EdgeInsets.zero,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           ),
@@ -65,5 +80,5 @@ class CustomSearchAppbar extends StatelessWidget
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(65);
+  Size get preferredSize => Size.fromHeight(appbarHeight ?? 65);
 }

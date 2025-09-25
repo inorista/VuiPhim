@@ -3,7 +3,8 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/native/vibration_native.dart';
+import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 import 'package:vuiphim/presentation/screens/explore_screen/explore_screen.dart';
@@ -71,6 +72,7 @@ class MainScreen extends StatelessWidget {
                 Expanded(
                   child: BottomNavigationItem(
                     onTap: () {
+                      VibrationNative.vibrateWithIntensity(1);
                       dashboardCubit.changeBoardIndex(0);
                     },
                     isSelected: state.boardIndex == 0,
@@ -82,6 +84,7 @@ class MainScreen extends StatelessWidget {
                 Expanded(
                   child: BottomNavigationItem(
                     onTap: () {
+                      VibrationNative.vibrateWithIntensity(1);
                       dashboardCubit.changeBoardIndex(1);
                     },
                     isSelected: state.boardIndex == 1,
@@ -93,6 +96,7 @@ class MainScreen extends StatelessWidget {
                 Expanded(
                   child: BottomNavigationItem(
                     onTap: () {
+                      VibrationNative.vibrateWithIntensity(1);
                       dashboardCubit.changeBoardIndex(2);
                     },
                     isSelected: state.boardIndex == 2,

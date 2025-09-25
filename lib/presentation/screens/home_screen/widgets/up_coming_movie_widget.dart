@@ -53,9 +53,7 @@ class UpComingMovieWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          VibrationNative.impactFeedback(
-                            VibrateStyle.medium.name,
-                          );
+                          VibrationNative.vibrateWithIntensity(1);
                           context.push(
                             '/movie_detail/${movies[index].id}',
                             extra: {'id': movies[index].id.toString()},

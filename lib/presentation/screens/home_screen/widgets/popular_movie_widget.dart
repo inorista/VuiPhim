@@ -39,7 +39,7 @@ class PopularMovieWidget extends StatelessWidget {
                   final movie = movies[index];
                   return InkWell(
                     onTap: () {
-                      VibrationNative.impactFeedback(VibrateStyle.medium.name);
+                      VibrationNative.vibrateWithIntensity(1);
                       context.push('/movie_detail/${movie.id}');
                     },
                     child: Stack(

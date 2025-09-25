@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
+import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
@@ -46,6 +48,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
         },
         listener: (context, state) {
           if (state is ExploreLoaded) {
+            if (state.isLoadingMore) {
+              VibrationNative.vibrateWithIntensity(1);
+            }
             scrollController.addListener(() {
               if (scrollController.offset >=
                       scrollController.position.maxScrollExtent &&
@@ -85,6 +90,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   final currentItem = state.movies[index];
                                   return InkWell(
                                     onTap: () {
+                                      VibrationNative.vibrateWithIntensity(1);
                                       context.push(
                                         '/movie_detail/${currentItem.id}',
                                         extra: {
@@ -234,7 +240,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   child: Center(
                                     child: Image.asset(
                                       'assets/icons/loading_icon.gif',
-                                      width: 30,
+                                      height: 50,
                                     ),
                                   ),
                                 ),
