@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
-import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/presentation/blocs/movie_search/movie_search_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_search_appbar.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
@@ -131,18 +130,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ],
               );
-              // return ListView.builder(
-              //   itemCount: state.movies.length,
-              //   itemBuilder: (context, index) {
-              //     final movie = state.movies[index];
-              //     return ListTile(
-              //       title: Text(
-              //         movie.title,
-              //         style: const TextStyle(color: Colors.white),
-              //       ),
-              //     );
-              //   },
-              // );
             } else if (state is MovieSearchError) {
               return Center(
                 child: Text(

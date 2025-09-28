@@ -12,19 +12,29 @@ class MovieSearchInitial extends MovieSearchState {}
 class MovieSearchLoading extends MovieSearchState {}
 
 class MovieSearchLoaded extends MovieSearchState {
-  final List<MovieEntity> movies;
+  final List<MovieEntity> nowPlayingMovies;
+  final List<MovieEntity> searchedMovies;
   final bool isLoadingMore;
-  const MovieSearchLoaded({this.movies = const [], this.isLoadingMore = false});
+  const MovieSearchLoaded({
+    this.nowPlayingMovies = const [],
+    this.searchedMovies = const [],
+    this.isLoadingMore = false,
+  });
 
-  MovieSearchLoaded copyWith({List<MovieEntity>? movies, bool? isLoadingMore}) {
+  MovieSearchLoaded copyWith({
+    List<MovieEntity>? nowPlayingMovies,
+    List<MovieEntity>? searchedMovies,
+    bool? isLoadingMore,
+  }) {
     return MovieSearchLoaded(
-      movies: movies ?? this.movies,
+      nowPlayingMovies: nowPlayingMovies ?? this.nowPlayingMovies,
+      searchedMovies: searchedMovies ?? this.searchedMovies,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 
   @override
-  List<Object> get props => [movies, isLoadingMore];
+  List<Object> get props => [nowPlayingMovies, searchedMovies, isLoadingMore];
 }
 
 class MovieSearchError extends MovieSearchState {

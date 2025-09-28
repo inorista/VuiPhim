@@ -23,7 +23,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
       final movieEntities = movies.results
           .map((e) => MovieEntity.fromDto(e))
           .toList();
-      emit(MovieSearchLoaded(movies: movieEntities));
+      emit(MovieSearchLoaded(nowPlayingMovies: movieEntities));
     } catch (e) {
       emit(const MovieSearchError(message: "Can't get playing now movies"));
     }
