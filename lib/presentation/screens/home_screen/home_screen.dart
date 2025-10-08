@@ -28,20 +28,25 @@ class HomeScreen extends StatelessWidget {
       ],
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            BackdropWidget(height: height),
-            const CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(child: PopularMovieWidget()),
-                SliverToBoxAdapter(child: SizedBox(height: 30)),
-                SliverToBoxAdapter(child: TopRatedMovieWidget()),
-                SliverToBoxAdapter(child: UpComingMovieWidget()),
-                SliverToBoxAdapter(child: SizedBox(height: 120)),
-              ],
-            ),
-          ],
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              BackdropWidget(height: height),
+              const CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(child: PopularMovieWidget()),
+                  SliverToBoxAdapter(child: SizedBox(height: 30)),
+                  SliverToBoxAdapter(child: TopRatedMovieWidget()),
+                  SliverToBoxAdapter(child: UpComingMovieWidget()),
+                  SliverToBoxAdapter(child: SizedBox(height: 120)),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

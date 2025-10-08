@@ -13,7 +13,7 @@ abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @GET("/search/movie")
-  Future<MovieResponseDto> getData({
+  Future<MovieResponseDto> getMovieByKeyword({
     @Query('query') required String query,
     @Query('language') String? language = 'vi-VN',
     @Query('page') int page = 1,

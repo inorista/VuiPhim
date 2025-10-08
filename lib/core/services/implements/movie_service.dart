@@ -120,4 +120,40 @@ class MovieService implements IMovieService {
       return null;
     }
   }
+
+  @override
+  Future<MovieResponseDto> searchMovieByKeyword(
+    String keyword, {
+    int page = 1,
+    String language = 'vi-VN',
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      return await _networkService.searchMovieByKeyword(
+        keyword,
+        page: page,
+        language: language,
+        cancelToken: cancelToken,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<MovieResponseDto> getNowPlayingMovies({
+    int page = 1,
+    String language = 'vi-VN',
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      return await _networkService.getNowPlayingMovies(
+        page: page,
+        language: language,
+        cancelToken: cancelToken,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

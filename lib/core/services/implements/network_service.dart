@@ -134,4 +134,24 @@ class NetworkService implements INetworkService {
       rethrow;
     }
   }
+
+  @override
+  Future<MovieResponseDto> searchMovieByKeyword(
+    String keyword, {
+    int page = 1,
+    String language = 'vi-VN',
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final movieDto = await getRestClient().getMovieByKeyword(
+        query: keyword,
+        page: page,
+        language: language,
+        cancelToken: cancelToken,
+      );
+      return movieDto;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

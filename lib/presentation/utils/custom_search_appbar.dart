@@ -32,6 +32,8 @@ class CustomSearchAppbar extends StatelessWidget
           title: SizedBox(
             height: textFieldHeight,
             child: TextFormField(
+              onFieldSubmitted: onFieldSubmitted,
+              onChanged: onChanged,
               style: const TextStyle(
                 color: Color(0xff7f7f7f),
                 fontSize: 17,

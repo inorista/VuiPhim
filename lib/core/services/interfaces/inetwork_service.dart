@@ -43,4 +43,11 @@ abstract class INetworkService {
     String language = 'vi-VN',
     CancelToken? cancelToken,
   });
+
+  Future<MovieResponseDto> searchMovieByKeyword(
+    String keyword, {
+    int page = 1,
+    String language = 'vi-VN',
+    CancelToken? cancelToken,
+  });
 }

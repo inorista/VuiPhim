@@ -24,7 +24,7 @@ class _RestClient implements RestClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<MovieResponseDto> getData({
+  Future<MovieResponseDto> getMovieByKeyword({
     required String query,
     String? language = 'vi-VN',
     int page = 1,
