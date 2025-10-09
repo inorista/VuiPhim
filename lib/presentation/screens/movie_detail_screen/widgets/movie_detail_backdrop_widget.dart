@@ -14,22 +14,22 @@ class MovieDetailBackdropWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<MovieDetailCubit, MovieDetailState>(
       listener: (context, state) {
-        if (state is MovieDetailLoaded) {
+        if (state.status == MovieDetailStatus.success) {
           context.read<MovieSourceCubit>().getMovieSources(
-            movieId: state.movieDetail.id,
+            movieId: state.movieDetail?.id ?? -1,
           );
         }
       },
       child: BlocBuilder<MovieDetailCubit, MovieDetailState>(
         builder: (_, state) {
-          if (state is MovieDetailLoaded) {
+          if (state.status == MovieDetailStatus.success) {
             return Stack(
               alignment: Alignment.topCenter,
               children: [
                 Positioned(
                   top: 0,
                   child: CachedNetworkImage(
-                    imageUrl: state.movieDetail.backdropUrl,
+                    imageUrl: state.movieDetail?.backdropUrl ?? '',
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.425,
                     fadeInDuration: const Duration(milliseconds: 10),
@@ -52,7 +52,7 @@ class MovieDetailBackdropWidget extends StatelessWidget {
                 ),
               ],
             );
-          } else if (state is MovieDetailLoading) {
+          } else if (state.status == MovieDetailStatus.loading) {
             return Shimmer(
               height: MediaQuery.of(context).size.height * 0.46,
               width: MediaQuery.of(context).size.width,

@@ -1,31 +1,34 @@
 part of 'movie_detail_cubit.dart';
 
-abstract class MovieDetailState extends Equatable {
-  const MovieDetailState();
+enum MovieDetailStatus { initial, loading, success, failure }
 
-  @override
-  List<Object> get props => [];
-}
+class MovieDetailState extends Equatable {
+  const MovieDetailState({
+    this.status = MovieDetailStatus.initial,
+    this.movieDetail,
+    this.cast = const [],
+    this.errorMessage,
+  });
 
-class MovieDetailInitial extends MovieDetailState {}
-
-class MovieDetailLoading extends MovieDetailState {}
-
-class MovieDetailLoaded extends MovieDetailState {
-  final MovieDetailEntity movieDetail;
+  final MovieDetailStatus status;
+  final MovieDetailEntity? movieDetail;
   final List<CastEntity> cast;
+  final String? errorMessage;
 
-  const MovieDetailLoaded({required this.movieDetail, this.cast = const []});
+  MovieDetailState copyWith({
+    MovieDetailStatus? status,
+    MovieDetailEntity? movieDetail,
+    List<CastEntity>? cast,
+    String? errorMessage,
+  }) {
+    return MovieDetailState(
+      status: status ?? this.status,
+      movieDetail: movieDetail ?? this.movieDetail,
+      cast: cast ?? this.cast,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object> get props => [movieDetail, cast];
-}
-
-class MovieDetailError extends MovieDetailState {
-  final String message;
-
-  const MovieDetailError({required this.message});
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [status, movieDetail, cast, errorMessage];
 }

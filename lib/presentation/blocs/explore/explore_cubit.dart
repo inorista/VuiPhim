@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
@@ -8,56 +7,75 @@ import 'package:vuiphim/data/hive_database/hive_entities/move_entity/movie_entit
 part 'explore_state.dart';
 
 class ExploreCubit extends Cubit<ExploreState> {
-  ExploreCubit() : super(ExploreInitial());
+  ExploreCubit() : super(const ExploreState());
 
-  int currentPage = 1;
-  final _networkService = locator<INetworkService>();
+  final INetworkService _networkService = locator<INetworkService>();
+  int _currentPage = 1;
 
-  void loadNowPlayingMovies() async {
-    CancelToken cancelToken = CancelToken();
-    emit(ExploreLoading());
+  Future<void> loadNowPlayingMovies() async {
+    emit(state.copyWith(status: ExploreStatus.loading));
+    _currentPage = 1;
     try {
       final movies = await _networkService.getNowPlayingMovies(
-        page: currentPage,
-        cancelToken: cancelToken,
+        page: _currentPage,
       );
-      if (movies.results.isNotEmpty) {
-        final movieEntities = movies.results.map((e) => e.toEntity()).toList();
-        emit(ExploreLoaded(movies: movieEntities));
-      }
+      final movieEntities = movies.results.map((e) => e.toEntity()).toList();
+      emit(
+        state.copyWith(
+          status: ExploreStatus.success,
+          movies: movieEntities,
+          hasReachedMax: movies.results.isEmpty,
+        ),
+      );
     } catch (e) {
-      emit(ExploreError(message: e.toString()));
+      emit(
+        state.copyWith(
+          status: ExploreStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
-  void loadMoreNowPlayingMovies() async {
-    if (state is ExploreLoaded) {
-      emit((state as ExploreLoaded).copyWith(isLoadingMore: true));
+  Future<void> loadMoreNowPlayingMovies() async {
+    if (state.hasReachedMax) return;
 
-      CancelToken cancelToken = CancelToken();
-      try {
-        currentPage++;
-        final movies = await _networkService.getNowPlayingMovies(
-          page: currentPage,
-          cancelToken: cancelToken,
+    emit(state.copyWith(loadingMore: true));
+
+    try {
+      _currentPage++;
+      final movies = await _networkService.getNowPlayingMovies(
+        page: _currentPage,
+      );
+      final movieEntities = movies.results.map((e) => e.toEntity()).toList();
+
+      if (movieEntities.isEmpty) {
+        emit(
+          state.copyWith(
+            status: ExploreStatus.success,
+            hasReachedMax: true,
+            loadingMore: false,
+          ),
         );
-        if (movies.results.isNotEmpty) {
-          final movieEntities = movies.results
-              .map((e) => e.toEntity())
-              .toList();
-          final currentState = state as ExploreLoaded;
-          final updatedMovies = List<MovieEntity>.from(currentState.movies)
-            ..addAll(movieEntities);
-          emit(
-            (state as ExploreLoaded).copyWith(
-              isLoadingMore: false,
-              movies: updatedMovies,
-            ),
-          );
-        }
-      } catch (e) {
-        currentPage--;
+      } else {
+        emit(
+          state.copyWith(
+            status: ExploreStatus.success,
+            movies: List.of(state.movies)..addAll(movieEntities),
+            hasReachedMax: false,
+            loadingMore: false,
+          ),
+        );
       }
+    } catch (e) {
+      _currentPage--;
+      emit(
+        state.copyWith(
+          status: ExploreStatus.failure,
+          errorMessage: e.toString(),
+          loadingMore: false,
+        ),
+      );
     }
   }
 }

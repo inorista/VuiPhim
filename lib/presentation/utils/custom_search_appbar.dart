@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/presentation/utils/debounced_search_field.dart';
 
 class CustomSearchAppbar extends StatelessWidget
     implements PreferredSizeWidget {
   final Function(String)? onChanged;
   final Function(String)? onFieldSubmitted;
   final String? hintText;
-  final TextEditingController controller;
   final double? textFieldHeight;
   final double? appbarHeight;
 
   const CustomSearchAppbar({
     required this.onChanged,
     required this.onFieldSubmitted,
-    required this.controller,
     this.hintText,
     this.textFieldHeight = 45,
     this.appbarHeight = 65,
@@ -31,34 +30,10 @@ class CustomSearchAppbar extends StatelessWidget
           centerTitle: false,
           title: SizedBox(
             height: textFieldHeight,
-            child: TextFormField(
-              onFieldSubmitted: onFieldSubmitted,
+            child: DebouncedSearchField(
               onChanged: onChanged,
-              style: const TextStyle(
-                color: Color(0xff7f7f7f),
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-              ),
-              decoration: InputDecoration(
-                hintText: hintText ?? 'Tìm kiếm...',
-                hintStyle: const TextStyle(
-                  color: Color(0xff7f7f7f),
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: const Icon(
-                  CupertinoIcons.search,
-                  color: Color(0xff7f7f7f),
-                  size: 28,
-                ),
-                filled: true,
-                fillColor: const Color(0xff323232),
-                contentPadding: EdgeInsets.zero,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-              ),
+              onFieldSubmitted: onFieldSubmitted,
+              hintText: hintText,
             ),
           ),
           leadingWidth: 35,

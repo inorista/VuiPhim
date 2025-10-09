@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
 import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
@@ -6,6 +7,7 @@ import 'package:vuiphim/data/dtos/genre_response_dto/genre_response_dto.dart';
 import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/data/dtos/movie_response_dto/movie_response_dto.dart';
 
+@LazySingleton(as: INetworkService)
 class NetworkService implements INetworkService {
   @override
   Future<MovieResponseDto> getNowPlayingMovies({

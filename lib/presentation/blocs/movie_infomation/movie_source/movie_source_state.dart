@@ -1,30 +1,30 @@
 part of 'movie_source_cubit.dart';
 
-abstract class MovieSourceState extends Equatable {
-  const MovieSourceState();
+enum MovieSourceStatus { initial, loading, success, failure }
 
-  @override
-  List<Object> get props => [];
-}
+class MovieSourceState extends Equatable {
+  const MovieSourceState({
+    this.status = MovieSourceStatus.initial,
+    this.sources = const [],
+    this.errorMessage,
+  });
 
-class MovieSourceInitial extends MovieSourceState {}
-
-class MovieSourceLoading extends MovieSourceState {}
-
-class MovieSourceLoaded extends MovieSourceState {
+  final MovieSourceStatus status;
   final List<EpisodeEntity> sources;
+  final String? errorMessage;
 
-  const MovieSourceLoaded({required this.sources});
+  MovieSourceState copyWith({
+    MovieSourceStatus? status,
+    List<EpisodeEntity>? sources,
+    String? errorMessage,
+  }) {
+    return MovieSourceState(
+      status: status ?? this.status,
+      sources: sources ?? this.sources,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object> get props => [sources];
-}
-
-class MovieSourceError extends MovieSourceState {
-  final String message;
-
-  const MovieSourceError({required this.message});
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [status, sources, errorMessage];
 }

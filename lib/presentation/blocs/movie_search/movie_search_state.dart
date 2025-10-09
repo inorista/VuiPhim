@@ -1,46 +1,41 @@
 part of 'movie_search_cubit.dart';
 
-abstract class MovieSearchState extends Equatable {
-  const MovieSearchState();
+// Enum để quản lý trạng thái, giúp code sạch sẽ hơn
+enum MovieSearchStatus { initial, loading, success, failure }
 
-  @override
-  List<Object> get props => [];
-}
-
-class MovieSearchInitial extends MovieSearchState {}
-
-class MovieSearchLoading extends MovieSearchState {}
-
-class MovieSearchLoaded extends MovieSearchState {
-  final List<MovieEntity> nowPlayingMovies;
-  final List<MovieEntity> searchedMovies;
-  final bool isLoadingMore;
-  const MovieSearchLoaded({
+class MovieSearchState extends Equatable {
+  const MovieSearchState({
+    this.status = MovieSearchStatus.initial,
     this.nowPlayingMovies = const [],
     this.searchedMovies = const [],
-    this.isLoadingMore = false,
+    this.errorMessage,
   });
 
-  MovieSearchLoaded copyWith({
+  final MovieSearchStatus status;
+  final List<MovieEntity> nowPlayingMovies;
+  final List<MovieEntity> searchedMovies;
+  final String? errorMessage;
+
+  // Phương thức copyWith là chìa khóa của việc quản lý state bất biến (immutable)
+  MovieSearchState copyWith({
+    MovieSearchStatus? status,
     List<MovieEntity>? nowPlayingMovies,
     List<MovieEntity>? searchedMovies,
-    bool? isLoadingMore,
+    String? errorMessage,
   }) {
-    return MovieSearchLoaded(
+    return MovieSearchState(
+      status: status ?? this.status,
       nowPlayingMovies: nowPlayingMovies ?? this.nowPlayingMovies,
       searchedMovies: searchedMovies ?? this.searchedMovies,
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props => [nowPlayingMovies, searchedMovies, isLoadingMore];
-}
-
-class MovieSearchError extends MovieSearchState {
-  final String message;
-  const MovieSearchError({required this.message});
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [
+    status,
+    nowPlayingMovies,
+    searchedMovies,
+    errorMessage,
+  ];
 }

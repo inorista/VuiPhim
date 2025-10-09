@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
 import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
 
+@LazySingleton(as: IFirebaseService)
 class FirebaseService implements IFirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final IKeychainStorageService _keychainStorageService =
@@ -30,7 +32,7 @@ class FirebaseService implements IFirebaseService {
   }
 
   @override
-  Future<void> getTmdbApiKey() async {
+  Future<String?> getTmdbApiKey() async {
     final data = await getDocumentFromCollection(
       ApiConstants.collectionPath,
       ApiConstants.documentPath,
@@ -41,5 +43,6 @@ class FirebaseService implements IFirebaseService {
         data[ApiConstants.tmdbKey],
       );
     }
+    return data?[ApiConstants.tmdbKey];
   }
 }

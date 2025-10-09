@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
@@ -9,6 +10,7 @@ import 'package:vuiphim/data/hive_database/hive_entities/move_entity/movie_entit
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart';
 import 'package:dio/dio.dart';
 
+@LazySingleton(as: IMovieService)
 class MovieService implements IMovieService {
   final _movieDao = locator<MovieDao>();
   final _networkService = locator<INetworkService>();

@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
-import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
@@ -47,13 +46,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
           return previous != current;
         },
         listener: (context, state) {
-          if (state is ExploreLoaded) {
-            if (state.isLoadingMore) {
-              VibrationNative.vibrateWithIntensity(1);
-            }
+          if (state.loadingMore) {
+            VibrationNative.vibrateWithIntensity(1);
+          }
+          if (state.status == ExploreStatus.success) {
             scrollController.addListener(() {
               if (scrollController.offset >=
-                      scrollController.position.maxScrollExtent &&
+                      scrollController.position.maxScrollExtent - 20 &&
                   !scrollController.position.outOfRange) {
                 context.read<ExploreCubit>().loadMoreNowPlayingMovies();
               }
@@ -72,7 +71,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   width: width,
                   child: BlocBuilder<ExploreCubit, ExploreState>(
                     builder: (context, state) {
-                      if (state is ExploreLoaded) {
+                      if (state.status == ExploreStatus.success) {
                         return CustomScrollView(
                           controller: scrollController,
                           physics: const BouncingScrollPhysics(
@@ -231,7 +230,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               ),
                             ),
 
-                            if (state.isLoadingMore)
+                            if (state.loadingMore)
                               SliverToBoxAdapter(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -250,15 +249,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
                           ],
                         );
-                      } else if (state is ExploreLoading) {
+                      } else if (state.status == ExploreStatus.loading) {
                         return Image.asset(
                           'assets/icons/loading_icon.gif',
                           width: 30,
                         );
-                      } else if (state is ExploreError) {
+                      } else if (state.status == ExploreStatus.failure) {
                         return Center(
                           child: Text(
-                            state.message,
+                            state.errorMessage ?? 'Đã có lỗi xảy ra',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,

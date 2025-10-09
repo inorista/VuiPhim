@@ -5,14 +5,11 @@ import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
-import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await EnvironmentLocator.setupServiceLocator();
-  await locator<IFirebaseService>().getTmdbApiKey();
-  await EnvironmentLocator.setupRestClient();
+  await configureDependencies();
   await HiveDatabase().setupHiveDatabase();
   await locator<IBackgroundSync>().syncGenres();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

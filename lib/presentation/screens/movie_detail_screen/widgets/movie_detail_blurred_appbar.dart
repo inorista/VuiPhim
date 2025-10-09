@@ -16,9 +16,9 @@ class MovieDetailBlurredAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MovieDetailCubit, MovieDetailState>(
       builder: (context, state) {
-        if (state is MovieDetailLoaded) {
+        if (state.status == MovieDetailStatus.success) {
           return CustomAnimationAppbar(
-            title: state.movieDetail.title,
+            title: state.movieDetail?.title,
             actions: [
               InkWell(
                 onTap: () {

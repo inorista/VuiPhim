@@ -1,64 +1,49 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
-import 'package:vuiphim/core/services/implements/background_sync.dart';
-import 'package:vuiphim/core/services/implements/firebase_service.dart';
-import 'package:vuiphim/core/services/implements/keychain_storage_service.dart';
-import 'package:vuiphim/core/services/implements/movie_service.dart';
-import 'package:vuiphim/core/services/implements/network_service.dart';
-import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
 import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
 import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
-import 'package:vuiphim/core/services/interfaces/imovie_service.dart'
-    show IMovieService;
-import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
-import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart';
-import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
-import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
-import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/data/resources/kkphim_rest_client.dart';
 import 'package:vuiphim/data/resources/rest_client.dart';
+import 'locator.config.dart';
 
 final locator = GetIt.instance;
+@InjectableInit()
+Future<void> configureDependencies() async => locator.init();
 
-class EnvironmentLocator {
-  static Future<void> setupServiceLocator() async {
-    // Register Services
-    locator.registerLazySingleton<IKeychainStorageService>(
-      () => KeychainStorageService(),
-    );
-    locator.registerLazySingleton<IMovieService>(() => MovieService());
-    locator.registerLazySingleton<IFirebaseService>(() => FirebaseService());
-    locator.registerLazySingleton<IBackgroundSync>(() => BackgroundSync());
-
-    locator.registerLazySingleton<INetworkService>(() => NetworkService());
-
-    // Register DAOs
-    locator.registerLazySingleton<MovieDao>(() => MovieDao());
-    locator.registerLazySingleton<GenreDao>(() => GenreDao());
-    locator.registerLazySingleton<CastDao>(() => CastDao());
-    locator.registerLazySingleton<MovieDetailDao>(() => MovieDetailDao());
-  }
-
-  static Future<void> setupRestClient() async {
+@module
+abstract class RegisterModule {
+  @preResolve
+  @Named('tmdbDio')
+  Future<Dio> provideTmdbDio(
+    IKeychainStorageService keychainStorageService,
+  ) async {
     final dio = Dio();
-    final kkphimDio = Dio();
-    // Register RestClient
-    final apiKey = await locator<IKeychainStorageService>().getData(
-      ApiConstants.tmdbKey,
-    );
-
+    String? apiKey = await keychainStorageService.getData(ApiConstants.tmdbKey);
+    apiKey ??= await locator<IFirebaseService>().getTmdbApiKey();
     dio.options = BaseOptions(
       baseUrl: ApiConstants.baseUrl,
       headers: {"Authorization": "Bearer $apiKey"},
     );
 
-    kkphimDio.options = BaseOptions(baseUrl: ApiConstants.kkphimBaseUrl);
-    locator.registerLazySingleton<RestClient>(() => RestClient(dio));
-    locator.registerLazySingleton<KKPhimRestClient>(
-      () => KKPhimRestClient(kkphimDio),
-    );
+    return dio;
   }
+
+  @lazySingleton
+  @Named('kkphimDio')
+  Dio provideKkphimDio() {
+    final dio = Dio();
+    dio.options = BaseOptions(baseUrl: ApiConstants.kkphimBaseUrl);
+    return dio;
+  }
+
+  @lazySingleton
+  RestClient provideRestClient(@Named('tmdbDio') Dio dio) => RestClient(dio);
+
+  @lazySingleton
+  KKPhimRestClient provideKKPhimRestClient(@Named('kkphimDio') Dio dio) =>
+      KKPhimRestClient(dio);
 }
 
 RestClient getRestClient() {

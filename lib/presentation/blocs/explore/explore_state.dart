@@ -1,36 +1,43 @@
 part of 'explore_cubit.dart';
 
-abstract class ExploreState extends Equatable {
-  const ExploreState();
+enum ExploreStatus { initial, loading, success, failure }
 
-  @override
-  List<Object> get props => [];
-}
-
-class ExploreInitial extends ExploreState {}
-
-class ExploreLoading extends ExploreState {}
-
-class ExploreLoaded extends ExploreState {
+class ExploreState extends Equatable {
+  const ExploreState({
+    this.status = ExploreStatus.initial,
+    this.movies = const [],
+    this.hasReachedMax = false,
+    this.errorMessage,
+    this.loadingMore = false,
+  });
+  final bool loadingMore;
+  final ExploreStatus status;
   final List<MovieEntity> movies;
-  final bool isLoadingMore;
-  const ExploreLoaded({this.movies = const [], this.isLoadingMore = false});
+  final bool hasReachedMax;
+  final String? errorMessage;
 
-  ExploreLoaded copyWith({List<MovieEntity>? movies, bool? isLoadingMore}) {
-    return ExploreLoaded(
+  ExploreState copyWith({
+    ExploreStatus? status,
+    List<MovieEntity>? movies,
+    bool? hasReachedMax,
+    String? errorMessage,
+    bool? loadingMore,
+  }) {
+    return ExploreState(
+      status: status ?? this.status,
       movies: movies ?? this.movies,
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      loadingMore: loadingMore ?? this.loadingMore,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props => [movies, isLoadingMore];
-}
-
-class ExploreError extends ExploreState {
-  final String message;
-  const ExploreError({required this.message});
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [
+    status,
+    movies,
+    hasReachedMax,
+    errorMessage,
+    loadingMore,
+  ];
 }

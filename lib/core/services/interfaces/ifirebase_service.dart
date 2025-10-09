@@ -6,5 +6,5 @@ abstract class IFirebaseService {
     String collectionPath,
     String documentId,
   );
-  Future<void> getTmdbApiKey();
+  Future<String?> getTmdbApiKey();
 }

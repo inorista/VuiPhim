@@ -1,8 +1,10 @@
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/genre_entity/genre_entity.dart';
 import 'package:vuiphim/core/services/interfaces/igenre_service.dart';
 
+@LazySingleton(as: IGenreService)
 class GenreService implements IGenreService {
   final _genreDao = locator<GenreDao>();
   @override

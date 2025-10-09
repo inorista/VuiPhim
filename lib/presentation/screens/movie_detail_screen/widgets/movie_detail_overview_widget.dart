@@ -30,7 +30,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
       decoration: const BoxDecoration(color: Colors.black),
       child: BlocBuilder<MovieDetailCubit, MovieDetailState>(
         builder: (context, state) {
-          if (state is MovieDetailLoaded) {
+          if (state.status == MovieDetailStatus.success) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -52,7 +52,9 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                           const SizedBox(height: 10),
                           Text(
                             DateFormat('dd/MM/yyyy').format(
-                              DateTime.parse(state.movieDetail.releaseDate),
+                              DateTime.parse(
+                                state.movieDetail?.releaseDate ?? '',
+                              ),
                             ),
                             style: const TextStyle(
                               color: Color(0xff9198a1),
@@ -81,30 +83,39 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                             direction: Axis.horizontal,
                             spacing: 10,
                             runSpacing: 10,
-                            children: state.movieDetail.genres
-                                .map(
-                                  (genre) => Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
-                                        color: const Color(0xFFbe2b27),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      genre.name.replaceAll('Phim', '').trim(),
-                                      style: const TextStyle(
-                                        color: Color(0xFFbe2b27),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
+                            children: state.movieDetail != null
+                                ? state.movieDetail?.genres
+                                          .map(
+                                            (genre) => Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 4,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                border: Border.all(
+                                                  color: const Color(
+                                                    0xFFbe2b27,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                genre.name
+                                                    .replaceAll('Phim', '')
+                                                    .trim(),
+                                                style: const TextStyle(
+                                                  color: Color(0xFFbe2b27),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                          .toList() ??
+                                      []
+                                : [],
                           ),
                         ],
                       ),
@@ -184,10 +195,10 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                     children: [
                       TextSpan(
                         text: isExpanded
-                            ? state.movieDetail.overview
-                            : (state.movieDetail.overview.length > 200
-                                  ? "${state.movieDetail.overview.substring(0, 200)}... "
-                                  : "${state.movieDetail.overview} "),
+                            ? state.movieDetail?.overview
+                            : (state.movieDetail?.overview.length ?? 0) > 200
+                            ? "${state.movieDetail?.overview.substring(0, 200)}... "
+                            : "${state.movieDetail?.overview} ",
                         style: const TextStyle(
                           height: 1.5,
                           color: Color(0xffebebeb),
@@ -213,7 +224,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                 ),
               ],
             );
-          } else if (state is MovieDetailLoading) {
+          } else if (state.status == MovieDetailStatus.loading) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

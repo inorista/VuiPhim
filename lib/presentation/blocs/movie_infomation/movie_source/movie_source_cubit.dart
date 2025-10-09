@@ -4,53 +4,72 @@ import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
+import 'package:vuiphim/data/resources/kkphim_rest_client.dart';
 
 part 'movie_source_state.dart';
 
 class MovieSourceCubit extends Cubit<MovieSourceState> {
-  MovieSourceCubit() : super(MovieSourceLoading());
-  final _movieDetailDao = locator<MovieDetailDao>();
+  MovieSourceCubit() : super(const MovieSourceState());
 
-  void getMovieSources({required int movieId}) async {
-    emit(MovieSourceLoading());
-    final movieDetail = await _movieDetailDao.getMovieDetailById(movieId);
-    if (movieDetail != null) {
-      try {
-        // LOAD FROM DB FIRST
-        if (movieDetail.episodes.isNotEmpty) {
-          emit(MovieSourceLoaded(sources: movieDetail.episodes));
-          return;
-        }
+  final MovieDetailDao _movieDetailDao = locator<MovieDetailDao>();
+  final KKPhimRestClient _kkphimRestClient = locator<KKPhimRestClient>();
 
-        // IF NOT FOUND, FETCH FROM API
-        final movieSearchResponseDto = await getKKPhimRestClient().searchMovies(
-          movieDetail.title,
-        );
-        final item = movieSearchResponseDto.data?.items.firstOrDefault((
-          element,
-        ) {
-          return ((int.tryParse(element.tmdb?.id ?? '') == movieId) ||
-              element.time == movieDetail.title);
-        });
-        if (item != null) {
-          final slug = item.slug;
-          final movieSourceDto = await getKKPhimRestClient().getMovieSources(
-            slug ?? '',
-          );
-          final sources = movieSourceDto.episodes
-              .map((source) => source.toEntity())
-              .toList();
-          movieDetail.episodes = sources;
-          emit(MovieSourceLoaded(sources: sources));
-          await _movieDetailDao.update(movieDetail.id, movieDetail);
-        } else {
-          emit(const MovieSourceError(message: "Movie source not found."));
-        }
-      } catch (e) {
-        emit(const MovieSourceError(message: "Fetch movie sources failed."));
+  Future<void> getMovieSources({required int movieId}) async {
+    try {
+      emit(state.copyWith(status: MovieSourceStatus.loading));
+
+      final movieDetail = await _movieDetailDao.getMovieDetailById(movieId);
+      if (movieDetail == null) {
+        throw Exception("Movie detail not found in local database.");
       }
-    } else {
-      emit(const MovieSourceError(message: "Movie detail not found."));
+
+      if (movieDetail.episodes.isNotEmpty) {
+        emit(
+          state.copyWith(
+            status: MovieSourceStatus.success,
+            sources: movieDetail.episodes,
+          ),
+        );
+        return;
+      }
+
+      final sources = await _fetchSourcesFromServer(movieDetail);
+      emit(state.copyWith(status: MovieSourceStatus.success, sources: sources));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: MovieSourceStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
+  }
+
+  Future<List<EpisodeEntity>> _fetchSourcesFromServer(
+    MovieDetailEntity movieDetail,
+  ) async {
+    final searchResponse = await _kkphimRestClient.searchMovies(
+      movieDetail.title,
+    );
+
+    final item = searchResponse.data?.items.firstOrDefault(
+      (element) =>
+          (int.tryParse(element.tmdb?.id ?? '') == movieDetail.id) ||
+          element.time == movieDetail.title,
+    );
+
+    final slug = item?.slug;
+    if (slug == null || slug.isEmpty) {
+      throw Exception("Could not find a matching movie source.");
+    }
+
+    final sourceDto = await _kkphimRestClient.getMovieSources(slug);
+    final sources = sourceDto.episodes.map((s) => s.toEntity()).toList();
+
+    movieDetail.episodes = sources;
+    await _movieDetailDao.update(movieDetail.id, movieDetail);
+
+    return sources;
   }
 }

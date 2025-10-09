@@ -16,7 +16,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
     return SafeArea(
       child: BlocBuilder<MovieDetailCubit, MovieDetailState>(
         builder: (context, state) {
-          if (state is MovieDetailLoaded) {
+          if (state.status == MovieDetailStatus.success) {
             return Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
@@ -27,7 +27,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
-                        imageUrl: state.movieDetail.posterUrl,
+                        imageUrl: state.movieDetail?.posterUrl ?? '',
                         width: 160,
                         height: 250,
                         fit: BoxFit.cover,
@@ -44,7 +44,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          state.movieDetail.title,
+                          state.movieDetail?.title ?? '',
                           maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -68,7 +68,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                             const SizedBox(width: 5),
                             Flexible(
                               child: Text(
-                                "Thời lượng: ${state.movieDetail.runtime} phút",
+                                "Thời lượng: ${state.movieDetail?.runtime ?? 0} phút",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -89,7 +89,7 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              "${state.movieDetail.voteAverage.toStringAsFixed(2)}/10",
+                              "${state.movieDetail?.voteAverage.toStringAsFixed(2) ?? '0.0'}/10",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -100,12 +100,14 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
 
                         BlocBuilder<MovieSourceCubit, MovieSourceState>(
                           builder: (context, sourceState) {
-                            if (sourceState is MovieSourceLoading) {
+                            if (sourceState.status ==
+                                MovieSourceStatus.loading) {
                               return const Padding(
                                 padding: EdgeInsets.only(top: 15),
                                 child: Shimmer(height: 40, width: 120),
                               );
-                            } else if (sourceState is MovieSourceLoaded) {
+                            } else if (sourceState.status ==
+                                MovieSourceStatus.success) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 15),
                                 child: CustomButton(

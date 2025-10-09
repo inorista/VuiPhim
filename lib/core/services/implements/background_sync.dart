@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart';
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
 
+@LazySingleton(as: IBackgroundSync)
 class BackgroundSync implements IBackgroundSync {
   final _networkService = locator<INetworkService>();
   @override

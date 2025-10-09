@@ -16,32 +16,23 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MovieSearchCubit()..getPlayingNowMovies(),
+      create: (context) => MovieSearchCubit()..getNowPlayingMovies(),
       child: Builder(
         builder: (context) {
           return Scaffold(
             backgroundColor: Colors.black,
             appBar: CustomSearchAppbar(
-              controller: _searchController,
               onChanged: (value) {
                 if (value.isEmpty) {
-                  context.read<MovieSearchCubit>().resetSearchState();
+                  context.read<MovieSearchCubit>().resetSearch();
                 } else {
                   context.read<MovieSearchCubit>().searchMovies(value);
                 }
               },
-              onFieldSubmitted: (value) {
-                if (value.isEmpty) {
-                  context.read<MovieSearchCubit>().resetSearchState();
-                } else {
-                  context.read<MovieSearchCubit>().searchMovies(value);
-                }
-              },
+              onFieldSubmitted: (value) {},
               textFieldHeight: 38.0,
               appbarHeight: 55.0,
               hintText: 'Tìm kiếm phim, TV show...',
@@ -52,11 +43,11 @@ class _SearchScreenState extends State<SearchScreen> {
               },
               child: BlocBuilder<MovieSearchCubit, MovieSearchState>(
                 builder: (context, state) {
-                  if (state is MovieSearchLoading) {
+                  if (state.status == MovieSearchStatus.loading) {
                     return Center(
                       child: Image.asset('assets/icons/loading_icon.gif'),
                     );
-                  } else if (state is MovieSearchLoaded) {
+                  } else if (state.status == MovieSearchStatus.success) {
                     return CustomScrollView(
                       slivers: [
                         if (state.searchedMovies.isNotEmpty) ...[
@@ -240,10 +231,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         ],
                       ],
                     );
-                  } else if (state is MovieSearchError) {
+                  } else if (state.status == MovieSearchStatus.failure) {
                     return Center(
                       child: Text(
-                        state.message,
+                        state.errorMessage ?? 'Unknown error',
                         style: const TextStyle(color: Colors.white),
                       ),
                     );
