@@ -231,16 +231,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
 
                             if (state.loadingMore)
-                              SliverToBoxAdapter(
+                              const SliverToBoxAdapter(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0,
-                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 20.0),
                                   child: Center(
-                                    child: Image.asset(
-                                      'assets/icons/loading_icon.gif',
-                                      height: 50,
-                                    ),
+                                    child: CupertinoActivityIndicator(),
                                   ),
                                 ),
                               ),
@@ -250,10 +245,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           ],
                         );
                       } else if (state.status == ExploreStatus.loading) {
-                        return Image.asset(
-                          'assets/icons/loading_icon.gif',
-                          width: 30,
-                        );
+                        return const CupertinoActivityIndicator(radius: 15);
                       } else if (state.status == ExploreStatus.failure) {
                         return Center(
                           child: Text(

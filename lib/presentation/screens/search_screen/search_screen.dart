@@ -45,7 +45,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 builder: (context, state) {
                   if (state.status == MovieSearchStatus.loading) {
                     return Center(
-                      child: Image.asset('assets/icons/loading_icon.gif'),
+                      child: CupertinoActivityIndicator(
+                        color: Colors.white.withAlpha(150),
+                        radius: 15,
+                      ),
                     );
                   } else if (state.status == MovieSearchStatus.success) {
                     return CustomScrollView(

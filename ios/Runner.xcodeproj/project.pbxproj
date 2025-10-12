@@ -13,6 +13,8 @@
 		6E0A3F7805F29F803EB40A78 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1EABF716D16CCFC306977B /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		91A3A1B82E689D0A00137DE1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 91A3A1B72E689D0A00137DE1 /* GoogleService-Info.plist */; };
+		91E3D5332E9BD07A00A5C362 /* BrightnessService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D5322E9BD07A00A5C362 /* BrightnessService.swift */; };
+		91E3D5352E9BD0B900A5C362 /* VibrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D5342E9BD0B400A5C362 /* VibrationService.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -70,6 +72,8 @@
 		91A3A1A32E689CCD00137DE1 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		91A3A1A52E689CCD00137DE1 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		91A3A1B72E689D0A00137DE1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		91E3D5322E9BD07A00A5C362 /* BrightnessService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessService.swift; sourceTree = "<group>"; };
+		91E3D5342E9BD0B400A5C362 /* VibrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrationService.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,11 +137,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		91F041F82E76DB5E00F69001 /* New Group */ = {
+		91F041F82E76DB5E00F69001 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				91E3D5342E9BD0B400A5C362 /* VibrationService.swift */,
+				91E3D5322E9BD07A00A5C362 /* BrightnessService.swift */,
 			);
-			path = "New Group";
+			path = Services;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -175,7 +181,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				91F041F82E76DB5E00F69001 /* New Group */,
+				91F041F82E76DB5E00F69001 /* Services */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -404,6 +410,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91E3D5352E9BD0B900A5C362 /* VibrationService.swift in Sources */,
+				91E3D5332E9BD07A00A5C362 /* BrightnessService.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);

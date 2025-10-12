@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Shimmer extends StatelessWidget {
@@ -24,7 +25,7 @@ class Shimmer extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       ),
       child: showLoading
-          ? Center(child: Image.asset('assets/icons/loading_icon.gif'))
+          ? const Center(child: CupertinoActivityIndicator())
           : const SizedBox.shrink(),
     );
   }
@@ -44,7 +45,7 @@ class CircleShimmer extends StatelessWidget {
         color: Color(0xfff1f1f1),
         shape: BoxShape.circle,
       ),
-      child: Center(child: Image.asset('assets/icons/loading_icon.gif')),
+      child: const Center(child: CupertinoActivityIndicator(radius: 15)),
     );
   }
 }
