@@ -1,16 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vuiphim/core/di/locator.dart';
-import 'package:vuiphim/core/hive_database/hive_database.dart';
+import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/core/router/app_router.dart';
-import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
+import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await EnvironmentLocator.initLocator();
+  await configureDependencies();
   await HiveDatabase().setupHiveDatabase();
-  await locator<IFirebaseService>().getTmdbApiKey();
+  await locator<IBackgroundSync>().syncGenres();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 
@@ -22,9 +24,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(title: 'VuiPhim', routerConfig: router);
+    return MaterialApp.router(
+      title: 'VuiPhim',
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        fontFamily: 'Roboto',
+      ),
+    );
   }
 }

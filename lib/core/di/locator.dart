@@ -1,24 +1,55 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vuiphim/core/resources/rest_client.dart';
-import 'package:vuiphim/core/services/implements/firebase_service.dart';
-import 'package:vuiphim/core/services/implements/keychain_storage_service.dart';
-import 'package:vuiphim/core/services/implements/movie_service.dart';
+import 'package:injectable/injectable.dart';
+import 'package:vuiphim/core/constants/api_constants.dart';
 import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
 import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
-import 'package:vuiphim/core/services/interfaces/imovie_service.dart'
-    show IMovieService;
+import 'package:vuiphim/data/resources/kkphim_rest_client.dart';
+import 'package:vuiphim/data/resources/rest_client.dart';
+import 'locator.config.dart';
 
 final locator = GetIt.instance;
-final Dio dio = Dio();
+@InjectableInit()
+Future<void> configureDependencies() async => locator.init();
 
-class EnvironmentLocator {
-  static Future<void> initLocator() async {
-    locator.registerLazySingleton<RestClient>(() => RestClient(dio));
-    locator.registerLazySingleton<IKeychainStorageService>(
-      () => KeychainStorageService(),
+@module
+abstract class RegisterModule {
+  @preResolve
+  @Named('tmdbDio')
+  Future<Dio> provideTmdbDio(
+    IKeychainStorageService keychainStorageService,
+  ) async {
+    final dio = Dio();
+    String? apiKey = await keychainStorageService.getData(ApiConstants.tmdbKey);
+    apiKey ??= await locator<IFirebaseService>().getTmdbApiKey();
+    dio.options = BaseOptions(
+      baseUrl: ApiConstants.baseUrl,
+      headers: {"Authorization": "Bearer $apiKey"},
     );
-    locator.registerLazySingleton<IMovieService>(() => MovieService());
-    locator.registerLazySingleton<IFirebaseService>(() => FirebaseService());
+
+    return dio;
   }
+
+  @lazySingleton
+  @Named('kkphimDio')
+  Dio provideKkphimDio() {
+    final dio = Dio();
+    dio.options = BaseOptions(baseUrl: ApiConstants.kkphimBaseUrl);
+    return dio;
+  }
+
+  @lazySingleton
+  RestClient provideRestClient(@Named('tmdbDio') Dio dio) => RestClient(dio);
+
+  @lazySingleton
+  KKPhimRestClient provideKKPhimRestClient(@Named('kkphimDio') Dio dio) =>
+      KKPhimRestClient(dio);
+}
+
+RestClient getRestClient() {
+  return locator<RestClient>();
+}
+
+KKPhimRestClient getKKPhimRestClient() {
+  return locator<KKPhimRestClient>();
 }
