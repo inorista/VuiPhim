@@ -7,9 +7,25 @@ import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/vid
 class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   VideoPlayerController? _controller;
   Timer? _positionTimer;
+  Timer? _autoSaveTimer;
   bool _isDisposed = false;
 
   VideoPlayerCubit() : super(VideoPlayerInitial());
+
+  void autoSavePosition() async {
+    _autoSaveTimer?.cancel();
+    _autoSaveTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_isDisposed) {
+        timer.cancel();
+        return;
+      }
+
+      final currentState = state;
+      if (currentState is VideoPlayerReady) {
+        final currentPosition = _controller!.value.position;
+      }
+    });
+  }
 
   Future<void> initializeVideo(String videoUrl) async {
     if (_isDisposed) return;

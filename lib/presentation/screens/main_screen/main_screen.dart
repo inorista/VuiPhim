@@ -6,9 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
+import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/screens/explore_screen/explore_screen.dart';
 import 'package:vuiphim/presentation/screens/home_screen/home_screen.dart';
 import 'package:vuiphim/presentation/screens/main_screen/widgets/bottom_navigation_item.dart';
+import 'package:vuiphim/presentation/screens/profile_screen/profile_screen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -24,7 +26,14 @@ class MainScreen extends StatelessWidget {
             if (state is DashBoardLoaded) {
               return IndexedStack(
                 index: state.boardIndex,
-                children: const [HomeScreen(), ExploreScreen(), HomeScreen()],
+                children: [
+                  const HomeScreen(),
+                  BlocProvider(
+                    create: (context) => ExploreCubit()..loadNowPlayingMovies(),
+                    child: const ExploreScreen(),
+                  ),
+                  const ProfileScreen(),
+                ],
               );
             }
             return const Center(child: CircularProgressIndicator());

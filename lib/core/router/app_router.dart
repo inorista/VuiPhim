@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
+import 'package:vuiphim/presentation/blocs/movie_search/movie_search_cubit.dart';
 import 'package:vuiphim/presentation/screens/main_screen/main_screen.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/movie_detail_screen.dart';
 import 'package:vuiphim/presentation/screens/search_screen/search_screen.dart';
@@ -38,7 +40,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRouter.search,
       builder: (context, state) {
-        return const SearchScreen();
+        return BlocProvider(
+          create: (context) => MovieSearchCubit()..getNowPlayingMovies(),
+          child: const SearchScreen(),
+        );
       },
     ),
 

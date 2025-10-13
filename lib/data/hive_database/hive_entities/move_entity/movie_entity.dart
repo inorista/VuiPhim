@@ -48,6 +48,8 @@ class MovieEntity extends Equatable {
   final int voteCount;
   @HiveField(14)
   final MovieCategory? category;
+  @HiveField(15)
+  final bool? isFavorite;
 
   const MovieEntity({
     required this.adult,
@@ -65,6 +67,7 @@ class MovieEntity extends Equatable {
     required this.voteAverage,
     required this.voteCount,
     this.category,
+    this.isFavorite = false,
   });
 
   factory MovieEntity.fromJson(Map<String, dynamic> json) =>
@@ -92,6 +95,7 @@ class MovieEntity extends Equatable {
       voteAverage: dto.voteAverage,
       voteCount: dto.voteCount,
       category: category,
+      isFavorite: false,
     );
   }
 
@@ -112,5 +116,6 @@ class MovieEntity extends Equatable {
     voteAverage,
     voteCount,
     category,
+    isFavorite,
   ];
 }

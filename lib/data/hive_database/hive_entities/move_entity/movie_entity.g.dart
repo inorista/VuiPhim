@@ -32,13 +32,14 @@ class MovieEntityAdapter extends TypeAdapter<MovieEntity> {
       voteAverage: fields[12] as double,
       voteCount: fields[13] as int,
       category: fields[14] as MovieCategory?,
+      isFavorite: fields[15] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MovieEntity obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.adult)
       ..writeByte(1)
@@ -68,7 +69,9 @@ class MovieEntityAdapter extends TypeAdapter<MovieEntity> {
       ..writeByte(13)
       ..write(obj.voteCount)
       ..writeByte(14)
-      ..write(obj.category);
+      ..write(obj.category)
+      ..writeByte(15)
+      ..write(obj.isFavorite);
   }
 
   @override
@@ -104,6 +107,7 @@ MovieEntity _$MovieEntityFromJson(Map<String, dynamic> json) => MovieEntity(
       voteAverage: (json['vote_average'] as num).toDouble(),
       voteCount: (json['vote_count'] as num).toInt(),
       category: $enumDecodeNullable(_$MovieCategoryEnumMap, json['category']),
+      isFavorite: json['isFavorite'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$MovieEntityToJson(MovieEntity instance) =>
@@ -123,6 +127,7 @@ Map<String, dynamic> _$MovieEntityToJson(MovieEntity instance) =>
       'vote_average': instance.voteAverage,
       'vote_count': instance.voteCount,
       'category': _$MovieCategoryEnumMap[instance.category],
+      'isFavorite': instance.isFavorite,
     };
 
 const _$MovieCategoryEnumMap = {

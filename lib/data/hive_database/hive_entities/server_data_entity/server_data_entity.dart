@@ -15,6 +15,8 @@ class ServerDataEntity {
   final String? linkEmbed;
   @HiveField(4)
   final String? linkM3U8;
+  @HiveField(5)
+  final Duration? playingDuration;
 
   ServerDataEntity({
     required this.name,
@@ -22,5 +24,6 @@ class ServerDataEntity {
     required this.filename,
     required this.linkEmbed,
     required this.linkM3U8,
+    this.playingDuration,
   });
 }
