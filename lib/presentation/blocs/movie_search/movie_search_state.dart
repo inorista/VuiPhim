@@ -9,12 +9,14 @@ class MovieSearchState extends Equatable {
     this.nowPlayingMovies = const [],
     this.searchedMovies = const [],
     this.errorMessage,
+    this.isSearching = false,
   });
 
   final MovieSearchStatus status;
   final List<MovieEntity> nowPlayingMovies;
   final List<MovieEntity> searchedMovies;
   final String? errorMessage;
+  final bool isSearching;
 
   // Phương thức copyWith là chìa khóa của việc quản lý state bất biến (immutable)
   MovieSearchState copyWith({
@@ -22,12 +24,14 @@ class MovieSearchState extends Equatable {
     List<MovieEntity>? nowPlayingMovies,
     List<MovieEntity>? searchedMovies,
     String? errorMessage,
+    bool? isSearching,
   }) {
     return MovieSearchState(
       status: status ?? this.status,
       nowPlayingMovies: nowPlayingMovies ?? this.nowPlayingMovies,
       searchedMovies: searchedMovies ?? this.searchedMovies,
       errorMessage: errorMessage ?? this.errorMessage,
+      isSearching: isSearching ?? this.isSearching,
     );
   }
 
@@ -37,5 +41,6 @@ class MovieSearchState extends Equatable {
     nowPlayingMovies,
     searchedMovies,
     errorMessage,
+    isSearching,
   ];
 }

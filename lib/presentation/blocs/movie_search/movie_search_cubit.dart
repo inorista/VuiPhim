@@ -43,16 +43,27 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
     emit(state.copyWith(status: MovieSearchStatus.loading));
     try {
       final movies = await _movieService.searchMovieByKeyword(keyword);
-      final movieEntities = movies.results
-          .map((e) => MovieEntity.fromDto(e))
-          .toList();
+      if (movies.results.isNotEmpty) {
+        final movieEntities = movies.results
+            .map((e) => MovieEntity.fromDto(e))
+            .toList();
 
-      emit(
-        state.copyWith(
-          status: MovieSearchStatus.success,
-          searchedMovies: movieEntities,
-        ),
-      );
+        emit(
+          state.copyWith(
+            status: MovieSearchStatus.success,
+            searchedMovies: movieEntities,
+            isSearching: true,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: MovieSearchStatus.success,
+            searchedMovies: [],
+            isSearching: true,
+          ),
+        );
+      }
     } catch (e) {
       emit(
         state.copyWith(
@@ -64,7 +75,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
   }
 
   void resetSearch() {
-    emit(state.copyWith(searchedMovies: []));
+    emit(state.copyWith(searchedMovies: [], isSearching: false));
   }
 
   Future<void> loadMoreNowPlayingMovies() async {

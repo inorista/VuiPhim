@@ -10,9 +10,11 @@ class CustomSearchAppbar extends StatelessWidget
   final String? hintText;
   final double? textFieldHeight;
   final double? appbarHeight;
+  final TextEditingController controller;
 
   const CustomSearchAppbar({
     required this.onChanged,
+    required this.controller,
     required this.onFieldSubmitted,
     this.hintText,
     this.textFieldHeight = 45,
@@ -31,6 +33,7 @@ class CustomSearchAppbar extends StatelessWidget
           title: SizedBox(
             height: textFieldHeight,
             child: DebouncedSearchField(
+              controller: controller,
               onChanged: onChanged,
               onFieldSubmitted: onFieldSubmitted,
               hintText: hintText,

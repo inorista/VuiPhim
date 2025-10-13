@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/presentation/blocs/movie_search/movie_search_cubit.dart';
@@ -16,6 +17,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -25,6 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
           return Scaffold(
             backgroundColor: Colors.black,
             appBar: CustomSearchAppbar(
+              controller: _searchController,
               onChanged: (value) {
                 if (value.isEmpty) {
                   context.read<MovieSearchCubit>().resetSearch();
@@ -53,96 +63,154 @@ class _SearchScreenState extends State<SearchScreen> {
                   } else if (state.status == MovieSearchStatus.success) {
                     return CustomScrollView(
                       slivers: [
-                        if (state.searchedMovies.isNotEmpty) ...[
-                          const SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.0),
-                            sliver: SliverToBoxAdapter(
-                              child: Text(
-                                'Kết quả gần nhất',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                        if (state.isSearching) ...[
+                          if (state.searchedMovies.isNotEmpty) ...[
+                            const SliverPadding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.0),
+                              sliver: SliverToBoxAdapter(
+                                child: Text(
+                                  'Kết quả gần nhất',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SliverPadding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14.0,
-                              vertical: 10.0,
-                            ),
-                            sliver: SliverList.separated(
-                              addAutomaticKeepAlives: true,
-                              itemCount: state.searchedMovies.length,
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(height: 14);
-                              },
-                              itemBuilder: (context, index) {
-                                final movie = state.searchedMovies[index];
-                                return InkWell(
-                                  onTap: () {
-                                    VibrationNative.vibrateWithIntensity(1);
-                                    context.push('/movie_detail/${movie.id}');
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(6),
-                                        child: CachedNetworkImage(
-                                          imageUrl: movie.backdropUrl,
-                                          fit: BoxFit.cover,
-                                          width: 130,
-                                          height: 75,
-                                          placeholderFadeInDuration:
-                                              const Duration(milliseconds: 10),
-                                          placeholder: (context, url) {
-                                            return const Shimmer(
-                                              width: 130,
-                                              height: 75,
-                                              borderRadius: 6,
-                                            );
-                                          },
-                                          fadeInDuration: const Duration(
-                                            milliseconds: 10,
+                            SliverPadding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0,
+                                vertical: 10.0,
+                              ),
+                              sliver: SliverList.separated(
+                                addAutomaticKeepAlives: true,
+                                itemCount: state.searchedMovies.length,
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(height: 14);
+                                },
+                                itemBuilder: (context, index) {
+                                  final movie = state.searchedMovies[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      VibrationNative.vibrateWithIntensity(1);
+                                      context.push('/movie_detail/${movie.id}');
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            6,
                                           ),
-                                          fadeOutDuration: const Duration(
-                                            milliseconds: 10,
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const SizedBox(),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          movie.title,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Color(0xfff1f1f1),
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
+                                          child: CachedNetworkImage(
+                                            imageUrl: movie.backdropUrl,
+                                            fit: BoxFit.cover,
+                                            width: 130,
+                                            height: 75,
+                                            placeholderFadeInDuration:
+                                                const Duration(
+                                                  milliseconds: 10,
+                                                ),
+                                            placeholder: (context, url) {
+                                              return const Shimmer(
+                                                width: 130,
+                                                height: 75,
+                                                borderRadius: 6,
+                                              );
+                                            },
+                                            fadeInDuration: const Duration(
+                                              milliseconds: 10,
+                                            ),
+                                            fadeOutDuration: const Duration(
+                                              milliseconds: 10,
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const SizedBox(),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      const Icon(
-                                        CupertinoIcons.play_circle,
-                                        color: Colors.white,
-                                        size: 44,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            movie.title,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Color(0xfff1f1f1),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        const Icon(
+                                          CupertinoIcons.play_circle,
+                                          color: Colors.white,
+                                          size: 44,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
+                          ] else ...[
+                            SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/search_icon.svg',
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                'Không tìm thấy kết quả cho từ khóa ',
+                                            style: TextStyle(
+                                              color: Colors.white.withAlpha(
+                                                150,
+                                              ),
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '"${_searchController.text}"',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
-                        if (state.searchedMovies.isEmpty) ...[
+                        if (!state.isSearching &&
+                            state.searchedMovies.isEmpty) ...[
                           const SliverPadding(
                             padding: EdgeInsets.symmetric(horizontal: 24.0),
                             sliver: SliverToBoxAdapter(

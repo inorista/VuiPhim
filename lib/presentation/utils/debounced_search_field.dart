@@ -6,11 +6,13 @@ class DebouncedSearchField extends StatefulWidget {
   final Function(String)? onChanged;
   final Function(String)? onFieldSubmitted;
   final String? hintText;
+  final TextEditingController controller;
   const DebouncedSearchField({
     super.key,
     this.onChanged,
     this.onFieldSubmitted,
     this.hintText,
+    required this.controller,
   });
 
   @override
@@ -18,7 +20,6 @@ class DebouncedSearchField extends StatefulWidget {
 }
 
 class _DebouncedSearchFieldState extends State<DebouncedSearchField> {
-  final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
 
   void _onSearchChanged(String query) {
@@ -32,13 +33,13 @@ class _DebouncedSearchFieldState extends State<DebouncedSearchField> {
   @override
   void dispose() {
     _debounce?.cancel();
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       onFieldSubmitted: widget.onFieldSubmitted,
       onChanged: _onSearchChanged,
       style: const TextStyle(
