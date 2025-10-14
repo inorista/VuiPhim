@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart'
-    show VideoPlayerCubit;
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
+    show VideoPlayerCubit, VideoPlayerState, VideoPlayerStatus;
 
 class VideoPlayerProgressIndicator extends StatelessWidget {
   const VideoPlayerProgressIndicator({super.key});
@@ -11,7 +10,7 @@ class VideoPlayerProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
       builder: (context, state) {
-        if (state is VideoPlayerReady) {
+        if (state.status == VideoPlayerStatus.ready) {
           return Slider(
             activeColor: const Color(0xffff7b7b),
             min: 0,
@@ -30,7 +29,8 @@ class VideoPlayerProgressIndicator extends StatelessWidget {
               context.read<VideoPlayerCubit>().onSliderChangeStart();
             },
             onChangeEnd: (value) {
-              context.read<VideoPlayerCubit>().onSliderChangeEnd();
+              final finalPosition = Duration(seconds: value.toInt());
+              context.read<VideoPlayerCubit>().onSliderChangeEnd(finalPosition);
             },
           );
         }

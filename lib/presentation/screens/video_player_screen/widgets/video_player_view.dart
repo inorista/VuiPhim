@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/widgets/controls_overlay.dart';
 
 class VideoPlayerView extends StatelessWidget {
@@ -23,11 +22,11 @@ class VideoPlayerView extends StatelessWidget {
         backgroundColor: Colors.black,
         body: BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
           builder: (context, state) {
-            if (state is VideoPlayerLoading) {
+            if (state.status == VideoPlayerStatus.loading) {
               return const Center(child: CupertinoActivityIndicator());
             }
 
-            if (state is VideoPlayerError) {
+            if (state.status == VideoPlayerStatus.error) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +34,7 @@ class VideoPlayerView extends StatelessWidget {
                     const Icon(Icons.error, color: Colors.red, size: 48),
                     const SizedBox(height: 16),
                     Text(
-                      state.message,
+                      state.errorMessage ?? 'Unknown error',
                       style: const TextStyle(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
@@ -44,7 +43,7 @@ class VideoPlayerView extends StatelessWidget {
               );
             }
 
-            if (state is VideoPlayerReady) {
+            if (state.status == VideoPlayerStatus.ready) {
               return InkWell(
                 onTap: () {
                   context.read<VideoPlayerCubit>().toggleControls();
@@ -57,8 +56,8 @@ class VideoPlayerView extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         AspectRatio(
-                          aspectRatio: state.controller.value.aspectRatio,
-                          child: VideoPlayer(state.controller),
+                          aspectRatio: state.controller!.value.aspectRatio,
+                          child: VideoPlayer(state.controller!),
                         ),
                         if (state.showControls) ...[
                           ControlsOverlay(

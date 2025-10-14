@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 
 class SmoothVideoProgressSlider extends StatefulWidget {
   const SmoothVideoProgressSlider({super.key});
@@ -19,14 +18,15 @@ class _SmoothVideoProgressSliderState extends State<SmoothVideoProgressSlider> {
   Widget build(BuildContext context) {
     return BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
       buildWhen: (previous, current) {
-        if (current is VideoPlayerReady && previous is VideoPlayerReady) {
+        if (current.status == VideoPlayerStatus.ready &&
+            previous.status == VideoPlayerStatus.ready) {
           return current.duration != previous.duration ||
               (!_isDragging && current.position != previous.position);
         }
         return true;
       },
       builder: (context, state) {
-        if (state is VideoPlayerReady) {
+        if (state.status == VideoPlayerStatus.ready) {
           final maxValue = state.duration.inSeconds > 0
               ? state.duration.inSeconds.toDouble()
               : 1.0;
@@ -63,8 +63,7 @@ class _SmoothVideoProgressSliderState extends State<SmoothVideoProgressSlider> {
               });
 
               final finalPosition = Duration(seconds: value.toInt());
-              context.read<VideoPlayerCubit>().seekTo(finalPosition);
-              context.read<VideoPlayerCubit>().onSliderChangeEnd();
+              context.read<VideoPlayerCubit>().onSliderChangeEnd(finalPosition);
             },
           );
         }

@@ -8,13 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/presentation/blocs/video_player/brightness/brightness_cubit.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/widgets/smooth_slider_indicator.dart';
 import 'package:vuiphim/presentation/utils/vertical_track_slider.dart';
 
 class ControlsOverlay extends StatelessWidget {
   final String title;
-  final VideoPlayerReady state;
+  final VideoPlayerState state;
   final double width;
   final double height;
 
@@ -87,7 +86,7 @@ class ControlsOverlay extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   context.pop();
-                  await context.read<VideoPlayerCubit>().disposeVideo();
+                  await context.read<VideoPlayerCubit>().close();
                 },
                 child: const Center(
                   child: Icon(
@@ -183,15 +182,15 @@ class ControlsOverlay extends StatelessWidget {
                     const Expanded(child: SmoothVideoProgressSlider()),
                     BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
                       buildWhen: (previous, current) {
-                        if (current is VideoPlayerReady &&
-                            previous is VideoPlayerReady) {
+                        if (current.status == VideoPlayerStatus.ready &&
+                            previous.status == VideoPlayerStatus.ready) {
                           return current.position.inSeconds !=
                               previous.position.inSeconds;
                         }
                         return true;
                       },
                       builder: (context, state) {
-                        if (state is VideoPlayerReady) {
+                        if (state.status == VideoPlayerStatus.ready) {
                           return Text(
                             state.position.toFormattedString(),
                             style: const TextStyle(
