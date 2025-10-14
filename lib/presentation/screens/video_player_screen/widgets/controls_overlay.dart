@@ -8,13 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/presentation/blocs/video_player/brightness/brightness_cubit.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/widgets/smooth_slider_indicator.dart';
 import 'package:vuiphim/presentation/utils/vertical_track_slider.dart';
 
 class ControlsOverlay extends StatelessWidget {
   final String title;
-  final VideoPlayerReady state;
+  final VideoPlayerState state;
   final double width;
   final double height;
 
@@ -51,10 +50,10 @@ class ControlsOverlay extends StatelessWidget {
                     const SizedBox(height: 10),
                     BlocBuilder<BrightnessCubit, BrightnessState>(
                       builder: (context, state) {
-                        if (state is BrightnessError) {
+                        if (state.status == BrightnessStatus.failure) {
                           return const SizedBox();
                         }
-                        if (state is BrightnessLoaded) {
+                        if (state.status == BrightnessStatus.success) {
                           return VerticalTrackSlider(
                             value: state.brightness,
                             min: 0,
@@ -87,7 +86,7 @@ class ControlsOverlay extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   context.pop();
-                  await context.read<VideoPlayerCubit>().disposeVideo();
+                  await context.read<VideoPlayerCubit>().close();
                 },
                 child: const Center(
                   child: Icon(
@@ -101,28 +100,80 @@ class ControlsOverlay extends StatelessWidget {
 
             Align(
               alignment: Alignment.center,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(40),
-                onTap: () {
-                  context.read<VideoPlayerCubit>().togglePlayPause();
-                },
-                child: SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Center(
-                    child: state.isPlaying
-                        ? const Icon(
-                            CupertinoIcons.pause,
-                            size: 65,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().rewind10s();
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/replay_icon.svg',
+                          width: 40,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          '10',
+                          style: TextStyle(
                             color: Colors.white,
-                          )
-                        : const Icon(
-                            CupertinoIcons.play_fill,
-                            size: 65,
-                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().togglePlayPause();
+                    },
+                    child: SizedBox(
+                      width: 200,
+                      height: 80,
+                      child: Center(
+                        child: state.isPlaying
+                            ? const Icon(
+                                CupertinoIcons.pause,
+                                size: 65,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                CupertinoIcons.play_fill,
+                                size: 65,
+                                color: Colors.white,
+                              ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().forward10s();
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/forward_icon.svg',
+                          width: 40,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          '10',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -183,15 +234,15 @@ class ControlsOverlay extends StatelessWidget {
                     const Expanded(child: SmoothVideoProgressSlider()),
                     BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
                       buildWhen: (previous, current) {
-                        if (current is VideoPlayerReady &&
-                            previous is VideoPlayerReady) {
+                        if (current.status == VideoPlayerStatus.ready &&
+                            previous.status == VideoPlayerStatus.ready) {
                           return current.position.inSeconds !=
                               previous.position.inSeconds;
                         }
                         return true;
                       },
                       builder: (context, state) {
-                        if (state is VideoPlayerReady) {
+                        if (state.status == VideoPlayerStatus.ready) {
                           return Text(
                             state.position.toFormattedString(),
                             style: const TextStyle(

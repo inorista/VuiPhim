@@ -236,7 +236,7 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                const Shimmer(height: 20, width: 120),
+                const Shimmer(height: 35, width: 120),
                 const SizedBox(height: 15),
                 Shimmer(height: 250, width: width),
               ],

@@ -1,37 +1,53 @@
 import 'dart:async';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
+part 'video_player_state.dart';
 
 class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   VideoPlayerController? _controller;
-  Timer? _positionTimer;
-  Timer? _autoSaveTimer;
-  bool _isDisposed = false;
+  Timer? _seekDebounceTimer;
+  Duration _pendingSeekAmount = Duration.zero;
+  VideoPlayerController? get controller => _controller;
 
-  VideoPlayerCubit() : super(VideoPlayerInitial());
+  VideoPlayerCubit() : super(const VideoPlayerState());
 
-  void autoSavePosition() async {
-    _autoSaveTimer?.cancel();
-    _autoSaveTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_isDisposed) {
-        timer.cancel();
-        return;
-      }
+  void forward10s() {
+    _debounceSeek(const Duration(seconds: 10));
+  }
 
-      final currentState = state;
-      if (currentState is VideoPlayerReady) {
-        final currentPosition = _controller!.value.position;
-      }
+  void rewind10s() {
+    _debounceSeek(const Duration(seconds: -10));
+  }
+
+  void _debounceSeek(Duration seekAmount) {
+    _seekDebounceTimer?.cancel();
+    _pendingSeekAmount += seekAmount;
+    emit(state.copyWith(pendingSeekDuration: _pendingSeekAmount));
+
+    _seekDebounceTimer = Timer(const Duration(milliseconds: 300), () {
+      final currentPosition = _controller?.value.position ?? Duration.zero;
+      final totalDuration = state.duration;
+      final totalMilliseconds =
+          (currentPosition + _pendingSeekAmount).inMilliseconds;
+      final durationMilliseconds = totalDuration.inMilliseconds;
+
+      final clampedMilliseconds = totalMilliseconds.clamp(
+        0,
+        durationMilliseconds,
+      );
+      final newPosition = Duration(milliseconds: clampedMilliseconds);
+      seekTo(newPosition);
+
+      _pendingSeekAmount = Duration.zero;
+      emit(state.copyWith(pendingSeekDuration: _pendingSeekAmount));
     });
   }
 
-  Future<void> initializeVideo(String videoUrl) async {
-    if (_isDisposed) return;
-
+  Future<void> initializePlayer(String videoUrl) async {
     try {
-      emit(VideoPlayerLoading());
+      emit(state.copyWith(status: VideoPlayerStatus.loading));
 
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       await SystemChrome.setPreferredOrientations([
@@ -42,127 +58,81 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
       _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
       await _controller!.initialize();
 
-      if (_isDisposed) {
-        _controller?.dispose();
-        return;
-      }
+      _controller!.addListener(_onControllerUpdate);
 
       emit(
-        VideoPlayerReady(
-          controller: _controller!,
-          showControls: false,
-          isPlaying: false,
-          position: Duration.zero,
+        state.copyWith(
+          status: VideoPlayerStatus.ready,
           duration: _controller!.value.duration,
+          controller: _controller,
         ),
       );
 
-      _startPositionTracking();
-
-      // Auto play
       play();
+      _startAutoSavePosition();
     } catch (e) {
-      if (_isDisposed) return;
-
-      emit(VideoPlayerError('Failed to initialize video: $e'));
+      emit(
+        state.copyWith(
+          status: VideoPlayerStatus.error,
+          errorMessage: 'Failed to initialize video: $e',
+        ),
+      );
     }
   }
 
-  void _startPositionTracking() {
-    _positionTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (_isDisposed) {
-        timer.cancel();
-        return;
-      }
+  void _onControllerUpdate() {
+    if (_controller == null || !_controller!.value.isInitialized) return;
 
-      if (_controller != null && _controller!.value.isInitialized) {
-        final currentState = state;
-        if (currentState is VideoPlayerReady) {
-          emit(
-            currentState.copyWith(
-              position: _controller!.value.position,
-              isPlaying: _controller!.value.isPlaying,
-            ),
-          );
-        }
-      }
-    });
+    final value = _controller!.value;
+    emit(state.copyWith(position: value.position, isPlaying: value.isPlaying));
+  }
+
+  void _startAutoSavePosition() {
+    if (state.status == VideoPlayerStatus.ready) {
+      final currentPosition = state.position;
+    }
+  }
+
+  void play() => _controller?.play();
+  void pause() => _controller?.pause();
+  void seekTo(Duration position) => _controller?.seekTo(position);
+
+  void togglePlayPause() {
+    if (state.isPlaying) {
+      pause();
+    } else {
+      play();
+    }
   }
 
   void toggleControls() {
-    if (_isDisposed) return;
-
-    final currentState = state;
-    if (currentState is VideoPlayerReady) {
-      emit(currentState.copyWith(showControls: !currentState.showControls));
-    }
-  }
-
-  void play() {
-    if (_isDisposed || _controller == null) return;
-
-    _controller?.play();
-    final currentState = state;
-    if (currentState is VideoPlayerReady) {
-      emit(currentState.copyWith(isPlaying: true));
-    }
-  }
-
-  void pause() {
-    if (_isDisposed || _controller == null) return;
-
-    _controller?.pause();
-    final currentState = state;
-    if (currentState is VideoPlayerReady) {
-      emit(currentState.copyWith(isPlaying: false));
-    }
-  }
-
-  void togglePlayPause() {
-    if (_isDisposed) return;
-
-    final currentState = state;
-    if (currentState is VideoPlayerReady) {
-      if (currentState.isPlaying) {
-        pause();
-      } else {
-        play();
-      }
-    }
-  }
-
-  void seekTo(Duration position) {
-    if (_isDisposed || _controller == null) return;
-
-    _controller?.seekTo(position);
+    emit(state.copyWith(showControls: !state.showControls));
   }
 
   void onSliderChangeStart() {
-    if (_isDisposed) return;
-
-    final currentState = state;
-    if (currentState is VideoPlayerReady && currentState.isPlaying) {
+    if (state.isPlaying) {
       pause();
     }
+    emit(state.copyWith(isScrubbing: true));
   }
 
-  void onSliderChangeEnd() {
-    if (_isDisposed) return;
-
-    final currentState = state;
-    if (currentState is VideoPlayerReady && !currentState.isPlaying) {
+  void onSliderChangeEnd(Duration newPosition) {
+    seekTo(newPosition);
+    if (!state.isPlaying) {
       play();
     }
+    emit(state.copyWith(isScrubbing: false));
   }
 
-  Future<void> disposeVideo() async {
-    _isDisposed = true;
-    _positionTimer?.cancel();
+  @override
+  Future<void> close() async {
+    emit(state.copyWith(status: VideoPlayerStatus.initial));
+    _seekDebounceTimer?.cancel();
+    _pendingSeekAmount = Duration.zero;
+    _controller?.removeListener(_onControllerUpdate);
     await _controller?.dispose();
-    _controller = null;
-    emit(VideoPlayerInitial());
-    // Restore system UI mode
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    return super.close();
   }
 }
