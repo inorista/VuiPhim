@@ -65,14 +65,14 @@ class MainScreen extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
             child: Container(
               color: Colors.black.withAlpha(150),
-              height: Platform.isIOS ? 100 : 80,
+              height: 65,
               width: double.infinity,
             ),
           ),
         ),
         Container(
           padding: const EdgeInsets.only(top: 10),
-          height: Platform.isIOS ? 100 : 80,
+          height: 65,
           color: Colors.transparent,
           child: SafeArea(
             child: Row(
@@ -109,7 +109,7 @@ class MainScreen extends StatelessWidget {
                     },
                     isSelected: state.boardIndex == 2,
                     label: AppText.settings,
-                    iconPath: 'assets/icons/setting_icon.svg',
+                    iconPath: 'assets/icons/profile_icon.svg',
                   ),
                 ),
               ],

@@ -20,6 +20,8 @@ import 'package:vuiphim/core/services/implements/keychain_storage_service.dart'
     as _i927;
 import 'package:vuiphim/core/services/implements/movie_service.dart' as _i650;
 import 'package:vuiphim/core/services/implements/network_service.dart' as _i422;
+import 'package:vuiphim/core/services/implements/watching_movie_service.dart'
+    as _i488;
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart'
     as _i504;
 import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart'
@@ -30,11 +32,15 @@ import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart'
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart' as _i52;
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart'
     as _i479;
+import 'package:vuiphim/core/services/interfaces/iwatching_movie_service.dart'
+    as _i249;
 import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart' as _i584;
 import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart' as _i190;
 import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart' as _i38;
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart'
     as _i279;
+import 'package:vuiphim/data/hive_database/hive_daos/watching_movie_dao.dart'
+    as _i739;
 import 'package:vuiphim/data/resources/kkphim_rest_client.dart' as _i605;
 import 'package:vuiphim/data/resources/rest_client.dart' as _i690;
 
@@ -54,7 +60,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i190.GenreDao>(() => _i190.GenreDao());
     gh.lazySingleton<_i38.MovieDao>(() => _i38.MovieDao());
     gh.lazySingleton<_i279.MovieDetailDao>(() => _i279.MovieDetailDao());
+    gh.lazySingleton<_i739.WatchingMovieDao>(() => _i739.WatchingMovieDao());
     gh.lazySingleton<_i479.INetworkService>(() => _i422.NetworkService());
+    gh.lazySingleton<_i249.IWatchingMovieService>(
+        () => _i488.WatchingMovieService());
     gh.lazySingleton<_i575.IFirebaseService>(() => _i713.FirebaseService());
     gh.lazySingleton<_i52.IMovieService>(() => _i650.MovieService());
     gh.lazySingleton<_i504.IBackgroundSync>(() => _i768.BackgroundSync());

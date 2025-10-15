@@ -51,4 +51,5 @@ class HiveBoxIds {
   static const createdBoxId = 11;
   static const imdbBoxId = 12;
   static const tmdbBoxId = 13;
+  static const watchingMovieBoxId = 14;
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 part 'video_player_state.dart';
@@ -56,8 +55,8 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
         DeviceOrientation.landscapeRight,
       ]);
 
-      controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-      await controller!.initialize();
+      _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      await _controller!.initialize();
 
       _controller!.addListener(_onControllerUpdate);
 
