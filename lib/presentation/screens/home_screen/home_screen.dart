@@ -13,7 +13,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -32,11 +31,11 @@ class HomeScreen extends StatelessWidget {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.topCenter,
             children: [
-              BackdropWidget(height: height),
-              const CustomScrollView(
+              BackdropWidget(),
+              CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(child: PopularMovieWidget()),
                   SliverToBoxAdapter(child: SizedBox(height: 30)),

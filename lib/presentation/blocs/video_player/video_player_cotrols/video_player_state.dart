@@ -9,7 +9,8 @@ class VideoPlayerState extends Equatable {
     this.position = Duration.zero,
     this.isPlaying = false,
     this.showControls = true,
-    this.isScrubbing = false, // Trạng thái khi người dùng đang tua video
+    this.isScrubbing = false,
+    this.pendingSeekDuration = Duration.zero,
     this.errorMessage,
     this.controller,
   });
@@ -20,6 +21,7 @@ class VideoPlayerState extends Equatable {
   final bool isPlaying;
   final bool showControls;
   final bool isScrubbing;
+  final Duration pendingSeekDuration;
   final String? errorMessage;
   final VideoPlayerController? controller;
 
@@ -31,6 +33,7 @@ class VideoPlayerState extends Equatable {
     isPlaying,
     showControls,
     isScrubbing,
+    pendingSeekDuration,
     errorMessage,
     controller,
   ];
@@ -42,6 +45,7 @@ class VideoPlayerState extends Equatable {
     bool? isPlaying,
     bool? showControls,
     bool? isScrubbing,
+    Duration? pendingSeekDuration,
     String? errorMessage,
     VideoPlayerController? controller,
   }) {
@@ -52,6 +56,7 @@ class VideoPlayerState extends Equatable {
       isPlaying: isPlaying ?? this.isPlaying,
       showControls: showControls ?? this.showControls,
       isScrubbing: isScrubbing ?? this.isScrubbing,
+      pendingSeekDuration: pendingSeekDuration ?? this.pendingSeekDuration,
       errorMessage: errorMessage ?? this.errorMessage,
       controller: controller ?? this.controller,
     );

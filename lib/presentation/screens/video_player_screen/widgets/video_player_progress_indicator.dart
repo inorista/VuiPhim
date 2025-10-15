@@ -21,7 +21,7 @@ class VideoPlayerProgressIndicator extends StatelessWidget {
                 .clamp(0, state.duration.inSeconds)
                 .toDouble(),
             onChanged: (newValue) {
-              context.read<VideoPlayerCubit>().seekTo(
+              context.read<VideoPlayerCubit>().onSliderChangeEnd(
                 Duration(seconds: newValue.toInt()),
               );
             },

@@ -50,10 +50,10 @@ class ControlsOverlay extends StatelessWidget {
                     const SizedBox(height: 10),
                     BlocBuilder<BrightnessCubit, BrightnessState>(
                       builder: (context, state) {
-                        if (state is BrightnessError) {
+                        if (state.status == BrightnessStatus.failure) {
                           return const SizedBox();
                         }
-                        if (state is BrightnessLoaded) {
+                        if (state.status == BrightnessStatus.success) {
                           return VerticalTrackSlider(
                             value: state.brightness,
                             min: 0,
@@ -100,28 +100,80 @@ class ControlsOverlay extends StatelessWidget {
 
             Align(
               alignment: Alignment.center,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(40),
-                onTap: () {
-                  context.read<VideoPlayerCubit>().togglePlayPause();
-                },
-                child: SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Center(
-                    child: state.isPlaying
-                        ? const Icon(
-                            CupertinoIcons.pause,
-                            size: 65,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().rewind10s();
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/replay_icon.svg',
+                          width: 40,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          '10',
+                          style: TextStyle(
                             color: Colors.white,
-                          )
-                        : const Icon(
-                            CupertinoIcons.play_fill,
-                            size: 65,
-                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().togglePlayPause();
+                    },
+                    child: SizedBox(
+                      width: 200,
+                      height: 80,
+                      child: Center(
+                        child: state.isPlaying
+                            ? const Icon(
+                                CupertinoIcons.pause,
+                                size: 65,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                CupertinoIcons.play_fill,
+                                size: 65,
+                                color: Colors.white,
+                              ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().forward10s();
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/forward_icon.svg',
+                          width: 40,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          '10',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
 

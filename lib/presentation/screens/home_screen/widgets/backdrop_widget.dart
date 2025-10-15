@@ -8,12 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
 
 class BackdropWidget extends StatelessWidget {
-  final double height;
-
-  const BackdropWidget({required this.height, super.key});
+  const BackdropWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     final random = Random();
     return SizedBox(
       width: double.infinity,

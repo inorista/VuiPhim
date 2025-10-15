@@ -1,16 +1,50 @@
 import 'dart:async';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
-
 part 'video_player_state.dart';
 
 class VideoPlayerCubit extends Cubit<VideoPlayerState> {
-  VideoPlayerController? controller;
-  Timer? _autoSaveTimer;
+  VideoPlayerController? _controller;
+  Timer? _seekDebounceTimer;
+  Duration _pendingSeekAmount = Duration.zero;
+  VideoPlayerController? get controller => _controller;
 
   VideoPlayerCubit() : super(const VideoPlayerState());
+
+  void forward10s() {
+    _debounceSeek(const Duration(seconds: 10));
+  }
+
+  void rewind10s() {
+    _debounceSeek(const Duration(seconds: -10));
+  }
+
+  void _debounceSeek(Duration seekAmount) {
+    _seekDebounceTimer?.cancel();
+    _pendingSeekAmount += seekAmount;
+    emit(state.copyWith(pendingSeekDuration: _pendingSeekAmount));
+
+    _seekDebounceTimer = Timer(const Duration(milliseconds: 300), () {
+      final currentPosition = _controller?.value.position ?? Duration.zero;
+      final totalDuration = state.duration;
+      final totalMilliseconds =
+          (currentPosition + _pendingSeekAmount).inMilliseconds;
+      final durationMilliseconds = totalDuration.inMilliseconds;
+
+      final clampedMilliseconds = totalMilliseconds.clamp(
+        0,
+        durationMilliseconds,
+      );
+      final newPosition = Duration(milliseconds: clampedMilliseconds);
+      seekTo(newPosition);
+
+      _pendingSeekAmount = Duration.zero;
+      emit(state.copyWith(pendingSeekDuration: _pendingSeekAmount));
+    });
+  }
 
   Future<void> initializePlayer(String videoUrl) async {
     try {
@@ -25,13 +59,13 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
       controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
       await controller!.initialize();
 
-      controller!.addListener(_onControllerUpdate);
+      _controller!.addListener(_onControllerUpdate);
 
       emit(
         state.copyWith(
           status: VideoPlayerStatus.ready,
-          duration: controller!.value.duration,
-          controller: controller,
+          duration: _controller!.value.duration,
+          controller: _controller,
         ),
       );
 
@@ -48,24 +82,21 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   }
 
   void _onControllerUpdate() {
-    if (controller == null || !controller!.value.isInitialized) return;
+    if (_controller == null || !_controller!.value.isInitialized) return;
 
-    final value = controller!.value;
+    final value = _controller!.value;
     emit(state.copyWith(position: value.position, isPlaying: value.isPlaying));
   }
 
   void _startAutoSavePosition() {
-    _autoSaveTimer?.cancel();
-    _autoSaveTimer = Timer.periodic(const Duration(seconds: 5), (_) {
-      if (state.status == VideoPlayerStatus.ready) {
-        final currentPosition = state.position;
-      }
-    });
+    if (state.status == VideoPlayerStatus.ready) {
+      final currentPosition = state.position;
+    }
   }
 
-  void play() => controller?.play();
-  void pause() => controller?.pause();
-  void seekTo(Duration position) => controller?.seekTo(position);
+  void play() => _controller?.play();
+  void pause() => _controller?.pause();
+  void seekTo(Duration position) => _controller?.seekTo(position);
 
   void togglePlayPause() {
     if (state.isPlaying) {
@@ -96,9 +127,11 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
 
   @override
   Future<void> close() async {
-    _autoSaveTimer?.cancel();
-    controller?.removeListener(_onControllerUpdate);
-    await controller?.dispose();
+    emit(state.copyWith(status: VideoPlayerStatus.initial));
+    _seekDebounceTimer?.cancel();
+    _pendingSeekAmount = Duration.zero;
+    _controller?.removeListener(_onControllerUpdate);
+    await _controller?.dispose();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     return super.close();

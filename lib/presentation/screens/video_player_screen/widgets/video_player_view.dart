@@ -34,7 +34,7 @@ class VideoPlayerView extends StatelessWidget {
                     const Icon(Icons.error, color: Colors.red, size: 48),
                     const SizedBox(height: 16),
                     Text(
-                      state.errorMessage ?? 'Unknown error',
+                      state.errorMessage ?? 'An error occurred',
                       style: const TextStyle(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
