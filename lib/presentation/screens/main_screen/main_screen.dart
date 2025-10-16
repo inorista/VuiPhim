@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
@@ -65,14 +64,14 @@ class MainScreen extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
             child: Container(
               color: Colors.black.withAlpha(150),
-              height: 65,
+              height: 88,
               width: double.infinity,
             ),
           ),
         ),
         Container(
           padding: const EdgeInsets.only(top: 10),
-          height: 65,
+          height: 88,
           color: Colors.transparent,
           child: SafeArea(
             child: Row(

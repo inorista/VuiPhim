@@ -18,8 +18,8 @@ class VerticalTrackSlider extends StatefulWidget {
     this.max = 1.0,
     this.activeColor,
     this.inactiveColor,
-    this.width = 30.0,
-    this.height = 200.0,
+    this.width = 40.0,
+    this.height = 250.0,
   });
 
   @override
@@ -101,7 +101,7 @@ class _VerticalTrackSliderState extends State<VerticalTrackSlider> {
                 inactiveColor:
                     widget.inactiveColor ?? Colors.grey.withOpacity(0.3),
                 isDragging: _isDragging,
-                trackWidth: 4.0,
+                trackWidth: 8.0,
               ),
               size: Size(constraints.maxWidth, constraints.maxHeight),
             ),

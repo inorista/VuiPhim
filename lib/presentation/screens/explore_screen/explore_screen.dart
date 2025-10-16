@@ -11,6 +11,7 @@ import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
+import 'package:vuiphim/presentation/utils/dialog_utils.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -277,12 +278,45 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
                 ),
                 actions: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Icon(
-                      CupertinoIcons.arrow_down_to_line,
-                      color: Colors.white,
-                      size: 30,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: InkWell(
+                      onTap: () async {
+                        DialogUtils.showBluredDialogWithCustomChildren(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                            color: Colors.white.withAlpha(100),
+                            width: 0.5,
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 7,
+                          children: [
+                            const Text(
+                              "Categories",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                              ),
+                            ),
+
+                            SvgPicture.asset(
+                              'assets/icons/arrow_down_icon.svg',
+                              width: 15,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   Padding(

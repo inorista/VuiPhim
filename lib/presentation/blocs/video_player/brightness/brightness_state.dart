@@ -5,7 +5,7 @@ enum BrightnessStatus { initial, loading, success, failure }
 class BrightnessState extends Equatable {
   const BrightnessState({
     this.status = BrightnessStatus.initial,
-    this.brightness = 0.5, // Giá trị mặc định
+    this.brightness = 0.5,
     this.errorMessage,
   });
 

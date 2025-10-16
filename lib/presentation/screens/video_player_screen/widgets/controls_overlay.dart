@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/presentation/blocs/video_player/brightness/brightness_cubit.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
@@ -25,6 +26,16 @@ class ControlsOverlay extends StatelessWidget {
     required this.height,
   });
 
+  String getBrightnessIcon(double brightness) {
+    if (brightness <= 0.1) {
+      return 'assets/icons/sun_light_slash_icon.svg';
+    } else if (brightness > 0.1 && brightness <= 0.6) {
+      return 'assets/icons/sun_light_medium_icon.svg';
+    } else {
+      return 'assets/icons/sun_light_icon.svg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
@@ -38,44 +49,49 @@ class ControlsOverlay extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Positioned(
-              left: 0,
+              left: 20,
               child: SafeArea(
-                child: Column(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/sun_light_icon.svg',
-                      width: 25,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 10),
-                    BlocBuilder<BrightnessCubit, BrightnessState>(
-                      builder: (context, state) {
-                        if (state.status == BrightnessStatus.failure) {
-                          return const SizedBox();
-                        }
-                        if (state.status == BrightnessStatus.success) {
-                          return VerticalTrackSlider(
-                            value: state.brightness,
-                            min: 0,
-                            max: 1,
-                            activeColor: Colors.white,
-                            height: 120,
-                            onChanged: (value) async {
-                              try {
-                                await context
-                                    .read<BrightnessCubit>()
-                                    .setBrightness(value);
-                              } catch (e) {
-                                log('Error setting brightness: ');
-                              }
-                            },
-                            width: 15,
-                          );
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                  ],
+                child: BlocListener<BrightnessCubit, BrightnessState>(
+                  listener: (context, state) {
+                    if (state.brightness == 0 || state.brightness >= 1) {
+                      VibrationNative.vibrateWithIntensity(1);
+                    }
+                  },
+                  child: BlocBuilder<BrightnessCubit, BrightnessState>(
+                    builder: (context, state) {
+                      if (state.status == BrightnessStatus.success) {
+                        return Column(
+                          children: [
+                            SvgPicture.asset(
+                              getBrightnessIcon(state.brightness),
+                              width: 30,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(height: 10),
+                            VerticalTrackSlider(
+                              value: state.brightness,
+                              min: 0,
+                              max: 1,
+                              activeColor: Colors.white,
+                              height: 130,
+
+                              onChanged: (value) async {
+                                try {
+                                  await context
+                                      .read<BrightnessCubit>()
+                                      .setBrightness(value);
+                                } catch (e) {
+                                  log('Error setting brightness: ');
+                                }
+                              },
+                              width: 40,
+                            ),
+                          ],
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
                 ),
               ),
             ),
