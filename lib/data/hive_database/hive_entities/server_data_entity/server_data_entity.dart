@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 
 part 'server_data_entity.g.dart';
 
 @HiveType(typeId: HiveBoxIds.serverDataBoxId)
-class ServerDataEntity {
+class ServerDataEntity extends Equatable {
   @HiveField(0)
   final String? name;
   @HiveField(1)
@@ -16,7 +17,7 @@ class ServerDataEntity {
   @HiveField(4)
   final String? linkM3U8;
   @HiveField(5)
-  final Duration? playingDuration;
+  int? playingDuration;
 
   ServerDataEntity({
     required this.name,
@@ -26,4 +27,7 @@ class ServerDataEntity {
     required this.linkM3U8,
     this.playingDuration,
   });
+
+  @override
+  List<Object?> get props => [name, slug, filename, linkEmbed, linkM3U8];
 }

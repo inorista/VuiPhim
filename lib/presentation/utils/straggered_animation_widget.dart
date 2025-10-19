@@ -20,12 +20,14 @@ class _StaggeredAnimationWidgetState extends State<StaggeredAnimationWidget>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
     );
-    animation = Tween(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    animation = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0, 0.2, curve: Curves.easeOut),
+      ),
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
     });
@@ -42,8 +44,8 @@ class _StaggeredAnimationWidgetState extends State<StaggeredAnimationWidget>
     return AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
-        return Opacity(
-          opacity: animation.value,
+        return FadeTransition(
+          opacity: animation,
           child: Transform.translate(
             offset: const Offset(0.0, 1),
             child: widget.child,

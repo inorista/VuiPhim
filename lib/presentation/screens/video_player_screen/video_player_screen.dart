@@ -22,8 +22,11 @@ class VideoPlayerScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              VideoPlayerCubit()..initializePlayer(serverData.linkM3U8 ?? ''),
+          create: (context) => VideoPlayerCubit()
+            ..initializePlayer(
+              movieDetailEntity: movieDetail,
+              serverDataEntity: serverData,
+            ),
         ),
         BlocProvider(create: (context) => BrightnessCubit()..getBrightness()),
       ],

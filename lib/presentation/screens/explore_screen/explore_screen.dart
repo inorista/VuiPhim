@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
+import 'package:vuiphim/presentation/screens/explore_screen/widgets/genre_list.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
 import 'package:vuiphim/presentation/utils/dialog_utils.dart';
@@ -282,7 +283,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: InkWell(
                       onTap: () async {
-                        DialogUtils.showBluredDialogWithCustomChildren(context);
+                        DialogUtils.showBluredDialogWithCustomChildren(
+                          context,
+                          child: const GenreList(),
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(
