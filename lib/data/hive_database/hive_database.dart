@@ -15,6 +15,7 @@ import 'package:vuiphim/data/hive_database/hive_entities/kkmovie_movie_entity/kk
 import 'package:vuiphim/data/hive_database/hive_entities/kkmovie_source_entity/kkmovie_source_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/tmdb_entity/tmdb_entity.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/watching_movie_entity/watching_movie_entity.dart';
 
 class HiveDatabase {
   Future<void> setupHiveDatabase() async {
@@ -34,6 +35,7 @@ class HiveDatabase {
     Hive.registerAdapter(CreatedEntityAdapter());
     Hive.registerAdapter(ImdbEntityAdapter());
     Hive.registerAdapter(TmdbEntityAdapter());
+    Hive.registerAdapter(WatchingMovieEntityAdapter());
   }
 }
 

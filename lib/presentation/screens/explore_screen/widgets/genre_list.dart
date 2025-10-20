@@ -18,7 +18,6 @@ class _GenreListState extends State<GenreList>
   final _genreService = locator<IGenreService>();
   List<GenreEntity> _genres = [];
   late AnimationController _controller;
-  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -27,7 +26,6 @@ class _GenreListState extends State<GenreList>
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final allGenres = await _genreService.getAllGenres();
       setState(() {

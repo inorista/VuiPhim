@@ -22,9 +22,6 @@ class WatchingMovieService implements IWatchingMovieService {
 
   @override
   Future<void> saveWatchingMovie(WatchingMovieEntity watchingMovie) async {
-    await _watchingMovieDao.update(
-      watchingMovie.movieDetail.id.toString(),
-      watchingMovie,
-    );
+    await _watchingMovieDao.update(watchingMovie.movieDetail.id, watchingMovie);
   }
 }

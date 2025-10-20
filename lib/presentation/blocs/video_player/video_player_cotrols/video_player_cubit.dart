@@ -60,8 +60,17 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   }) async {
     try {
       emit(state.copyWith(status: VideoPlayerStatus.loading));
+      final watchingMovie = await _watchingMovieService.getWatchingMovie(
+        movieDetailEntity.id,
+      );
+
       _movieDetailEntity = movieDetailEntity;
       _serverDataEntity = serverDataEntity;
+      if (watchingMovie != null) {
+        final serverData = watchingMovie.serverDataList.firstOrDefault(
+          (item) => item == _serverDataEntity,
+        );
+      }
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
@@ -103,14 +112,12 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   }
 
   Future<void> _startAutoSavePosition() async {
-    if (state.status == VideoPlayerStatus.ready &&
-        _movieDetailEntity != null &&
-        _serverDataEntity != null) {
+    if (_movieDetailEntity != null && _serverDataEntity != null) {
       final watchingMovie = await _watchingMovieService.getWatchingMovie(
         _movieDetailEntity!.id,
       );
       if (watchingMovie == null) {
-        _serverDataEntity!.playingDuration = state.position.inSeconds;
+        _serverDataEntity!.playingDuration = state.position.inMilliseconds;
         final newWatchingMovie = WatchingMovieEntity(
           serverDataList: [_serverDataEntity!],
           movieDetail: _movieDetailEntity!,
@@ -161,13 +168,15 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   @override
   Future<void> close() async {
     emit(state.copyWith(status: VideoPlayerStatus.initial));
-    await _startAutoSavePosition();
+    // await _startAutoSavePosition();
     _seekDebounceTimer?.cancel();
     _pendingSeekAmount = Duration.zero;
     _controller?.removeListener(_onControllerUpdate);
+    _startAutoSavePosition();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     await _controller?.dispose();
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
     return super.close();
   }
 }
