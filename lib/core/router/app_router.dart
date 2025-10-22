@@ -8,6 +8,7 @@ import 'package:vuiphim/presentation/screens/main_screen/main_screen.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/movie_detail_screen.dart';
 import 'package:vuiphim/presentation/screens/search_screen/search_screen.dart';
 import 'package:vuiphim/presentation/screens/select_movie_episode_screen/select_movie_episode_screen.dart';
+import 'package:vuiphim/presentation/screens/sticker_screen/sticker_screen.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/video_player_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -59,6 +60,15 @@ final GoRouter router = GoRouter(
         );
       },
     ),
+
+    GoRoute(
+      path: AppRouter.stickerScreen,
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        final movieDetail = data['movieDetail'] as MovieDetailEntity;
+        return StickerScreen(movieDetail: movieDetail);
+      },
+    ),
   ],
 );
 
@@ -71,4 +81,5 @@ class AppRouter {
   static String selectMovieEpisode = '/select_movie_episode';
   static String videoPlayer = '/video_player';
   static String search = '/search';
+  static String stickerScreen = '/sticker_screen';
 }

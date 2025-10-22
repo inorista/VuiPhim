@@ -5,6 +5,72 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/presentation/utils/straggered_animation_widget.dart';
 
 class DialogUtils {
+  static Future<void> showBottomSheetWithCustomChildren(
+    BuildContext context, {
+    Widget? child,
+    double initialChildSize = 0.3,
+    double minChildSize = 0.3,
+    double maxChildSize = 0.4,
+  }) async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      backgroundColor: const Color(0xff2b2b2b),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: initialChildSize,
+          minChildSize: minChildSize,
+          maxChildSize: maxChildSize,
+          snap: false,
+          expand: false,
+          builder: (context, scrollController) {
+            return Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(14.0),
+                  decoration: const BoxDecoration(
+                    color: Color(0xff2b2b2b),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    physics: const ClampingScrollPhysics(),
+                    controller: scrollController,
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                ),
+                Positioned(
+                  top: 14,
+                  right: 14,
+                  child: InkWell(
+                    onTap: () {
+                      context.pop();
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.white54,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 25,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   static Future<void> showYesNoDialog(
     BuildContext context, {
     required String title,
