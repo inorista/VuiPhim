@@ -30,7 +30,7 @@ class VideoPlayerScreen extends StatelessWidget {
         ),
         BlocProvider(create: (context) => BrightnessCubit()..getBrightness()),
       ],
-      child: VideoPlayerView(movieDetail: movieDetail),
+      child: VideoPlayerView(movieDetail: movieDetail, serverData: serverData),
     );
   }
 }

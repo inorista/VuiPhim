@@ -1,3 +1,4 @@
+import 'package:uuid/uuid.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/category_entity/category_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/created_entity/created_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
@@ -147,6 +148,7 @@ class ServerData {
   };
 
   ServerDataEntity toEntity() => ServerDataEntity(
+    id: const Uuid().v4(),
     name: name,
     slug: slug,
     filename: filename,

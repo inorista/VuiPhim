@@ -60,17 +60,8 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   }) async {
     try {
       emit(state.copyWith(status: VideoPlayerStatus.loading));
-      final watchingMovie = await _watchingMovieService.getWatchingMovie(
-        movieDetailEntity.id,
-      );
-
       _movieDetailEntity = movieDetailEntity;
       _serverDataEntity = serverDataEntity;
-      if (watchingMovie != null) {
-        final serverData = watchingMovie.serverDataList.firstOrDefault(
-          (item) => item == _serverDataEntity,
-        );
-      }
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
@@ -80,20 +71,27 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
       _controller = VideoPlayerController.networkUrl(
         Uri.parse(serverDataEntity.linkM3U8 ?? ''),
       );
+      if (_controller != null) {
+        await _controller!.initialize();
+        _controller!.addListener(_onControllerUpdate);
 
-      await _controller!.initialize();
-
-      _controller!.addListener(_onControllerUpdate);
-
-      emit(
-        state.copyWith(
-          status: VideoPlayerStatus.ready,
-          duration: _controller!.value.duration,
-          controller: _controller,
-        ),
-      );
-
-      play();
+        emit(
+          state.copyWith(
+            status: VideoPlayerStatus.ready,
+            duration: _controller!.value.duration,
+            controller: _controller,
+          ),
+        );
+        play();
+      } else {
+        emit(
+          state.copyWith(
+            status: VideoPlayerStatus.error,
+            errorMessage: 'Failed to create video controller.',
+          ),
+        );
+        return;
+      }
     } catch (e) {
       emit(
         state.copyWith(
@@ -117,19 +115,51 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
         _movieDetailEntity!.id,
       );
       if (watchingMovie == null) {
-        _serverDataEntity!.playingDuration = state.position.inMilliseconds;
+        final serverDataEntity = _serverDataEntity!.copyWith(
+          playingDuration: state.position.inMilliseconds,
+        );
+
         final newWatchingMovie = WatchingMovieEntity(
-          serverDataList: [_serverDataEntity!],
+          serverDataList: [serverDataEntity],
           movieDetail: _movieDetailEntity!,
         );
         await _watchingMovieService.saveWatchingMovie(newWatchingMovie);
         return;
       } else {
-        watchingMovie.serverDataList
-                .firstOrDefault((serverData) => serverData == _serverDataEntity)
-                ?.playingDuration =
-            state.position.inMilliseconds;
-        await _watchingMovieService.saveWatchingMovie(watchingMovie);
+        final existedWatchingMovie = watchingMovie.serverDataList
+            .firstOrDefault((serverData) => serverData == _serverDataEntity);
+        if (existedWatchingMovie != null) {
+          final updatedServerData = existedWatchingMovie.copyWith(
+            playingDuration: state.position.inMilliseconds,
+          );
+          final updatedServerDataList = watchingMovie.serverDataList.map((
+            serverData,
+          ) {
+            if (serverData == _serverDataEntity) {
+              return updatedServerData;
+            }
+            return serverData;
+          }).toList();
+
+          final updatedWatchingMovie = watchingMovie.copyWith(
+            serverDataList: updatedServerDataList,
+          );
+          await _watchingMovieService.saveWatchingMovie(updatedWatchingMovie);
+          return;
+        } else {
+          final newServerData = _serverDataEntity!.copyWith(
+            playingDuration: state.position.inMilliseconds,
+          );
+          final updatedServerDataList = [
+            ...watchingMovie.serverDataList,
+            newServerData,
+          ];
+          final updatedWatchingMovie = watchingMovie.copyWith(
+            serverDataList: updatedServerDataList,
+          );
+          await _watchingMovieService.saveWatchingMovie(updatedWatchingMovie);
+          return;
+        }
       }
     }
   }

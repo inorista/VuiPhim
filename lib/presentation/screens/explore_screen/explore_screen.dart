@@ -306,7 +306,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           spacing: 7,
                           children: [
                             const Text(
-                              "Categories",
+                              "Thể loại",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,

@@ -18,6 +18,16 @@ class WatchingMovieEntity extends Equatable {
     required this.movieDetail,
   });
 
+  WatchingMovieEntity copyWith({
+    List<ServerDataEntity>? serverDataList,
+    MovieDetailEntity? movieDetail,
+  }) {
+    return WatchingMovieEntity(
+      serverDataList: serverDataList ?? this.serverDataList,
+      movieDetail: movieDetail ?? this.movieDetail,
+    );
+  }
+
   @override
   List<Object?> get props => [serverDataList, movieDetail];
 }

@@ -6,5 +6,5 @@ class AppText {
   static const String home = 'Trang chủ';
   static const String explore = 'Khám phá';
   static const String favorites = 'Yêu thích';
-  static const String settings = 'Cài đặt';
+  static const String settings = 'Cá nhân';
 }
