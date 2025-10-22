@@ -71,7 +71,7 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/vuiphim.git
+git clone https://github.com/Inorista/vuiphim.git
 cd vuiphim
 
 # Cài đặt dependencies
@@ -79,6 +79,14 @@ flutter pub get
 
 # Chạy ứng dụng
 flutter run
+```
+
+### Chạy tests
+
+Để chạy các bài test có trong dự án:
+
+```bash
+flutter test
 ```
 
 ### Cấu hình Firebase
@@ -159,7 +167,7 @@ Distributed under the MIT License. Xem `LICENSE` để biết thêm thông tin.
 
 ## 👨‍💻 Tác giả
 
-**Your Name** - [your-email@example.com](mailto:ngotu2102@gmail.com)
+**Inorista** - [ngotu2102@gmail.com](mailto:ngotu2102@gmail.com)
 
 ## 🙏 Lời cảm ơn
 
