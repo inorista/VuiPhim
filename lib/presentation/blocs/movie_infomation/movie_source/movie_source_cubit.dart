@@ -65,7 +65,9 @@ class MovieSourceCubit extends Cubit<MovieSourceState> {
     }
 
     final sourceDto = await _kkphimRestClient.getMovieSources(slug);
-    final sources = sourceDto.episodes.map((s) => s.toEntity()).toList();
+    final sources = sourceDto.episodes
+        .map((s) => s.toEntity(movieDetail.id))
+        .toList();
 
     movieDetail.episodes = sources;
     await _movieDetailDao.update(movieDetail.id, movieDetail);

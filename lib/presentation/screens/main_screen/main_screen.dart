@@ -3,10 +3,14 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
 import 'package:vuiphim/presentation/screens/explore_screen/explore_screen.dart';
 import 'package:vuiphim/presentation/screens/home_screen/home_screen.dart';
 import 'package:vuiphim/presentation/screens/main_screen/widgets/bottom_navigation_item.dart';
@@ -17,18 +21,36 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<DashBoardCubit>(
       create: (context) => DashBoardCubit(),
       child: Scaffold(
         extendBody: true,
         body: BlocBuilder<DashBoardCubit, DashBoardState>(
           builder: (context, state) {
             if (state is DashBoardLoaded) {
-              return IndexedStack(
+              return LazyLoadIndexedStack(
                 index: state.boardIndex,
+                preloadIndexes: const [0, 1],
+                autoDisposeIndexes: const [2],
                 children: [
-                  const HomeScreen(),
-                  BlocProvider(
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider<PopularMovieCubit>(
+                        create: (context) =>
+                            PopularMovieCubit()..fetchPopularMovies(),
+                      ),
+                      BlocProvider<TopRatedMovieCubit>(
+                        create: (context) =>
+                            TopRatedMovieCubit()..fetchTopRatedMovies(),
+                      ),
+                      BlocProvider<UpcomingMovieCubit>(
+                        create: (context) =>
+                            UpcomingMovieCubit()..fetchUpcomingMovies(),
+                      ),
+                    ],
+                    child: const HomeScreen(),
+                  ),
+                  BlocProvider<ExploreCubit>(
                     create: (context) => ExploreCubit()..loadNowPlayingMovies(),
                     child: const ExploreScreen(),
                   ),

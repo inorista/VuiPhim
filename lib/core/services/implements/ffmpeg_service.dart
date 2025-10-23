@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:ffmpeg_kit_flutter_new/return_code.dart';
@@ -10,7 +11,11 @@ import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 class FFmpegService implements IFFmpegService {
   final _serverDataService = locator<IServerDataService>();
   @override
-  Future<void> downloadM3U8Video(String videoId, String m3u8Url) async {
+  Future<void> downloadM3U8Video(
+    String videoId,
+    String m3u8Url,
+    StreamController<double> progressController,
+  ) async {
     final Directory appDir = await getApplicationDocumentsDirectory();
     final String outputPath = '${appDir.path}/$videoId.mp4';
     final outputFile = File(outputPath);

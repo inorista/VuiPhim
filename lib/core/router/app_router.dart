@@ -41,7 +41,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRouter.search,
       builder: (context, state) {
-        return BlocProvider(
+        return BlocProvider<MovieSearchCubit>(
           create: (context) => MovieSearchCubit()..getNowPlayingMovies(),
           child: const SearchScreen(),
         );

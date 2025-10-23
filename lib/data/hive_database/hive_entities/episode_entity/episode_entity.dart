@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 
@@ -10,6 +11,15 @@ class EpisodeEntity {
   final String? serverName;
   @HiveField(1)
   final List<ServerDataEntity> serverData;
+  @HiveField(2)
+  final String id;
+  @HiveField(3)
+  final int movieId;
 
-  EpisodeEntity({required this.serverName, required this.serverData});
+  EpisodeEntity({
+    required this.serverName,
+    required this.serverData,
+    required this.movieId,
+    String? id,
+  }) : id = id ?? const Uuid().v4();
 }

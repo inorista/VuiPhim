@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 
 part 'server_data_entity.g.dart';
@@ -23,7 +24,6 @@ class ServerDataEntity extends Equatable {
   final String id;
   @HiveField(7)
   final String? downloadPath;
-
   ServerDataEntity({
     required this.name,
     required this.slug,
@@ -31,9 +31,9 @@ class ServerDataEntity extends Equatable {
     required this.linkEmbed,
     required this.linkM3U8,
     this.playingDuration,
-    required this.id,
     this.downloadPath,
-  });
+    String? id,
+  }) : id = id ?? const Uuid().v4();
 
   ServerDataEntity copyWith({
     String? name,

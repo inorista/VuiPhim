@@ -136,8 +136,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               return const Shimmer(
                                                 height: 270,
                                                 width: double.infinity,
-                                                borderRadius: 0,
-                                                showLoading: false,
+                                                borderRadius: 100,
                                               );
                                             },
                                             imageUrl: currentItem.backdropUrl,
@@ -267,15 +266,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
             Align(
               alignment: Alignment.topCenter,
               child: CustomAnimationAppbar(
-                leading: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                  child: Text(
-                    "Khám phá",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                leading: const Text(
+                  "Khám phá",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
                 actions: [
@@ -283,7 +279,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: InkWell(
                       onTap: () async {
-                        DialogUtils.showBluredDialogWithCustomChildren(
+                        VibrationNative.vibrateWithIntensity(1);
+                        await DialogUtils.showBluredDialogWithCustomChildren(
                           context,
                           child: const GenreList(),
                         );
@@ -338,7 +335,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
                 ],
                 scrollController: _scrollController,
-                appBarHeight: Platform.isIOS ? 110 : 80,
+                appBarHeight: Platform.isIOS ? 110 : 90,
               ),
             ),
           ], //

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/core/router/app_router.dart';
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
         highlightColor: Colors.transparent,
         fontFamily: 'Roboto',
       ),
+      builder: EasyLoading.init(),
     );
   }
 }

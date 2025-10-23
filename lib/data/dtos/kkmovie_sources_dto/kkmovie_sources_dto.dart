@@ -54,13 +54,6 @@ class KkMovieSourceDto {
     "movie": movie?.toJson(),
     "episodes": episodes.map((x) => x.toJson()).toList(),
   };
-
-  KkMovieSourceEntity toEntity() => KkMovieSourceEntity(
-    status: status,
-    msg: msg,
-    movie: movie?.toEntity(),
-    episodes: episodes.map((e) => e.toEntity()).toList(),
-  );
 }
 
 class EpisodeDto {
@@ -92,9 +85,10 @@ class EpisodeDto {
     "server_data": serverData.map((x) => x.toJson()).toList(),
   };
 
-  EpisodeEntity toEntity() => EpisodeEntity(
+  EpisodeEntity toEntity(int movieId) => EpisodeEntity(
     serverName: serverName,
     serverData: serverData.map((e) => e.toEntity()).toList(),
+    movieId: movieId,
   );
 }
 

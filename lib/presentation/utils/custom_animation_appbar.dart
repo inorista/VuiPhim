@@ -75,55 +75,60 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
           ),
         ),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+        SizedBox(
+          height: _appBarHeight,
           child: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                widget.leading != null
-                    ? widget.leading!
-                    : widget.isBackable
-                    ? InkWell(
-                        onTap: () {
-                          context.pop();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(150),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            CupertinoIcons.back,
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-                widget.title != null
-                    ? Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          child: Text(
-                            widget.title ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(_opacity),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  widget.leading != null
+                      ? widget.leading!
+                      : widget.isBackable
+                      ? InkWell(
+                          onTap: () {
+                            context.pop();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withAlpha(150),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              CupertinoIcons.back,
+                              color: Colors.black,
                             ),
                           ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
+                        )
+                      : const SizedBox.shrink(),
+                  widget.title != null
+                      ? Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14),
+                            child: Text(
+                              widget.title ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(_opacity),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
 
-                if (widget.actions != null)
-                  Row(children: widget.actions!)
-                else
-                  const SizedBox(width: 14),
-              ],
+                  if (widget.actions != null)
+                    Row(children: widget.actions!)
+                  else
+                    const SizedBox(width: 14),
+                ],
+              ),
             ),
           ),
         ),
