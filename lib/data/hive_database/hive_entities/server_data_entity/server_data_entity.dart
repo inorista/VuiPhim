@@ -24,6 +24,7 @@ class ServerDataEntity extends Equatable {
   final String id;
   @HiveField(7)
   final String? downloadPath;
+
   ServerDataEntity({
     required this.name,
     required this.slug,

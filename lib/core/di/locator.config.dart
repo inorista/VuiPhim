@@ -60,13 +60,13 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
+    gh.lazySingleton<_i29.ServerDataService>(() => _i29.ServerDataService());
+    gh.lazySingleton<_i207.ServerDataDao>(() => _i207.ServerDataDao());
+    gh.lazySingleton<_i739.WatchingMovieDao>(() => _i739.WatchingMovieDao());
     gh.lazySingleton<_i584.CastDao>(() => _i584.CastDao());
     gh.lazySingleton<_i190.GenreDao>(() => _i190.GenreDao());
     gh.lazySingleton<_i38.MovieDao>(() => _i38.MovieDao());
     gh.lazySingleton<_i279.MovieDetailDao>(() => _i279.MovieDetailDao());
-    gh.lazySingleton<_i739.WatchingMovieDao>(() => _i739.WatchingMovieDao());
-    gh.lazySingleton<_i29.ServerDataService>(() => _i29.ServerDataService());
-    gh.lazySingleton<_i207.ServerDataDao>(() => _i207.ServerDataDao());
     gh.lazySingleton<_i479.INetworkService>(() => _i422.NetworkService());
     gh.lazySingleton<_i249.IWatchingMovieService>(
         () => _i488.WatchingMovieService());
