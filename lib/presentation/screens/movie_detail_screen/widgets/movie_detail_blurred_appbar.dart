@@ -79,6 +79,39 @@ class MovieDetailBlurredAppBar extends StatelessWidget {
                               ],
                             ),
                           ),
+                          InkWell(
+                            onTap: () {
+                              context.pop();
+                              InstagramSharingNative().captureAndShareWidget(
+                                context,
+                                BlurryBackground(
+                                  movieDetail: state.movieDetail!,
+                                ),
+                                StickerDetail(movieDetail: state.movieDetail!),
+                              );
+                            },
+                            child: Row(
+                              spacing: 10,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/download_icon.svg',
+                                  width: 30,
+                                  height: 30,
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.white70,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                const Text(
+                                  'Tải xuống',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),

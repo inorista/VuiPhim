@@ -8,13 +8,13 @@ class DialogUtils {
   static Future<void> showBottomSheetWithCustomChildren(
     BuildContext context, {
     Widget? child,
-    double initialChildSize = 0.3,
-    double minChildSize = 0.3,
-    double maxChildSize = 0.4,
+    double initialChildSize = 0.2,
+    double minChildSize = 0.2,
+    double maxChildSize = 0.25,
   }) async {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: false,
+      isScrollControlled: true,
       backgroundColor: const Color(0xff2b2b2b),
       builder: (context) {
         return DraggableScrollableSheet(
