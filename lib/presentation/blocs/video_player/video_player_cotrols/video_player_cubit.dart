@@ -12,7 +12,6 @@ import 'package:vuiphim/data/hive_database/hive_entities/watching_movie_entity/w
 part 'video_player_state.dart';
 
 class VideoPlayerCubit extends Cubit<VideoPlayerState> {
-  final _watchingMovieService = locator<IWatchingMovieService>();
   VideoPlayerController? _controller;
   Timer? _seekDebounceTimer;
   Duration _pendingSeekAmount = Duration.zero;

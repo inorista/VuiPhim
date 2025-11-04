@@ -22,6 +22,7 @@ class ServerDataEntityAdapter extends TypeAdapter<ServerDataEntity> {
       filename: fields[2] as String?,
       linkEmbed: fields[3] as String?,
       linkM3U8: fields[4] as String?,
+      episodeId: fields[8] as String,
       playingDuration: fields[5] as int?,
       downloadPath: fields[7] as String?,
       id: fields[6] as String?,
@@ -31,7 +32,7 @@ class ServerDataEntityAdapter extends TypeAdapter<ServerDataEntity> {
   @override
   void write(BinaryWriter writer, ServerDataEntity obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class ServerDataEntityAdapter extends TypeAdapter<ServerDataEntity> {
       ..writeByte(6)
       ..write(obj.id)
       ..writeByte(7)
-      ..write(obj.downloadPath);
+      ..write(obj.downloadPath)
+      ..writeByte(8)
+      ..write(obj.episodeId);
   }
 
   @override

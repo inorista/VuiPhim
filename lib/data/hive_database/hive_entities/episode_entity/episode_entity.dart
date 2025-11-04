@@ -10,16 +10,10 @@ class EpisodeEntity {
   @HiveField(0)
   final String? serverName;
   @HiveField(1)
-  final List<ServerDataEntity> serverData;
-  @HiveField(2)
   final String id;
-  @HiveField(3)
+  @HiveField(2)
   final int movieId;
 
-  EpisodeEntity({
-    required this.serverName,
-    required this.serverData,
-    required this.movieId,
-    String? id,
-  }) : id = id ?? const Uuid().v4();
+  EpisodeEntity({required this.serverName, required this.movieId, String? id})
+    : id = id ?? const Uuid().v4();
 }

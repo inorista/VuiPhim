@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/services/interfaces/iepisode_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
@@ -13,6 +16,7 @@ class MovieSourceCubit extends Cubit<MovieSourceState> {
   MovieSourceCubit() : super(const MovieSourceState());
 
   final MovieDetailDao _movieDetailDao = locator<MovieDetailDao>();
+  final IEpisodeService _episodeService = locator<IEpisodeService>();
   final KKPhimRestClient _kkphimRestClient = locator<KKPhimRestClient>();
 
   Future<void> getMovieSources({required int movieId}) async {
@@ -24,18 +28,23 @@ class MovieSourceCubit extends Cubit<MovieSourceState> {
         throw Exception("Movie detail not found in local database.");
       }
 
-      if (movieDetail.episodes.isNotEmpty) {
+      final existedEpisodes = await _episodeService.getEpisodesByMovieId(
+        movieId,
+      );
+
+      if (existedEpisodes.isNotEmpty) {
         emit(
           state.copyWith(
             status: MovieSourceStatus.success,
-            sources: movieDetail.episodes,
+            sources: existedEpisodes,
           ),
         );
-        return;
+      } else {
+        final sources = await _fetchSourcesFromServer(movieDetail);
+        emit(
+          state.copyWith(status: MovieSourceStatus.success, sources: sources),
+        );
       }
-
-      final sources = await _fetchSourcesFromServer(movieDetail);
-      emit(state.copyWith(status: MovieSourceStatus.success, sources: sources));
     } catch (e) {
       emit(
         state.copyWith(
@@ -69,9 +78,7 @@ class MovieSourceCubit extends Cubit<MovieSourceState> {
         .map((s) => s.toEntity(movieDetail.id))
         .toList();
 
-    movieDetail.episodes = sources;
-    await _movieDetailDao.update(movieDetail.id, movieDetail);
-
+    await _episodeService.saveEpisodes(sources);
     return sources;
   }
 }

@@ -39,15 +39,14 @@ class MovieDetailEntityAdapter extends TypeAdapter<MovieDetailEntity> {
       video: fields[19] as bool,
       voteAverage: fields[20] as double,
       voteCount: fields[21] as int,
-      episodes: (fields[22] as List).cast<EpisodeEntity>(),
-      casts: (fields[23] as List).cast<CastEntity>(),
+      casts: (fields[22] as List).cast<CastEntity>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, MovieDetailEntity obj) {
     writer
-      ..writeByte(24)
+      ..writeByte(23)
       ..writeByte(0)
       ..write(obj.adult)
       ..writeByte(1)
@@ -93,8 +92,6 @@ class MovieDetailEntityAdapter extends TypeAdapter<MovieDetailEntity> {
       ..writeByte(21)
       ..write(obj.voteCount)
       ..writeByte(22)
-      ..write(obj.episodes)
-      ..writeByte(23)
       ..write(obj.casts);
   }
 

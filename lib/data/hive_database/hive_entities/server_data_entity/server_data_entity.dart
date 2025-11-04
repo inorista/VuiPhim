@@ -24,6 +24,8 @@ class ServerDataEntity extends Equatable {
   final String id;
   @HiveField(7)
   final String? downloadPath;
+  @HiveField(8)
+  final String episodeId;
 
   ServerDataEntity({
     required this.name,
@@ -31,6 +33,7 @@ class ServerDataEntity extends Equatable {
     required this.filename,
     required this.linkEmbed,
     required this.linkM3U8,
+    required this.episodeId,
     this.playingDuration,
     this.downloadPath,
     String? id,
@@ -45,6 +48,7 @@ class ServerDataEntity extends Equatable {
     int? playingDuration,
     String? id,
     String? downloadPath,
+    String? episodeId,
   }) {
     return ServerDataEntity(
       id: id ?? this.id,
@@ -55,6 +59,7 @@ class ServerDataEntity extends Equatable {
       linkM3U8: linkM3U8 ?? this.linkM3U8,
       playingDuration: playingDuration ?? this.playingDuration,
       downloadPath: downloadPath ?? this.downloadPath,
+      episodeId: episodeId ?? this.episodeId,
     );
   }
 
@@ -67,5 +72,6 @@ class ServerDataEntity extends Equatable {
     linkM3U8,
     downloadPath,
     id,
+    episodeId,
   ];
 }

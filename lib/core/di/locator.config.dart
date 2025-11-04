@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:vuiphim/core/di/locator.dart' as _i1062;
 import 'package:vuiphim/core/services/implements/background_sync.dart' as _i768;
+import 'package:vuiphim/core/services/implements/episode_service.dart' as _i125;
 import 'package:vuiphim/core/services/implements/firebase_service.dart'
     as _i713;
 import 'package:vuiphim/core/services/implements/genre_service.dart' as _i134;
@@ -26,6 +27,8 @@ import 'package:vuiphim/core/services/implements/watching_movie_service.dart'
     as _i488;
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart'
     as _i504;
+import 'package:vuiphim/core/services/interfaces/iepisode_service.dart'
+    as _i597;
 import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart'
     as _i575;
 import 'package:vuiphim/core/services/interfaces/igenre_service.dart' as _i1053;
@@ -37,6 +40,7 @@ import 'package:vuiphim/core/services/interfaces/inetwork_service.dart'
 import 'package:vuiphim/core/services/interfaces/iwatching_movie_service.dart'
     as _i249;
 import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart' as _i584;
+import 'package:vuiphim/data/hive_database/hive_daos/episode_dao.dart' as _i666;
 import 'package:vuiphim/data/hive_database/hive_daos/genre_dao.dart' as _i190;
 import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart' as _i38;
 import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart'
@@ -67,7 +71,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i190.GenreDao>(() => _i190.GenreDao());
     gh.lazySingleton<_i38.MovieDao>(() => _i38.MovieDao());
     gh.lazySingleton<_i279.MovieDetailDao>(() => _i279.MovieDetailDao());
+    gh.lazySingleton<_i666.EpisodeDao>(() => _i666.EpisodeDao());
     gh.lazySingleton<_i479.INetworkService>(() => _i422.NetworkService());
+    gh.lazySingleton<_i597.IEpisodeService>(() => _i125.EpisodeService());
     gh.lazySingleton<_i249.IWatchingMovieService>(
         () => _i488.WatchingMovieService());
     gh.lazySingleton<_i575.IFirebaseService>(() => _i713.FirebaseService());

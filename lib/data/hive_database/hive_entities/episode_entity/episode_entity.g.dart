@@ -18,23 +18,20 @@ class EpisodeEntityAdapter extends TypeAdapter<EpisodeEntity> {
     };
     return EpisodeEntity(
       serverName: fields[0] as String?,
-      serverData: (fields[1] as List).cast<ServerDataEntity>(),
-      movieId: fields[3] as int,
-      id: fields[2] as String?,
+      movieId: fields[2] as int,
+      id: fields[1] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, EpisodeEntity obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.serverName)
       ..writeByte(1)
-      ..write(obj.serverData)
-      ..writeByte(2)
       ..write(obj.id)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.movieId);
   }
 
