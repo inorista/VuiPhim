@@ -11,4 +11,18 @@ class ServerDataDao extends BaseDao<ServerDataEntity> {
     final allMovieDetails = await getAll();
     return allMovieDetails.firstOrDefault((item) => item.id == id);
   }
+
+  Future<List<ServerDataEntity>> getServerDataByEpisodeId(
+    String episodeId,
+  ) async {
+    final allServerData = await getAll();
+    return allServerData.where((item) => item.episodeId == episodeId).toList();
+  }
+
+  Future<void> saveServerData(List<ServerDataEntity> serverData) async {
+    final serverDataMap = {
+      for (var serverData in serverData) serverData.id: serverData,
+    };
+    await updateAll(serverDataMap);
+  }
 }

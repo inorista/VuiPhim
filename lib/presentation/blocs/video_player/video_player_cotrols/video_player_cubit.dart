@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 import 'package:vuiphim/core/services/interfaces/iwatching_movie_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
@@ -18,8 +20,8 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   VideoPlayerController? get controller => _controller;
   MovieDetailEntity? _movieDetailEntity;
   ServerDataEntity? _serverDataEntity;
-
   VideoPlayerCubit() : super(const VideoPlayerState());
+  final IServerDataService _serverDataService = locator<IServerDataService>();
 
   void forward10s() {
     _debounceSeek(const Duration(seconds: 10));
@@ -110,55 +112,18 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
 
   Future<void> _startAutoSavePosition() async {
     if (_movieDetailEntity != null && _serverDataEntity != null) {
-      final watchingMovie = await _watchingMovieService.getWatchingMovie(
-        _movieDetailEntity!.id,
+      final currentPosition = _controller?.value.position ?? Duration.zero;
+      final existedServerData = await _serverDataService.getServerDataById(
+        _serverDataEntity?.id ?? '',
       );
-      if (watchingMovie == null) {
-        final serverDataEntity = _serverDataEntity!.copyWith(
-          playingDuration: state.position.inMilliseconds,
+      if (existedServerData != null) {
+        final updatedServerData = existedServerData.copyWith(
+          playingDuration: currentPosition.inMilliseconds,
         );
-
-        final newWatchingMovie = WatchingMovieEntity(
-          serverDataList: [serverDataEntity],
-          movieDetail: _movieDetailEntity!,
+        await _serverDataService.updateServerData(
+          _serverDataEntity!.id,
+          updatedServerData,
         );
-        await _watchingMovieService.saveWatchingMovie(newWatchingMovie);
-        return;
-      } else {
-        final existedWatchingMovie = watchingMovie.serverDataList
-            .firstOrDefault((serverData) => serverData == _serverDataEntity);
-        if (existedWatchingMovie != null) {
-          final updatedServerData = existedWatchingMovie.copyWith(
-            playingDuration: state.position.inMilliseconds,
-          );
-          final updatedServerDataList = watchingMovie.serverDataList.map((
-            serverData,
-          ) {
-            if (serverData == _serverDataEntity) {
-              return updatedServerData;
-            }
-            return serverData;
-          }).toList();
-
-          final updatedWatchingMovie = watchingMovie.copyWith(
-            serverDataList: updatedServerDataList,
-          );
-          await _watchingMovieService.saveWatchingMovie(updatedWatchingMovie);
-          return;
-        } else {
-          final newServerData = _serverDataEntity!.copyWith(
-            playingDuration: state.position.inMilliseconds,
-          );
-          final updatedServerDataList = [
-            ...watchingMovie.serverDataList,
-            newServerData,
-          ];
-          final updatedWatchingMovie = watchingMovie.copyWith(
-            serverDataList: updatedServerDataList,
-          );
-          await _watchingMovieService.saveWatchingMovie(updatedWatchingMovie);
-          return;
-        }
       }
     }
   }

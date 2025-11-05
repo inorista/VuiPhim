@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 import 'package:vuiphim/core/services/interfaces/iwatching_movie_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
@@ -23,37 +24,32 @@ class VideoPlayerView extends StatelessWidget {
   });
 
   Future<void> checkResume(BuildContext context) async {
-    final watchingMovie = await locator<IWatchingMovieService>()
-        .getWatchingMovie(movieDetail.id);
-    if (context.mounted) {
+    final serverDataEntity = await locator<IServerDataService>()
+        .getServerDataById(serverData.id);
+    if (context.mounted && serverDataEntity != null) {
       final cubit = context.read<VideoPlayerCubit>();
-      if (watchingMovie != null && watchingMovie.serverDataList.isNotEmpty) {
-        final watchingServerData = watchingMovie.serverDataList.firstOrDefault(
-          (item) => item == serverData,
+      if (serverDataEntity.playingDuration != null) {
+        cubit.pause();
+        await DialogUtils.showYesNoDialog(
+          context,
+          title: 'Tiếp tục xem?',
+          content:
+              'Bạn có muốn tiếp tục xem từ ${FormatDateFromMilliseconds(serverDataEntity.playingDuration!).toDateString()} không?',
+          onYesPressed: () {
+            context.pop();
+            cubit.seekTo(
+              Duration(milliseconds: serverDataEntity.playingDuration!),
+            );
+            cubit.play();
+          },
+          onNoPressed: () {
+            context.pop();
+            cubit.seekTo(Duration.zero);
+            cubit.play();
+          },
+          noText: 'Thôi, xem lại từ đầu',
+          yesText: 'Có, xem tiếp',
         );
-        if (watchingServerData?.playingDuration != null) {
-          cubit.pause();
-          await DialogUtils.showYesNoDialog(
-            context,
-            title: 'Tiếp tục xem?',
-            content:
-                'Bạn có muốn tiếp tục xem từ ${FormatDateFromMilliseconds(watchingServerData!.playingDuration!).toDateString()} không?',
-            onYesPressed: () {
-              context.pop();
-              cubit.seekTo(
-                Duration(milliseconds: watchingServerData.playingDuration!),
-              );
-              cubit.play();
-            },
-            onNoPressed: () {
-              context.pop();
-              cubit.seekTo(Duration.zero);
-              cubit.play();
-            },
-            noText: 'Thôi, xem lại từ đầu',
-            yesText: 'Có, xem tiếp',
-          );
-        }
       }
     }
   }

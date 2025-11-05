@@ -84,8 +84,7 @@ class EpisodeDto {
     "server_data": serverData.map((x) => x.toJson()).toList(),
   };
 
-  EpisodeEntity toEntity(int movieId) {
-    final episodeId = const Uuid().v4();
+  EpisodeEntity toEntity(String episodeId, int movieId) {
     return EpisodeEntity(
       serverName: serverName,
       movieId: movieId,

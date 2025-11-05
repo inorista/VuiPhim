@@ -22,7 +22,7 @@ class ServerDataEntityAdapter extends TypeAdapter<ServerDataEntity> {
       filename: fields[2] as String?,
       linkEmbed: fields[3] as String?,
       linkM3U8: fields[4] as String?,
-      episodeId: fields[8] as String,
+      episodeId: fields[8] as String?,
       playingDuration: fields[5] as int?,
       downloadPath: fields[7] as String?,
       id: fields[6] as String?,

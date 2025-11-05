@@ -52,7 +52,7 @@ class EpisodeListWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              episode.serverName ?? '',
+                              episode.episode.serverName ?? '',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,
@@ -60,43 +60,44 @@ class EpisodeListWidget extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 15),
-                            // SizedBox(
-                            //   height: 50,
-                            //   child: ListView.separated(
-                            //     physics: const BouncingScrollPhysics(
-                            //       parent: AlwaysScrollableScrollPhysics(),
-                            //     ),
-                            //     scrollDirection: Axis.horizontal,
-                            //     itemBuilder: (context, dataIndex) {
-                            //       final currentSourceData =
-                            //           episode.serverData[dataIndex];
-                            //       return CustomButton(
-                            //         onTap: () {
-                            //           context.push(
-                            //             AppRouter.videoPlayer,
-                            //             extra: {
-                            //               'movieDetail': movieDetail,
-                            //               'serverData': currentSourceData,
-                            //             },
-                            //           );
-                            //         },
-                            //         width: 65,
-                            //         height: 50,
-                            //         color: Colors.transparent,
-                            //         child: Text(
-                            //           currentSourceData.name ?? '',
-                            //           style: const TextStyle(
-                            //             color: Color(0xFFbe2b27),
-                            //           ),
-                            //         ),
-                            //       );
-                            //     },
-                            //     itemCount: episode.serverData.length,
-                            //     separatorBuilder: (context, index) {
-                            //       return const SizedBox(width: 10);
-                            //     },
-                            //   ),
-                            // ),
+                            SizedBox(
+                              height: 50,
+                              child: ListView.separated(
+                                physics: const BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics(),
+                                ),
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, dataIndex) {
+                                  final currentSourceData =
+                                      episode.serverDatas[dataIndex];
+
+                                  return CustomButton(
+                                    onTap: () {
+                                      context.push(
+                                        AppRouter.videoPlayer,
+                                        extra: {
+                                          'movieDetail': movieDetail,
+                                          'serverData': currentSourceData,
+                                        },
+                                      );
+                                    },
+                                    width: 65,
+                                    height: 50,
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      currentSourceData.name ?? '',
+                                      style: const TextStyle(
+                                        color: Color(0xFFbe2b27),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount: episode.serverDatas.length,
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(width: 10);
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       );

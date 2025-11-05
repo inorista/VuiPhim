@@ -4,7 +4,7 @@ enum SelectMovieEpisodeStatus { initial, loading, success, failure }
 
 class SelectMovieEpisodeState extends Equatable {
   final SelectMovieEpisodeStatus status;
-  final List<EpisodeEntity> sources;
+  final List<EpisodeUIModel> sources;
 
   const SelectMovieEpisodeState({
     this.status = SelectMovieEpisodeStatus.initial,
@@ -13,7 +13,7 @@ class SelectMovieEpisodeState extends Equatable {
 
   SelectMovieEpisodeState copyWith({
     SelectMovieEpisodeStatus? status,
-    List<EpisodeEntity>? sources,
+    List<EpisodeUIModel>? sources,
   }) {
     return SelectMovieEpisodeState(
       status: status ?? this.status,

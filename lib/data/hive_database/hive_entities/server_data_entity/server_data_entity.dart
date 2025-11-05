@@ -25,7 +25,7 @@ class ServerDataEntity extends Equatable {
   @HiveField(7)
   final String? downloadPath;
   @HiveField(8)
-  final String episodeId;
+  final String? episodeId;
 
   ServerDataEntity({
     required this.name,
@@ -33,7 +33,7 @@ class ServerDataEntity extends Equatable {
     required this.filename,
     required this.linkEmbed,
     required this.linkM3U8,
-    required this.episodeId,
+    this.episodeId,
     this.playingDuration,
     this.downloadPath,
     String? id,

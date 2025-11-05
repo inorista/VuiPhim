@@ -37,6 +37,8 @@ import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart'
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart' as _i52;
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart'
     as _i479;
+import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart'
+    as _i302;
 import 'package:vuiphim/core/services/interfaces/iwatching_movie_service.dart'
     as _i249;
 import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart' as _i584;
@@ -64,7 +66,6 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
-    gh.lazySingleton<_i29.ServerDataService>(() => _i29.ServerDataService());
     gh.lazySingleton<_i207.ServerDataDao>(() => _i207.ServerDataDao());
     gh.lazySingleton<_i739.WatchingMovieDao>(() => _i739.WatchingMovieDao());
     gh.lazySingleton<_i584.CastDao>(() => _i584.CastDao());
@@ -78,6 +79,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i488.WatchingMovieService());
     gh.lazySingleton<_i575.IFirebaseService>(() => _i713.FirebaseService());
     gh.lazySingleton<_i52.IMovieService>(() => _i650.MovieService());
+    gh.lazySingleton<_i302.IServerDataService>(() => _i29.ServerDataService());
     gh.lazySingleton<_i504.IBackgroundSync>(() => _i768.BackgroundSync());
     gh.lazySingleton<_i811.IKeychainStorageService>(
         () => _i927.KeychainStorageService());
