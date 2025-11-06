@@ -8,7 +8,7 @@ part of 'episode_entity.dart';
 
 class EpisodeEntityAdapter extends TypeAdapter<EpisodeEntity> {
   @override
-  final int typeId = 7;
+  final typeId = 7;
 
   @override
   EpisodeEntity read(BinaryReader reader) {
@@ -18,7 +18,7 @@ class EpisodeEntityAdapter extends TypeAdapter<EpisodeEntity> {
     };
     return EpisodeEntity(
       serverName: fields[0] as String?,
-      movieId: fields[2] as int,
+      movieId: (fields[2] as num).toInt(),
       id: fields[1] as String?,
     );
   }

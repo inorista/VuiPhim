@@ -8,7 +8,7 @@ part of 'enum.dart';
 
 class MovieCategoryAdapter extends TypeAdapter<MovieCategory> {
   @override
-  final int typeId = 3;
+  final typeId = 3;
 
   @override
   MovieCategory read(BinaryReader reader) {
@@ -29,13 +29,10 @@ class MovieCategoryAdapter extends TypeAdapter<MovieCategory> {
     switch (obj) {
       case MovieCategory.popular:
         writer.writeByte(0);
-        break;
       case MovieCategory.topRated:
         writer.writeByte(1);
-        break;
       case MovieCategory.upcoming:
         writer.writeByte(2);
-        break;
     }
   }
 

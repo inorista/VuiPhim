@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/category_entity/category_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/created_entity/created_entity.dart';

@@ -8,7 +8,7 @@ part of 'server_data_entity.dart';
 
 class ServerDataEntityAdapter extends TypeAdapter<ServerDataEntity> {
   @override
-  final int typeId = 8;
+  final typeId = 8;
 
   @override
   ServerDataEntity read(BinaryReader reader) {
@@ -23,7 +23,7 @@ class ServerDataEntityAdapter extends TypeAdapter<ServerDataEntity> {
       linkEmbed: fields[3] as String?,
       linkM3U8: fields[4] as String?,
       episodeId: fields[8] as String?,
-      playingDuration: fields[5] as int?,
+      playingDuration: (fields[5] as num?)?.toInt(),
       downloadPath: fields[7] as String?,
       id: fields[6] as String?,
     );

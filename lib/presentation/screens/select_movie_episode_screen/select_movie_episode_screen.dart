@@ -3,11 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/presentation/blocs/select_movie_episode/select_movie_episode_cubit.dart';
 import 'package:vuiphim/presentation/screens/select_movie_episode_screen/widgets/episode_list_widget.dart';
-import 'package:vuiphim/presentation/utils/custom_button.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class SelectMovieEpisodeScreen extends StatelessWidget {

@@ -15,7 +15,4 @@ CastResponseDto _$CastResponseDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CastResponseDtoToJson(CastResponseDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'cast': instance.cast,
-    };
+    <String, dynamic>{'id': instance.id, 'cast': instance.cast};

@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
-import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 part 'video_player_state.dart';

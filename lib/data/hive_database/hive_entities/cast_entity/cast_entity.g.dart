@@ -8,7 +8,7 @@ part of 'cast_entity.dart';
 
 class CastEntityAdapter extends TypeAdapter<CastEntity> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   CastEntity read(BinaryReader reader) {
@@ -18,17 +18,17 @@ class CastEntityAdapter extends TypeAdapter<CastEntity> {
     };
     return CastEntity(
       adult: fields[0] as bool,
-      gender: fields[1] as int,
-      id: fields[2] as int,
+      gender: (fields[1] as num).toInt(),
+      id: (fields[2] as num).toInt(),
       knownForDepartment: fields[3] as String,
       name: fields[4] as String,
       originalName: fields[5] as String,
-      popularity: fields[6] as double,
-      castId: fields[7] as int?,
+      popularity: (fields[6] as num).toDouble(),
+      castId: (fields[7] as num?)?.toInt(),
       character: fields[8] as String?,
       profilePath: fields[9] as String?,
       creditId: fields[10] as String,
-      order: fields[11] as int?,
+      order: (fields[11] as num?)?.toInt(),
       department: fields[12] as String?,
       job: fields[13] as String?,
     );
@@ -84,21 +84,21 @@ class CastEntityAdapter extends TypeAdapter<CastEntity> {
 // **************************************************************************
 
 CastEntity _$CastEntityFromJson(Map<String, dynamic> json) => CastEntity(
-      adult: json['adult'] as bool,
-      gender: (json['gender'] as num).toInt(),
-      id: (json['id'] as num).toInt(),
-      knownForDepartment: json['known_for_department'] as String,
-      name: json['name'] as String,
-      originalName: json['original_name'] as String,
-      popularity: (json['popularity'] as num).toDouble(),
-      castId: (json['cast_id'] as num?)?.toInt(),
-      character: json['character'] as String?,
-      profilePath: json['profile_path'] as String?,
-      creditId: json['credit_id'] as String,
-      order: (json['order'] as num?)?.toInt(),
-      department: json['department'] as String?,
-      job: json['job'] as String?,
-    );
+  adult: json['adult'] as bool,
+  gender: (json['gender'] as num).toInt(),
+  id: (json['id'] as num).toInt(),
+  knownForDepartment: json['known_for_department'] as String,
+  name: json['name'] as String,
+  originalName: json['original_name'] as String,
+  popularity: (json['popularity'] as num).toDouble(),
+  castId: (json['cast_id'] as num?)?.toInt(),
+  character: json['character'] as String?,
+  profilePath: json['profile_path'] as String?,
+  creditId: json['credit_id'] as String,
+  order: (json['order'] as num?)?.toInt(),
+  department: json['department'] as String?,
+  job: json['job'] as String?,
+);
 
 Map<String, dynamic> _$CastEntityToJson(CastEntity instance) =>
     <String, dynamic>{

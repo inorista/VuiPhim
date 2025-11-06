@@ -8,7 +8,7 @@ part of 'kkmovie_movie_entity.dart';
 
 class KkMovieMovieEntityAdapter extends TypeAdapter<KkMovieMovieEntity> {
   @override
-  final int typeId = 9;
+  final typeId = 9;
 
   @override
   KkMovieMovieEntity read(BinaryReader reader) {
@@ -41,8 +41,8 @@ class KkMovieMovieEntityAdapter extends TypeAdapter<KkMovieMovieEntity> {
       lang: fields[21] as String?,
       notify: fields[22] as String?,
       showtimes: fields[23] as String?,
-      year: fields[24] as int?,
-      view: fields[25] as int?,
+      year: (fields[24] as num?)?.toInt(),
+      view: (fields[25] as num?)?.toInt(),
       actor: (fields[26] as List).cast<String>(),
       director: (fields[27] as List).cast<String>(),
       category: (fields[28] as List).cast<CategoryEntity>(),

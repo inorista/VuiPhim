@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
 

@@ -8,7 +8,7 @@ part of 'kkmovie_source_entity.dart';
 
 class KkMovieSourceEntityAdapter extends TypeAdapter<KkMovieSourceEntity> {
   @override
-  final int typeId = 6;
+  final typeId = 6;
 
   @override
   KkMovieSourceEntity read(BinaryReader reader) {

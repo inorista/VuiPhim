@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -56,12 +57,12 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
-    gh.lazySingleton<_i207.ServerDataDao>(() => _i207.ServerDataDao());
     gh.lazySingleton<_i584.CastDao>(() => _i584.CastDao());
+    gh.lazySingleton<_i666.EpisodeDao>(() => _i666.EpisodeDao());
     gh.lazySingleton<_i190.GenreDao>(() => _i190.GenreDao());
     gh.lazySingleton<_i38.MovieDao>(() => _i38.MovieDao());
     gh.lazySingleton<_i279.MovieDetailDao>(() => _i279.MovieDetailDao());
-    gh.lazySingleton<_i666.EpisodeDao>(() => _i666.EpisodeDao());
+    gh.lazySingleton<_i207.ServerDataDao>(() => _i207.ServerDataDao());
     gh.lazySingleton<_i479.INetworkService>(() => _i422.NetworkService());
     gh.lazySingleton<_i597.IEpisodeService>(() => _i125.EpisodeService());
     gh.lazySingleton<_i575.IFirebaseService>(() => _i713.FirebaseService());

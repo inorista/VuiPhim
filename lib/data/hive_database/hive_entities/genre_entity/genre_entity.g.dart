@@ -8,7 +8,7 @@ part of 'genre_entity.dart';
 
 class GenreEntityAdapter extends TypeAdapter<GenreEntity> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   GenreEntity read(BinaryReader reader) {
@@ -17,7 +17,7 @@ class GenreEntityAdapter extends TypeAdapter<GenreEntity> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GenreEntity(
-      id: fields[0] as int,
+      id: (fields[0] as num).toInt(),
       name: fields[1] as String,
     );
   }
@@ -47,13 +47,8 @@ class GenreEntityAdapter extends TypeAdapter<GenreEntity> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-GenreEntity _$GenreEntityFromJson(Map<String, dynamic> json) => GenreEntity(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-    );
+GenreEntity _$GenreEntityFromJson(Map<String, dynamic> json) =>
+    GenreEntity(id: (json['id'] as num).toInt(), name: json['name'] as String);
 
 Map<String, dynamic> _$GenreEntityToJson(GenreEntity instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };
+    <String, dynamic>{'id': instance.id, 'name': instance.name};

@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/iepisode_service.dart';
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
-import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
 import 'package:vuiphim/presentation/screens/select_movie_episode_screen/widgets/episode_ui_model.dart';
 
 part 'select_movie_episode_state.dart';
@@ -30,6 +29,7 @@ class SelectMovieEpisodeCubit extends Cubit<SelectMovieEpisodeState> {
         );
         episodeUIModels.add(episodeUIModel);
       }
+
       emit(
         state.copyWith(
           status: SelectMovieEpisodeStatus.success,
