@@ -104,16 +104,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SliverToBoxAdapter(
-                    child: Text(
-                      "Tiếp tục xem",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      child: Text(
+                        "Tiếp tục xem",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 1000)),
                 ],
               ),
             ),

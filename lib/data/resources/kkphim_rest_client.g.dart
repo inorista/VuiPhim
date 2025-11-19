@@ -22,7 +22,7 @@ class _KKPhimRestClient implements KKPhimRestClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<KkMovieResponseDto> searchMovies(
+  Future<dynamic> searchMovies(
     String keyword, {
     String? language = 'vi-VN',
     CancelToken? cancelToken,
@@ -32,7 +32,7 @@ class _KKPhimRestClient implements KKPhimRestClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<KkMovieResponseDto>(
+    final _options = _setStreamType<dynamic>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -43,24 +43,18 @@ class _KKPhimRestClient implements KKPhimRestClient {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late KkMovieResponseDto _value;
-    try {
-      _value = KkMovieResponseDto.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     return _value;
   }
 
   @override
-  Future<KkMovieSourceDto> getMovieSources(String slug) async {
+  Future<dynamic> getMovieSources(String slug) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<KkMovieSourceDto>(
+    final _options = _setStreamType<dynamic>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -70,14 +64,8 @@ class _KKPhimRestClient implements KKPhimRestClient {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late KkMovieSourceDto _value;
-    try {
-      _value = KkMovieSourceDto.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     return _value;
   }
 

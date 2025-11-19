@@ -21,6 +21,8 @@ class PopularMovieCubit extends Cubit<PopularMovieState> {
       language: 'vi-VN',
     );
 
+    if (isClosed) return;
+
     final movieEntites = movieDtos.results
         .map(
           (item) => MovieEntity.fromDto(item, category: MovieCategory.popular),

@@ -22,6 +22,8 @@ class TopRatedMovieCubit extends Cubit<TopRatedMovieState> {
       language: 'vi-VN',
     );
 
+    if (isClosed) return;
+
     final movieEntities = movieDtos.results
         .map(
           (item) => MovieEntity.fromDto(item, category: MovieCategory.topRated),

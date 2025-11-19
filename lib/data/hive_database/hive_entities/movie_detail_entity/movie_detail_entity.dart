@@ -110,6 +110,33 @@ class MovieDetailEntity extends Equatable {
     );
   }
 
+  Map<String, Object?> toJson() {
+    return {
+      "adult": adult,
+      "backdrop_path": backdropPath,
+      "budget": budget,
+      "genres": genres.map((genre) => genre.toJson()).toList(),
+      "homepage": homepage,
+      "id": id,
+      "imdb_id": imdbId,
+      "origin_country": originCountry,
+      "original_language": originalLanguage,
+      "original_title": originalTitle,
+      "overview": overview,
+      "popularity": popularity,
+      "poster_path": posterPath,
+      "release_date": releaseDate,
+      "revenue": revenue,
+      "runtime": runtime,
+      "status": status,
+      "tagline": tagline,
+      "title": title,
+      "video": video,
+      "vote_average": voteAverage,
+      "vote_count": voteCount,
+    };
+  }
+
   String get posterUrl => 'https://image.tmdb.org/t/p/original$posterPath';
   String get backdropUrl => 'https://image.tmdb.org/t/p/original$backdropPath';
 

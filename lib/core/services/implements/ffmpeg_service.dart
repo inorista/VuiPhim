@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_session.dart';
 import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/iffmpeg_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 
+@LazySingleton(as: IFFmpegService)
 class FFmpegService implements IFFmpegService {
   final _serverDataService = locator<IServerDataService>();
 

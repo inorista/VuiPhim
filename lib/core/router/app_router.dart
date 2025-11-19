@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 import 'package:vuiphim/presentation/blocs/movie_search/movie_search_cubit.dart';
+import 'package:vuiphim/presentation/screens/download_manager_screen/download_manager_screen.dart';
 import 'package:vuiphim/presentation/screens/main_screen/main_screen.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/movie_detail_screen.dart';
 import 'package:vuiphim/presentation/screens/search_screen/search_screen.dart';
@@ -69,6 +70,13 @@ final GoRouter router = GoRouter(
         return StickerScreen(movieDetail: movieDetail);
       },
     ),
+
+    GoRoute(
+      path: AppRouter.downloadManager,
+      builder: (context, state) {
+        return const DownloadManagerScreen();
+      },
+    ),
   ],
 );
 
@@ -82,4 +90,5 @@ class AppRouter {
   static String videoPlayer = '/video_player';
   static String search = '/search';
   static String stickerScreen = '/sticker_screen';
+  static String downloadManager = '/download_manager';
 }

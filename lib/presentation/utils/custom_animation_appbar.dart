@@ -11,6 +11,7 @@ class CustomAnimationAppbar extends StatefulWidget {
   final ScrollController? scrollController;
   final double? appBarHeight;
   final bool isBackable;
+  final bool centerTitle;
   const CustomAnimationAppbar({
     super.key,
     this.title,
@@ -19,6 +20,7 @@ class CustomAnimationAppbar extends StatefulWidget {
     this.leading,
     this.actions,
     this.isBackable = true,
+    this.centerTitle = false,
   });
 
   @override

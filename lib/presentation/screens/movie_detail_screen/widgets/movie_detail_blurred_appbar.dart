@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/instagram_sharing_native.dart';
 import 'package:vuiphim/presentation/blocs/movie_infomation/movie_detail/movie_detail_cubit.dart';
+import 'package:vuiphim/presentation/blocs/movie_infomation/movie_source/movie_source_cubit.dart';
+import 'package:vuiphim/presentation/blocs/select_movie_episode/select_movie_episode_cubit.dart';
+import 'package:vuiphim/presentation/screens/download_manager_screen/widgets/episode_list.dart';
 import 'package:vuiphim/presentation/screens/sticker_screen/widgets/blurry_background.dart';
 import 'package:vuiphim/presentation/screens/sticker_screen/widgets/sticker_detail.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/dialog_utils.dart';
+import 'package:vuiphim/presentation/utils/option_item.dart';
 
 class MovieDetailBlurredAppBar extends StatelessWidget {
   const MovieDetailBlurredAppBar({
     super.key,
     required ScrollController scrollController,
   }) : _scrollController = scrollController;
-
   final ScrollController _scrollController;
 
   @override
@@ -46,8 +48,10 @@ class MovieDetailBlurredAppBar extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
+                          OptionItem(
+                            imgPath: 'assets/icons/instagram_icon.svg',
+                            title: "Chia sẻ lên Instagram",
+                            onTap: () async {
                               context.pop();
                               InstagramSharingNative().captureAndShareWidget(
                                 context,
@@ -57,61 +61,33 @@ class MovieDetailBlurredAppBar extends StatelessWidget {
                                 StickerDetail(movieDetail: state.movieDetail!),
                               );
                             },
-                            child: Row(
-                              spacing: 10,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/instagram_icon.svg',
-                                  width: 30,
-                                  height: 30,
-                                  colorFilter: const ColorFilter.mode(
-                                    Colors.white70,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                                const Text(
-                                  'Chia sẻ qua Instagram',
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              context.pop();
-                              InstagramSharingNative().captureAndShareWidget(
-                                context,
-                                BlurryBackground(
-                                  movieDetail: state.movieDetail!,
-                                ),
-                                StickerDetail(movieDetail: state.movieDetail!),
-                              );
-                            },
-                            child: Row(
-                              spacing: 10,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/download_icon.svg',
-                                  width: 30,
-                                  height: 30,
-                                  colorFilter: const ColorFilter.mode(
-                                    Colors.white70,
-                                    BlendMode.srcIn,
+
+                          if (context.read<MovieSourceCubit>().state.status ==
+                                  MovieSourceStatus.success &&
+                              context
+                                  .read<MovieSourceCubit>()
+                                  .state
+                                  .sources
+                                  .isNotEmpty)
+                            OptionItem(
+                              imgPath: 'assets/icons/download_icon.svg',
+                              title: 'Tải xuống',
+                              onTap: () async {
+                                context.pop();
+                                await DialogUtils.showBluredDialogWithCustomChildren(
+                                  context,
+                                  child: BlocProvider<SelectMovieEpisodeCubit>(
+                                    create: (context) =>
+                                        SelectMovieEpisodeCubit()
+                                          ..initializeEpisodes(
+                                            state.movieDetail!.id,
+                                          ),
+                                    child: const EpisodeList(),
                                   ),
-                                ),
-                                const Text(
-                                  'Tải xuống',
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          ),
                         ],
                       ),
                     ),

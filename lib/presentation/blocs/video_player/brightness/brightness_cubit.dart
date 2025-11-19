@@ -10,6 +10,7 @@ class BrightnessCubit extends Cubit<BrightnessState> {
     try {
       emit(state.copyWith(status: BrightnessStatus.loading));
       final currentBrightness = await BrightnessNative.getBrightness();
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: BrightnessStatus.success,
@@ -17,6 +18,7 @@ class BrightnessCubit extends Cubit<BrightnessState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: BrightnessStatus.failure,
@@ -30,6 +32,7 @@ class BrightnessCubit extends Cubit<BrightnessState> {
     final clampedBrightness = brightness.clamp(0.0, 1.0);
     try {
       await BrightnessNative.setBrightness(clampedBrightness);
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: BrightnessStatus.success,
@@ -37,6 +40,7 @@ class BrightnessCubit extends Cubit<BrightnessState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: BrightnessStatus.failure,

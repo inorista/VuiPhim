@@ -10,11 +10,12 @@ class DownloadManagerCubit extends Cubit<DownloadManagerState> {
 
   DownloadManagerCubit() : super(const DownloadManagerState());
 
-  DownloadItemState getDownloadState(String videoId) {
-    return state.downloads[videoId] ?? const DownloadItemState();
+  DownloadItemState getDownloadState(String videoId, int movieId) {
+    return state.downloads[videoId] ??
+        DownloadItemState(movieId: movieId, videoId: videoId);
   }
 
-  void startDownload(String videoId, String m3u8Url) async {
+  void startDownload(String videoId, int movieId, String m3u8Url) async {
     if (state.downloads[videoId]?.status == DownloadStatus.downloading) {
       return;
     }
@@ -24,9 +25,11 @@ class DownloadManagerCubit extends Cubit<DownloadManagerState> {
     final progressController = StreamController<double>();
     _updateDownloadState(
       videoId,
-      const DownloadItemState(
+      DownloadItemState(
         status: DownloadStatus.downloading,
         progress: 0.0,
+        movieId: movieId,
+        videoId: videoId,
       ),
     );
 
@@ -37,16 +40,19 @@ class DownloadManagerCubit extends Cubit<DownloadManagerState> {
           DownloadItemState(
             status: DownloadStatus.downloading,
             progress: progress,
+            movieId: movieId,
+            videoId: videoId,
           ),
         );
       },
       onError: (error) {
-        print("Download error for $videoId: $error");
         _updateDownloadState(
           videoId,
           DownloadItemState(
             status: DownloadStatus.failure,
             progress: state.downloads[videoId]?.progress ?? 0.0,
+            movieId: movieId,
+            videoId: videoId,
           ),
         );
         progressController.close();
@@ -67,10 +73,13 @@ class DownloadManagerCubit extends Cubit<DownloadManagerState> {
 
       _updateDownloadState(
         videoId,
-        const DownloadItemState(status: DownloadStatus.success, progress: 1.0),
+        DownloadItemState(
+          status: DownloadStatus.success,
+          progress: 1.0,
+          movieId: movieId,
+          videoId: videoId,
+        ),
       );
-    } catch (e) {
-      print("FFmpeg service failed for $videoId: $e");
     } finally {
       if (!progressController.isClosed) {
         progressController.close();

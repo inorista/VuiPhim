@@ -23,6 +23,8 @@ class UpcomingMovieCubit extends Cubit<UpcomingMovieState> {
       language: 'vi-VN',
     );
 
+    if (isClosed) return;
+
     final movieEntities = movieDtos.results
         .map(
           (item) => MovieEntity.fromDto(item, category: MovieCategory.upcoming),

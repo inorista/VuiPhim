@@ -19,6 +19,7 @@ class ExploreCubit extends Cubit<ExploreState> {
       final movies = await _networkService.getNowPlayingMovies(
         page: _currentPage,
       );
+      if (isClosed) return;
       final movieEntities = movies.results.map((e) => e.toEntity()).toList();
       emit(
         state.copyWith(
@@ -28,6 +29,7 @@ class ExploreCubit extends Cubit<ExploreState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: ExploreStatus.failure,
@@ -47,6 +49,7 @@ class ExploreCubit extends Cubit<ExploreState> {
       final movies = await _networkService.getNowPlayingMovies(
         page: _currentPage,
       );
+      if (isClosed) return;
       final movieEntities = movies.results.map((e) => e.toEntity()).toList();
 
       if (movieEntities.isEmpty) {
@@ -69,6 +72,7 @@ class ExploreCubit extends Cubit<ExploreState> {
       }
     } catch (e) {
       _currentPage--;
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: ExploreStatus.failure,

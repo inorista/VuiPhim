@@ -60,16 +60,19 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
       _movieDetailEntity = movieDetailEntity;
       _serverDataEntity = serverDataEntity;
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+      if (isClosed) return;
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
+      if (isClosed) return;
 
       _controller = VideoPlayerController.networkUrl(
         Uri.parse(serverDataEntity.linkM3U8 ?? ''),
       );
       if (_controller != null) {
         await _controller!.initialize();
+        if (isClosed) return;
         _controller!.addListener(_onControllerUpdate);
 
         emit(
@@ -81,6 +84,7 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
         );
         play();
       } else {
+        if (isClosed) return;
         emit(
           state.copyWith(
             status: VideoPlayerStatus.error,
@@ -90,6 +94,7 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
         return;
       }
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: VideoPlayerStatus.error,
