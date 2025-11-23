@@ -1,11 +1,17 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/router/app_router.dart';
+import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
+import 'package:vuiphim/presentation/blocs/download_manager/download_manager_state.dart';
+import 'package:vuiphim/presentation/blocs/downloaded_manager/downloaded_manager_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
+import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -89,15 +95,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(
                             height: 220,
-                            child: ListView.separated(
-                              itemBuilder: (context, index) {
-                                return null;
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(width: 15);
-                              },
-                              itemCount: 15,
-                            ),
+                            child:
+                                BlocBuilder<
+                                  DownloadedManagerCubit,
+                                  DownloadedManagerState
+                                >(
+                                  builder: (context, state) {
+                                    if (state.downloadedMovieMaps.isEmpty) {
+                                      return const Center(
+                                        child: Text(
+                                          "Chưa có phim nào được tải xuống",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          final movieEntity = state
+                                              .downloadedMovieMaps
+                                              .keys
+                                              .elementAt(index);
+                                          return ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl: movieEntity.posterUrl,
+                                              fit: BoxFit.cover,
+                                              fadeInDuration: const Duration(
+                                                milliseconds: 10,
+                                              ),
+                                              fadeOutDuration: const Duration(
+                                                milliseconds: 10,
+                                              ),
+                                              width: 170,
+                                              height: 200,
+                                              placeholder: (context, url) =>
+                                                  const Shimmer(
+                                                    width: 170,
+                                                    height: 250,
+                                                    borderRadius: 14,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return const SizedBox(width: 15);
+                                        },
+                                        itemCount:
+                                            state.downloadedMovieMaps.length,
+                                      );
+                                    }
+                                  },
+                                ),
                           ),
                         ],
                       ),

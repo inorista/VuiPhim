@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
 import 'package:vuiphim/presentation/blocs/select_movie_episode/select_movie_episode_cubit.dart';
-import 'package:vuiphim/presentation/utils/custom_button.dart';
 import 'package:vuiphim/presentation/utils/download_widget.dart';
 
 class EpisodeList extends StatelessWidget {
@@ -57,7 +57,6 @@ class EpisodeList extends StatelessWidget {
                         ),
                         const SizedBox(height: 15),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width,
                           height: 55,
                           child: ListView.separated(
                             physics: const NeverScrollableScrollPhysics(),
@@ -67,27 +66,46 @@ class EpisodeList extends StatelessWidget {
                             itemBuilder: (context, dataIndex) {
                               final currentSourceData =
                                   episode.serverDatas[dataIndex];
-                              return Row(
-                                children: [
-                                  DownloadButtonWidget(
-                                    movieId: episode.episode.movieId,
-                                    videoId: currentSourceData.episodeId ?? '',
-                                    m3u8Url: currentSourceData.linkM3U8 ?? '',
-                                  ),
-                                  Expanded(
-                                    child: CustomButton(
-                                      onTap: () {},
-                                      height: 50,
-                                      color: Colors.transparent,
-                                      child: Text(
-                                        currentSourceData.name ?? '',
-                                        style: const TextStyle(
-                                          color: Color(0xFFbe2b27),
-                                        ),
-                                      ),
+                              return InkWell(
+                                onTap: () {
+                                  context
+                                      .read<DownloadManagerCubit>()
+                                      .startDownload(
+                                        currentSourceData.episodeId ?? '',
+                                        episode.episode.movieId,
+                                        currentSourceData.linkM3U8 ?? '',
+                                      );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(14.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      width: 1,
+                                      color: const Color(0xFFbe2b27),
                                     ),
                                   ),
-                                ],
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    spacing: 14.0,
+                                    children: [
+                                      DownloadButtonWidget(
+                                        movieId: episode.episode.movieId,
+                                        videoId:
+                                            currentSourceData.episodeId ?? '',
+                                        m3u8Url:
+                                            currentSourceData.linkM3U8 ?? '',
+                                      ),
+                                      Text(
+                                        currentSourceData.name ?? '',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               );
                             },
                             itemCount: episode.serverDatas.length,

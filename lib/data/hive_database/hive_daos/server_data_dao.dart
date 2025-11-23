@@ -25,4 +25,13 @@ class ServerDataDao extends BaseDao<ServerDataEntity> {
     };
     await updateAll(serverDataMap);
   }
+
+  Future<List<ServerDataEntity>> getDownloadedServerDatas() async {
+    final allServerData = await getAll();
+    return allServerData
+        .where(
+          (item) => item.downloadPath != null && item.downloadPath!.isNotEmpty,
+        )
+        .toList();
+  }
 }

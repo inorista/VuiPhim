@@ -7,6 +7,7 @@ import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
+import 'package:vuiphim/presentation/blocs/downloaded_manager/downloaded_manager_cubit.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
 import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
@@ -54,7 +55,11 @@ class MainScreen extends StatelessWidget {
                     create: (context) => ExploreCubit()..loadNowPlayingMovies(),
                     child: const ExploreScreen(),
                   ),
-                  const ProfileScreen(),
+                  BlocProvider<DownloadedManagerCubit>(
+                    create: (context) =>
+                        DownloadedManagerCubit()..initMovieDownloaded(),
+                    child: const ProfileScreen(),
+                  ),
                 ],
               );
             }

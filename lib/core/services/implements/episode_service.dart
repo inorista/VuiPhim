@@ -20,4 +20,10 @@ class EpisodeService implements IEpisodeService {
     final episodeMap = {for (var episode in episodes) episode.id: episode};
     await _episodeDao.updateAll(episodeMap);
   }
+
+  @override
+  Future<EpisodeEntity> getEpisodeById(String episodeId) async {
+    final allEpisodes = await _episodeDao.getAll();
+    return allEpisodes.firstWhere((episode) => episode.id == episodeId);
+  }
 }
