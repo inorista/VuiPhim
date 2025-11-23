@@ -52,9 +52,14 @@ class DownloadButtonWidget extends StatelessWidget {
           case DownloadStatus.downloading:
             return _buildProgressIndicator(itemState.progress);
           case DownloadStatus.success:
-            return IconButton(
-              icon: const Icon(Icons.check_circle, color: Colors.green),
-              onPressed: () {},
+            return SvgPicture.asset(
+              'assets/icons/download_done_icon.svg',
+              width: 24,
+              height: 24,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
             );
           case DownloadStatus.failure:
             return InkWell(

@@ -71,7 +71,7 @@ class EpisodeList extends StatelessWidget {
                                   context
                                       .read<DownloadManagerCubit>()
                                       .startDownload(
-                                        currentSourceData.episodeId ?? '',
+                                        currentSourceData.id,
                                         episode.episode.movieId,
                                         currentSourceData.linkM3U8 ?? '',
                                       );
@@ -91,8 +91,7 @@ class EpisodeList extends StatelessWidget {
                                     children: [
                                       DownloadButtonWidget(
                                         movieId: episode.episode.movieId,
-                                        videoId:
-                                            currentSourceData.episodeId ?? '',
+                                        videoId: currentSourceData.id,
                                         m3u8Url:
                                             currentSourceData.linkM3U8 ?? '',
                                       ),
