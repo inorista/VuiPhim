@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
+import 'package:vuiphim/presentation/blocs/download_manager/download_manager_state.dart';
 import 'package:vuiphim/presentation/blocs/select_movie_episode/select_movie_episode_cubit.dart';
 import 'package:vuiphim/presentation/utils/download_widget.dart';
 
@@ -68,13 +70,23 @@ class EpisodeList extends StatelessWidget {
                                   episode.serverDatas[dataIndex];
                               return InkWell(
                                 onTap: () {
-                                  context
-                                      .read<DownloadManagerCubit>()
-                                      .startDownload(
-                                        currentSourceData.id,
-                                        episode.episode.movieId,
-                                        currentSourceData.linkM3U8 ?? '',
-                                      );
+                                  if (currentSourceData.downloadPath != null ||
+                                      context
+                                              .read<DownloadManagerCubit>()
+                                              .state
+                                              .downloads[currentSourceData.id]
+                                              ?.status ==
+                                          DownloadStatus.success) {
+                                    return;
+                                  } else {
+                                    context
+                                        .read<DownloadManagerCubit>()
+                                        .startDownload(
+                                          currentSourceData.id,
+                                          episode.episode.movieId,
+                                          currentSourceData.linkM3U8 ?? '',
+                                        );
+                                  }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(14.0),
@@ -89,12 +101,25 @@ class EpisodeList extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     spacing: 14.0,
                                     children: [
-                                      DownloadButtonWidget(
-                                        movieId: episode.episode.movieId,
-                                        videoId: currentSourceData.id,
-                                        m3u8Url:
-                                            currentSourceData.linkM3U8 ?? '',
-                                      ),
+                                      if (currentSourceData.downloadPath !=
+                                          null)
+                                        SvgPicture.asset(
+                                          'assets/icons/download_done_icon.svg',
+                                          width: 24,
+                                          height: 24,
+                                          colorFilter: const ColorFilter.mode(
+                                            Colors.white,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      if (currentSourceData.downloadPath ==
+                                          null)
+                                        DownloadButtonWidget(
+                                          movieId: episode.episode.movieId,
+                                          videoId: currentSourceData.id,
+                                          m3u8Url:
+                                              currentSourceData.linkM3U8 ?? '',
+                                        ),
                                       Text(
                                         currentSourceData.name ?? '',
                                         style: const TextStyle(

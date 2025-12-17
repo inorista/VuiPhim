@@ -102,7 +102,7 @@ class ControlsOverlay extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   context.pop();
-                  await context.read<VideoPlayerCubit>().close();
+                  context.read<VideoPlayerCubit>().close();
                 },
                 child: const Center(
                   child: Icon(

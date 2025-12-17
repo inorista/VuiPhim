@@ -45,7 +45,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
             _scrollController.position.maxScrollExtent - 20 &&
         !_scrollController.position.outOfRange) {
       if (cubit.state.status != ExploreStatus.failure) {
-        cubit.loadMoreNowPlayingMovies();
+        if (cubit.state.selectedGenre != null) {
+          cubit.loadMoreMoviesByGenre();
+        } else {
+          cubit.loadMoreNowPlayingMovies();
+        }
       }
     }
   }
@@ -282,7 +286,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         VibrationNative.vibrateWithIntensity(1);
                         await DialogUtils.showBluredDialogWithCustomChildren(
                           context,
-                          child: const GenreList(),
+                          child: GenreList(context, parrentContext: context),
                         );
                       },
                       child: Container(
@@ -297,25 +301,74 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           horizontal: 12,
                           vertical: 6,
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 7,
-                          children: [
-                            const Text(
-                              "Thể loại",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17,
-                              ),
-                            ),
+                        child: BlocBuilder<ExploreCubit, ExploreState>(
+                          builder: (context, state) {
+                            return AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              transitionBuilder: (child, animation) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: ScaleTransition(
+                                    scale: animation,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: state.selectedGenre != null
+                                  ? Row(
+                                      key: ValueKey(state.selectedGenre!.id),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      spacing: 7,
+                                      children: [
+                                        Text(
+                                          state.selectedGenre!.name,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            context
+                                                .read<ExploreCubit>()
+                                                .clearSelectedGenre();
+                                          },
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Row(
+                                      key: const ValueKey(1),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      spacing: 7,
+                                      children: [
+                                        const Text(
+                                          "Thể loại",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                          ),
+                                        ),
 
-                            SvgPicture.asset(
-                              'assets/icons/arrow_down_icon.svg',
-                              width: 15,
-                              color: Colors.white,
-                            ),
-                          ],
+                                        SvgPicture.asset(
+                                          'assets/icons/arrow_down_icon.svg',
+                                          width: 15,
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                            );
+                          },
                         ),
                       ),
                     ),

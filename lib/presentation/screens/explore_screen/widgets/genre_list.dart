@@ -1,13 +1,20 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/core/constants/value_constants.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/igenre_service.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/genre_entity/genre_entity.dart';
+import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 
 class GenreList extends StatefulWidget {
-  const GenreList({super.key});
+  final BuildContext parrentContext;
+  const GenreList(
+    BuildContext context, {
+    super.key,
+    required this.parrentContext,
+  });
 
   @override
   State<GenreList> createState() => _GenreListState();
@@ -65,7 +72,9 @@ class _GenreListState extends State<GenreList>
               );
 
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  widget.parrentContext.read<ExploreCubit>().selectGenre(genre);
+                },
                 child: AnimatedBuilder(
                   animation: _controller,
                   builder: (context, child) {

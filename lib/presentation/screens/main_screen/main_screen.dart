@@ -29,10 +29,8 @@ class MainScreen extends StatelessWidget {
         body: BlocBuilder<DashBoardCubit, DashBoardState>(
           builder: (context, state) {
             if (state is DashBoardLoaded) {
-              return LazyLoadIndexedStack(
+              return IndexedStack(
                 index: state.boardIndex,
-                preloadIndexes: const [0, 1],
-                autoDisposeIndexes: const [2],
                 children: [
                   MultiBlocProvider(
                     providers: [

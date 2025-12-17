@@ -23,6 +23,8 @@ import 'package:vuiphim/core/services/implements/keychain_storage_service.dart'
     as _i927;
 import 'package:vuiphim/core/services/implements/movie_service.dart' as _i650;
 import 'package:vuiphim/core/services/implements/network_service.dart' as _i422;
+import 'package:vuiphim/core/services/implements/path_provider_service.dart'
+    as _i162;
 import 'package:vuiphim/core/services/implements/server_data_service.dart'
     as _i29;
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart'
@@ -38,6 +40,8 @@ import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart'
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart' as _i52;
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart'
     as _i479;
+import 'package:vuiphim/core/services/interfaces/ipath_provider_service.dart'
+    as _i537;
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart'
     as _i302;
 import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart' as _i584;
@@ -76,6 +80,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i927.KeychainStorageService(),
     );
     gh.lazySingleton<_i1053.IGenreService>(() => _i134.GenreService());
+    gh.lazySingleton<_i537.IPathProviderService>(
+      () => _i162.PathProviderService(),
+    );
     gh.lazySingleton<_i361.Dio>(
       () => registerModule.provideKkphimDio(),
       instanceName: 'kkphimDio',

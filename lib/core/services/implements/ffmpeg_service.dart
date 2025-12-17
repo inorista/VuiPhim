@@ -8,11 +8,13 @@ import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/iffmpeg_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+import 'package:vuiphim/core/services/interfaces/ipath_provider_service.dart';
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 
 @LazySingleton(as: IFFmpegService)
 class FFmpegService implements IFFmpegService {
   final _serverDataService = locator<IServerDataService>();
+  final _pathProviderService = locator<IPathProviderService>();
 
   Future<double> _getMediaDuration(String m3u8Url) async {
     try {
@@ -38,8 +40,8 @@ class FFmpegService implements IFFmpegService {
     String m3u8Url,
     StreamController<double> progressController,
   ) async {
-    final Directory appDir = await getApplicationDocumentsDirectory();
-    final String outputPath = '${appDir.path}/$videoId.mp4';
+    final String outputPath = await _pathProviderService
+        .getDownloadedEpisodePath('$videoId.mp4');
     final outputFile = File(outputPath);
     if (await outputFile.exists()) {
       await outputFile.delete();

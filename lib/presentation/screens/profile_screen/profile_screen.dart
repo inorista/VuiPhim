@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
 import 'package:vuiphim/presentation/blocs/download_manager/download_manager_state.dart';
@@ -94,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                           SizedBox(
-                            height: 220,
+                            height: 270,
                             child:
                                 BlocBuilder<
                                   DownloadedManagerCubit,
@@ -119,27 +120,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               .downloadedMovieMaps
                                               .keys
                                               .elementAt(index);
-                                          return ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl: movieEntity.posterUrl,
-                                              fit: BoxFit.cover,
-                                              fadeInDuration: const Duration(
-                                                milliseconds: 10,
+                                          return InkWell(
+                                            onTap: () {
+                                              VibrationNative.vibrateWithIntensity(
+                                                1,
+                                              );
+                                              context.push(
+                                                '/movie_detail/${movieEntity.id}',
+                                              );
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: CachedNetworkImage(
+                                                imageUrl: movieEntity.posterUrl,
+                                                fit: BoxFit.cover,
+                                                fadeInDuration: const Duration(
+                                                  milliseconds: 10,
+                                                ),
+                                                fadeOutDuration: const Duration(
+                                                  milliseconds: 10,
+                                                ),
+                                                width: 180,
+                                                height: 250,
+                                                placeholder: (context, url) =>
+                                                    const Shimmer(
+                                                      width: 180,
+                                                      height: 250,
+                                                      borderRadius: 14,
+                                                    ),
                                               ),
-                                              fadeOutDuration: const Duration(
-                                                milliseconds: 10,
-                                              ),
-                                              width: 170,
-                                              height: 200,
-                                              placeholder: (context, url) =>
-                                                  const Shimmer(
-                                                    width: 170,
-                                                    height: 250,
-                                                    borderRadius: 14,
-                                                  ),
                                             ),
                                           );
                                         },

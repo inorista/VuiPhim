@@ -220,7 +220,7 @@ class DialogUtils {
     BuildContext context, {
     Widget? child,
   }) async {
-    showDialog(
+    await showDialog(
       context: context,
       barrierDismissible: false,
       useSafeArea: false,

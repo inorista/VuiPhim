@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/services/interfaces/ipath_provider_service.dart';
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
@@ -18,6 +21,8 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
   ServerDataEntity? _serverDataEntity;
   VideoPlayerCubit() : super(const VideoPlayerState());
   final IServerDataService _serverDataService = locator<IServerDataService>();
+  final IPathProviderService _pathProviderService =
+      locator<IPathProviderService>();
 
   void forward10s() {
     _debounceSeek(const Duration(seconds: 10));
@@ -56,6 +61,7 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
     required ServerDataEntity serverDataEntity,
   }) async {
     try {
+      bool canLoadFromFile = false;
       emit(state.copyWith(status: VideoPlayerStatus.loading));
       _movieDetailEntity = movieDetailEntity;
       _serverDataEntity = serverDataEntity;
@@ -66,10 +72,33 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
         DeviceOrientation.landscapeRight,
       ]);
       if (isClosed) return;
+      if (serverDataEntity.downloadPath != null) {
+        try {
+          // IF DOWNLOAD PATH IS NOT NULL, PLAY FROM FILE
+          final String fileName = serverDataEntity.downloadPath!
+              .split('/')
+              .last;
+          final String currentPath = await _pathProviderService
+              .getDownloadedEpisodePath(fileName);
 
-      _controller = VideoPlayerController.networkUrl(
-        Uri.parse(serverDataEntity.linkM3U8 ?? ''),
-      );
+          final file = File(currentPath);
+          final isFileExists = await file.exists();
+
+          if (isFileExists) {
+            _controller = VideoPlayerController.file(File(currentPath));
+            canLoadFromFile = true;
+          }
+        } catch (e) {
+          // IF FAILED TO LOAD FROM FILE, FALLBACK TO NETWORK
+          canLoadFromFile = false;
+        }
+      }
+      if (!canLoadFromFile) {
+        // IF DOWNLOAD PATH IS NULL, PLAY FROM NETWORK
+        _controller = VideoPlayerController.networkUrl(
+          Uri.parse(serverDataEntity.linkM3U8 ?? ''),
+        );
+      }
       if (_controller != null) {
         await _controller!.initialize();
         if (isClosed) return;
@@ -162,12 +191,14 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
 
   @override
   Future<void> close() async {
-    emit(state.copyWith(status: VideoPlayerStatus.initial));
-    // await _startAutoSavePosition();
+    if (!isClosed) {
+      emit(state.copyWith(status: VideoPlayerStatus.initial));
+    }
+
     _seekDebounceTimer?.cancel();
     _pendingSeekAmount = Duration.zero;
     _controller?.removeListener(_onControllerUpdate);
-    _startAutoSavePosition();
+    await _startAutoSavePosition();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     await _controller?.dispose();
