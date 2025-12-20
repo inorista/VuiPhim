@@ -10,6 +10,7 @@ import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/screens/explore_screen/widgets/genre_list.dart';
+import 'package:vuiphim/presentation/screens/explore_screen/widgets/genre_tag.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
 import 'package:vuiphim/presentation/utils/dialog_utils.dart';
@@ -81,6 +82,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 child: BlocBuilder<ExploreCubit, ExploreState>(
                   builder: (context, state) {
                     if (state.status == ExploreStatus.success) {
+                      final isGenreSelected =
+                          context.read<ExploreCubit>().state.selectedGenre !=
+                          null;
                       return CustomScrollView(
                         controller: _scrollController,
                         physics: const BouncingScrollPhysics(
@@ -93,9 +97,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           SliverPadding(
                             padding: const EdgeInsets.all(10),
                             sliver: SliverList.separated(
-                              itemCount: state.movies.length,
+                              itemCount: isGenreSelected
+                                  ? state.movieByGenre.length
+                                  : state.movies.length,
                               itemBuilder: (context, index) {
-                                final currentItem = state.movies[index];
+                                final currentItem = isGenreSelected
+                                    ? state.movieByGenre[index]
+                                    : state.movies[index];
                                 return InkWell(
                                   onTap: () {
                                     VibrationNative.vibrateWithIntensity(1);
@@ -140,7 +148,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               return const Shimmer(
                                                 height: 270,
                                                 width: double.infinity,
-                                                borderRadius: 100,
+                                                borderRadius: 8,
                                               );
                                             },
                                             imageUrl: currentItem.backdropUrl,
@@ -148,7 +156,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                 const Shimmer(
                                                   height: 270,
                                                   width: double.infinity,
-                                                  borderRadius: 0,
+                                                  borderRadius: 8,
                                                 ),
                                           ),
                                         ),
@@ -279,100 +287,59 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
                 ),
                 actions: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: InkWell(
-                      onTap: () async {
-                        VibrationNative.vibrateWithIntensity(1);
-                        await DialogUtils.showBluredDialogWithCustomChildren(
-                          context,
-                          child: GenreList(context, parrentContext: context),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(
-                            color: Colors.white.withAlpha(100),
-                            width: 0.5,
-                          ),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        child: BlocBuilder<ExploreCubit, ExploreState>(
-                          builder: (context, state) {
-                            return AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 300),
-                              transitionBuilder: (child, animation) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: ScaleTransition(
-                                    scale: animation,
-                                    child: child,
-                                  ),
-                                );
-                              },
-                              child: state.selectedGenre != null
-                                  ? Row(
-                                      key: ValueKey(state.selectedGenre!.id),
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      spacing: 7,
-                                      children: [
-                                        Text(
-                                          state.selectedGenre!.name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 17,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            context
-                                                .read<ExploreCubit>()
-                                                .clearSelectedGenre();
-                                          },
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Row(
-                                      key: const ValueKey(1),
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      spacing: 7,
-                                      children: [
-                                        const Text(
-                                          "Thể loại",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 17,
-                                          ),
-                                        ),
-
-                                        SvgPicture.asset(
-                                          'assets/icons/arrow_down_icon.svg',
-                                          width: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ],
-                                    ),
+                  InkWell(
+                    onTap: () async {
+                      VibrationNative.vibrateWithIntensity(1);
+                      await DialogUtils.showBluredDialogWithCustomChildren(
+                        context,
+                        child: GenreList(context, parrentContext: context),
+                      );
+                    },
+                    child: BlocBuilder<ExploreCubit, ExploreState>(
+                      buildWhen: (previous, current) =>
+                          previous.selectedGenre != current.selectedGenre,
+                      builder: (context, state) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 700),
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
                             );
                           },
-                        ),
-                      ),
+                          child: state.selectedGenre != null
+                              ? GenreTag(
+                                  widgetKey: ValueKey(state.selectedGenre!.id),
+                                  label: state.selectedGenre!.name.replaceAll(
+                                    'Phim',
+                                    '',
+                                  ),
+                                  trailing: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  onTap: () => context
+                                      .read<ExploreCubit>()
+                                      .clearSelectedGenre(),
+                                )
+                              : GenreTag(
+                                  widgetKey: const ValueKey('default_genre'),
+                                  label: "Thể loại",
+                                  trailing: SvgPicture.asset(
+                                    'assets/icons/arrow_down_icon.svg',
+                                    width: 20,
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                        );
+                      },
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: InkWell(

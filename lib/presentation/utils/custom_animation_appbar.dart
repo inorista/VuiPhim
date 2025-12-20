@@ -29,7 +29,7 @@ class CustomAnimationAppbar extends StatefulWidget {
 
 class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
   double get _appBarHeight =>
-      widget.appBarHeight ?? (Platform.isIOS ? 115.0 : 80.0);
+      widget.appBarHeight ?? (Platform.isIOS ? 120.0 : 80.0);
   double _opacity = 0.0;
 
   @override
@@ -82,7 +82,10 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
           child: SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14.0,
+                vertical: 5.0,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,7 +129,14 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
                       : const SizedBox.shrink(),
 
                   if (widget.actions != null)
-                    Row(children: widget.actions!)
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: widget.actions!,
+                      ),
+                    )
                   else
                     const SizedBox(width: 14),
                 ],

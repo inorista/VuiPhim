@@ -36,7 +36,7 @@ class ExploreState extends Equatable {
       loadingMore: loadingMore ?? this.loadingMore,
       errorMessage: errorMessage ?? this.errorMessage,
       movieByGenre: movieByGenre ?? this.movieByGenre,
-      selectedGenre: selectedGenre ?? this.selectedGenre,
+      selectedGenre: selectedGenre,
     );
   }
 

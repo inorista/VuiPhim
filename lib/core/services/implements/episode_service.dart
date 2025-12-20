@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/iepisode_service.dart';
+import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/episode_dao.dart'
     show EpisodeDao;
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart'
@@ -22,8 +23,8 @@ class EpisodeService implements IEpisodeService {
   }
 
   @override
-  Future<EpisodeEntity> getEpisodeById(String episodeId) async {
+  Future<EpisodeEntity?> getEpisodeById(String episodeId) async {
     final allEpisodes = await _episodeDao.getAll();
-    return allEpisodes.firstWhere((episode) => episode.id == episodeId);
+    return allEpisodes.firstOrDefault((episode) => episode.id == episodeId);
   }
 }

@@ -12,6 +12,7 @@ import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
 import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
 import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
 import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/profile/continue_watching/continue_watching_cubit.dart';
 import 'package:vuiphim/presentation/screens/explore_screen/explore_screen.dart';
 import 'package:vuiphim/presentation/screens/home_screen/home_screen.dart';
 import 'package:vuiphim/presentation/screens/main_screen/widgets/bottom_navigation_item.dart';
@@ -29,7 +30,8 @@ class MainScreen extends StatelessWidget {
         body: BlocBuilder<DashBoardCubit, DashBoardState>(
           builder: (context, state) {
             if (state is DashBoardLoaded) {
-              return IndexedStack(
+              return LazyLoadIndexedStack(
+                autoDisposeIndexes: const [2],
                 index: state.boardIndex,
                 children: [
                   MultiBlocProvider(
@@ -53,9 +55,17 @@ class MainScreen extends StatelessWidget {
                     create: (context) => ExploreCubit()..loadNowPlayingMovies(),
                     child: const ExploreScreen(),
                   ),
-                  BlocProvider<DownloadedManagerCubit>(
-                    create: (context) =>
-                        DownloadedManagerCubit()..initMovieDownloaded(),
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DownloadedManagerCubit>(
+                        create: (context) =>
+                            DownloadedManagerCubit()..initMovieDownloaded(),
+                      ),
+                      BlocProvider<ContinueWatchingCubit>(
+                        create: (context) =>
+                            ContinueWatchingCubit()..loadContinueWatchingList(),
+                      ),
+                    ],
                     child: const ProfileScreen(),
                   ),
                 ],
