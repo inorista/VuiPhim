@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
