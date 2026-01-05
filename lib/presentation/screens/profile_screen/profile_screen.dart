@@ -8,8 +8,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
-import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
-import 'package:vuiphim/presentation/blocs/download_manager/download_manager_state.dart';
 import 'package:vuiphim/presentation/blocs/downloaded_manager/downloaded_manager_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';

@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/iepisode_service.dart';
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
-import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
