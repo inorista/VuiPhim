@@ -13,7 +13,8 @@ MovieDetailDto _$MovieDetailDtoFromJson(Map<String, dynamic> json) =>
       belongsToCollection: json['belongs_to_collection'] == null
           ? null
           : BelongsToCollectionDto.fromJson(
-              json['belongs_to_collection'] as Map<String, dynamic>),
+              json['belongs_to_collection'] as Map<String, dynamic>,
+            ),
       budget: (json['budget'] as num).toInt(),
       genres: (json['genres'] as List<dynamic>)
           .map((e) => GenreDto.fromJson(e as Map<String, dynamic>))

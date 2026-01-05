@@ -8,7 +8,7 @@ part of 'imdb_entity.dart';
 
 class ImdbEntityAdapter extends TypeAdapter<ImdbEntity> {
   @override
-  final int typeId = 12;
+  final typeId = 12;
 
   @override
   ImdbEntity read(BinaryReader reader) {
@@ -16,9 +16,7 @@ class ImdbEntityAdapter extends TypeAdapter<ImdbEntity> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ImdbEntity(
-      id: fields[0] as dynamic,
-    );
+    return ImdbEntity(id: fields[0] as dynamic);
   }
 
   @override

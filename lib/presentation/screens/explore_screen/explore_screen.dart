@@ -9,8 +9,11 @@ import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
+import 'package:vuiphim/presentation/screens/explore_screen/widgets/genre_list.dart';
+import 'package:vuiphim/presentation/screens/explore_screen/widgets/genre_tag.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
 import 'package:vuiphim/presentation/utils/custom_button.dart';
+import 'package:vuiphim/presentation/utils/dialog_utils.dart';
 import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -43,7 +46,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
             _scrollController.position.maxScrollExtent - 20 &&
         !_scrollController.position.outOfRange) {
       if (cubit.state.status != ExploreStatus.failure) {
-        cubit.loadMoreNowPlayingMovies();
+        if (cubit.state.selectedGenre != null) {
+          cubit.loadMoreMoviesByGenre();
+        } else {
+          cubit.loadMoreNowPlayingMovies();
+        }
       }
     }
   }
@@ -75,6 +82,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 child: BlocBuilder<ExploreCubit, ExploreState>(
                   builder: (context, state) {
                     if (state.status == ExploreStatus.success) {
+                      final isGenreSelected =
+                          context.read<ExploreCubit>().state.selectedGenre !=
+                          null;
                       return CustomScrollView(
                         controller: _scrollController,
                         physics: const BouncingScrollPhysics(
@@ -87,9 +97,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           SliverPadding(
                             padding: const EdgeInsets.all(10),
                             sliver: SliverList.separated(
-                              itemCount: state.movies.length,
+                              itemCount: isGenreSelected
+                                  ? state.movieByGenre.length
+                                  : state.movies.length,
                               itemBuilder: (context, index) {
-                                final currentItem = state.movies[index];
+                                final currentItem = isGenreSelected
+                                    ? state.movieByGenre[index]
+                                    : state.movies[index];
                                 return InkWell(
                                   onTap: () {
                                     VibrationNative.vibrateWithIntensity(1);
@@ -134,8 +148,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               return const Shimmer(
                                                 height: 270,
                                                 width: double.infinity,
-                                                borderRadius: 0,
-                                                showLoading: false,
+                                                borderRadius: 8,
                                               );
                                             },
                                             imageUrl: currentItem.backdropUrl,
@@ -143,7 +156,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                 const Shimmer(
                                                   height: 270,
                                                   width: double.infinity,
-                                                  borderRadius: 0,
+                                                  borderRadius: 8,
                                                 ),
                                           ),
                                         ),
@@ -265,26 +278,68 @@ class _ExploreScreenState extends State<ExploreScreen> {
             Align(
               alignment: Alignment.topCenter,
               child: CustomAnimationAppbar(
-                leading: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                  child: Text(
-                    "Khám phá",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                leading: const Text(
+                  "Khám phá",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
                 actions: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Icon(
-                      CupertinoIcons.arrow_down_to_line,
-                      color: Colors.white,
-                      size: 30,
+                  InkWell(
+                    onTap: () async {
+                      VibrationNative.vibrateWithIntensity(1);
+                      await DialogUtils.showBluredDialogWithCustomChildren(
+                        context,
+                        child: GenreList(context, parrentContext: context),
+                      );
+                    },
+                    child: BlocBuilder<ExploreCubit, ExploreState>(
+                      buildWhen: (previous, current) =>
+                          previous.selectedGenre != current.selectedGenre,
+                      builder: (context, state) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 700),
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          child: state.selectedGenre != null
+                              ? GenreTag(
+                                  widgetKey: ValueKey(state.selectedGenre!.id),
+                                  label: state.selectedGenre!.name.replaceAll(
+                                    'Phim',
+                                    '',
+                                  ),
+                                  trailing: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  onTap: () => context
+                                      .read<ExploreCubit>()
+                                      .clearSelectedGenre(),
+                                )
+                              : GenreTag(
+                                  widgetKey: const ValueKey('default_genre'),
+                                  label: "Thể loại",
+                                  trailing: SvgPicture.asset(
+                                    'assets/icons/arrow_down_icon.svg',
+                                    width: 20,
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                        );
+                      },
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: InkWell(
@@ -300,7 +355,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
                 ],
                 scrollController: _scrollController,
-                appBarHeight: Platform.isIOS ? 110 : 80,
+                appBarHeight: Platform.isIOS ? 110 : 90,
               ),
             ),
           ], //

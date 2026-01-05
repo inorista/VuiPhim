@@ -1,63 +1,64 @@
-import 'package:equatable/equatable.dart';
-import 'package:video_player/video_player.dart';
+part of 'video_player_cubit.dart';
 
-abstract class VideoPlayerState extends Equatable {
-  const VideoPlayerState();
+enum VideoPlayerStatus { initial, loading, ready, error }
 
-  @override
-  List<Object?> get props => [];
-}
-
-class VideoPlayerInitial extends VideoPlayerState {}
-
-class VideoPlayerLoading extends VideoPlayerState {}
-
-class VideoPlayerReady extends VideoPlayerState {
-  final VideoPlayerController controller;
-  final bool showControls;
-  final bool isPlaying;
-  final Duration position;
-  final Duration duration;
-
-  const VideoPlayerReady({
-    required this.controller,
-    required this.showControls,
-    required this.isPlaying,
-    required this.position,
-    required this.duration,
+class VideoPlayerState extends Equatable {
+  const VideoPlayerState({
+    this.status = VideoPlayerStatus.initial,
+    this.duration = Duration.zero,
+    this.position = Duration.zero,
+    this.isPlaying = false,
+    this.showControls = true,
+    this.isScrubbing = false,
+    this.pendingSeekDuration = Duration.zero,
+    this.errorMessage,
+    this.controller,
   });
+
+  final VideoPlayerStatus status;
+  final Duration duration;
+  final Duration position;
+  final bool isPlaying;
+  final bool showControls;
+  final bool isScrubbing;
+  final Duration pendingSeekDuration;
+  final String? errorMessage;
+  final VideoPlayerController? controller;
 
   @override
   List<Object?> get props => [
-    controller,
-    showControls,
-    isPlaying,
-    position,
+    status,
     duration,
+    position,
+    isPlaying,
+    showControls,
+    isScrubbing,
+    pendingSeekDuration,
+    errorMessage,
+    controller,
   ];
 
-  VideoPlayerReady copyWith({
-    VideoPlayerController? controller,
-    bool? showControls,
-    bool? isPlaying,
-    Duration? position,
+  VideoPlayerState copyWith({
+    VideoPlayerStatus? status,
     Duration? duration,
+    Duration? position,
+    bool? isPlaying,
+    bool? showControls,
+    bool? isScrubbing,
+    Duration? pendingSeekDuration,
+    String? errorMessage,
+    VideoPlayerController? controller,
   }) {
-    return VideoPlayerReady(
-      controller: controller ?? this.controller,
-      showControls: showControls ?? this.showControls,
-      isPlaying: isPlaying ?? this.isPlaying,
-      position: position ?? this.position,
+    return VideoPlayerState(
+      status: status ?? this.status,
       duration: duration ?? this.duration,
+      position: position ?? this.position,
+      isPlaying: isPlaying ?? this.isPlaying,
+      showControls: showControls ?? this.showControls,
+      isScrubbing: isScrubbing ?? this.isScrubbing,
+      pendingSeekDuration: pendingSeekDuration ?? this.pendingSeekDuration,
+      errorMessage: errorMessage ?? this.errorMessage,
+      controller: controller ?? this.controller,
     );
   }
-}
-
-class VideoPlayerError extends VideoPlayerState {
-  final String message;
-
-  const VideoPlayerError(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }

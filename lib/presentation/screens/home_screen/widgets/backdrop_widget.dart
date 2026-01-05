@@ -2,18 +2,17 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
+import 'package:vuiphim/presentation/utils/shimmer.dart';
 
 class BackdropWidget extends StatelessWidget {
-  final double height;
-
-  const BackdropWidget({required this.height, super.key});
+  const BackdropWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     final random = Random();
     return SizedBox(
       width: double.infinity,
@@ -21,7 +20,13 @@ class BackdropWidget extends StatelessWidget {
       child: BlocBuilder<PopularMovieCubit, PopularMovieState>(
         builder: (context, state) {
           if (state is PopularMovieLoading) {
-            return const Center(child: CupertinoActivityIndicator());
+            return Center(
+              child: Shimmer(
+                height: height * 0.9,
+                width: double.infinity,
+                borderRadius: 14,
+              ),
+            );
           } else if (state is PopularMovieLoaded) {
             final movie = state.movies[random.nextInt(state.movies.length)];
             return Stack(

@@ -8,7 +8,7 @@ part of 'movie_entity.dart';
 
 class MovieEntityAdapter extends TypeAdapter<MovieEntity> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   MovieEntity read(BinaryReader reader) {
@@ -20,19 +20,19 @@ class MovieEntityAdapter extends TypeAdapter<MovieEntity> {
       adult: fields[0] as bool,
       backdropPath: fields[1] as String,
       genreIds: (fields[2] as List).cast<int>(),
-      id: fields[3] as int,
+      id: (fields[3] as num).toInt(),
       originalLanguage: fields[4] as String,
       originalTitle: fields[5] as String,
       overview: fields[6] as String,
-      popularity: fields[7] as double,
+      popularity: (fields[7] as num).toDouble(),
       posterPath: fields[8] as String,
       releaseDate: fields[9] as String,
       title: fields[10] as String,
       video: fields[11] as bool,
-      voteAverage: fields[12] as double,
-      voteCount: fields[13] as int,
+      voteAverage: (fields[12] as num).toDouble(),
+      voteCount: (fields[13] as num).toInt(),
       category: fields[14] as MovieCategory?,
-      isFavorite: fields[15] as bool?,
+      isFavorite: fields[15] == null ? false : fields[15] as bool?,
     );
   }
 
@@ -90,25 +90,25 @@ class MovieEntityAdapter extends TypeAdapter<MovieEntity> {
 // **************************************************************************
 
 MovieEntity _$MovieEntityFromJson(Map<String, dynamic> json) => MovieEntity(
-      adult: json['adult'] as bool,
-      backdropPath: json['backdrop_path'] as String,
-      genreIds: (json['genre_ids'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
-          .toList(),
-      id: (json['id'] as num).toInt(),
-      originalLanguage: json['original_language'] as String,
-      originalTitle: json['original_title'] as String,
-      overview: json['overview'] as String,
-      popularity: (json['popularity'] as num).toDouble(),
-      posterPath: json['poster_path'] as String,
-      releaseDate: json['release_date'] as String,
-      title: json['title'] as String,
-      video: json['video'] as bool,
-      voteAverage: (json['vote_average'] as num).toDouble(),
-      voteCount: (json['vote_count'] as num).toInt(),
-      category: $enumDecodeNullable(_$MovieCategoryEnumMap, json['category']),
-      isFavorite: json['isFavorite'] as bool? ?? false,
-    );
+  adult: json['adult'] as bool,
+  backdropPath: json['backdrop_path'] as String,
+  genreIds: (json['genre_ids'] as List<dynamic>)
+      .map((e) => (e as num).toInt())
+      .toList(),
+  id: (json['id'] as num).toInt(),
+  originalLanguage: json['original_language'] as String,
+  originalTitle: json['original_title'] as String,
+  overview: json['overview'] as String,
+  popularity: (json['popularity'] as num).toDouble(),
+  posterPath: json['poster_path'] as String,
+  releaseDate: json['release_date'] as String,
+  title: json['title'] as String,
+  video: json['video'] as bool,
+  voteAverage: (json['vote_average'] as num).toDouble(),
+  voteCount: (json['vote_count'] as num).toInt(),
+  category: $enumDecodeNullable(_$MovieCategoryEnumMap, json['category']),
+  isFavorite: json['isFavorite'] as bool? ?? false,
+);
 
 Map<String, dynamic> _$MovieEntityToJson(MovieEntity instance) =>
     <String, dynamic>{

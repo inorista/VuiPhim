@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/presentation/blocs/video_player/brightness/brightness_cubit.dart';
 import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_cubit.dart';
-import 'package:vuiphim/presentation/blocs/video_player/video_player_cotrols/video_player_state.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/widgets/smooth_slider_indicator.dart';
 import 'package:vuiphim/presentation/utils/vertical_track_slider.dart';
 
 class ControlsOverlay extends StatelessWidget {
   final String title;
-  final VideoPlayerReady state;
+  final VideoPlayerState state;
   final double width;
   final double height;
 
@@ -25,6 +25,16 @@ class ControlsOverlay extends StatelessWidget {
     required this.width,
     required this.height,
   });
+
+  String getBrightnessIcon(double brightness) {
+    if (brightness <= 0.1) {
+      return 'assets/icons/sun_light_slash_icon.svg';
+    } else if (brightness > 0.1 && brightness <= 0.6) {
+      return 'assets/icons/sun_light_medium_icon.svg';
+    } else {
+      return 'assets/icons/sun_light_icon.svg';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,44 +49,49 @@ class ControlsOverlay extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Positioned(
-              left: 0,
+              left: 20,
               child: SafeArea(
-                child: Column(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/sun_light_icon.svg',
-                      width: 25,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 10),
-                    BlocBuilder<BrightnessCubit, BrightnessState>(
-                      builder: (context, state) {
-                        if (state is BrightnessError) {
-                          return const SizedBox();
-                        }
-                        if (state is BrightnessLoaded) {
-                          return VerticalTrackSlider(
-                            value: state.brightness,
-                            min: 0,
-                            max: 1,
-                            activeColor: Colors.white,
-                            height: 120,
-                            onChanged: (value) async {
-                              try {
-                                await context
-                                    .read<BrightnessCubit>()
-                                    .setBrightness(value);
-                              } catch (e) {
-                                log('Error setting brightness: ');
-                              }
-                            },
-                            width: 15,
-                          );
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                  ],
+                child: BlocListener<BrightnessCubit, BrightnessState>(
+                  listener: (context, state) {
+                    if (state.brightness == 0 || state.brightness >= 1) {
+                      VibrationNative.vibrateWithIntensity(1);
+                    }
+                  },
+                  child: BlocBuilder<BrightnessCubit, BrightnessState>(
+                    builder: (context, state) {
+                      if (state.status == BrightnessStatus.success) {
+                        return Column(
+                          children: [
+                            SvgPicture.asset(
+                              getBrightnessIcon(state.brightness),
+                              width: 30,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(height: 10),
+                            VerticalTrackSlider(
+                              value: state.brightness,
+                              min: 0,
+                              max: 1,
+                              activeColor: Colors.white,
+                              height: 130,
+
+                              onChanged: (value) async {
+                                try {
+                                  await context
+                                      .read<BrightnessCubit>()
+                                      .setBrightness(value);
+                                } catch (e) {
+                                  log('Error setting brightness: ');
+                                }
+                              },
+                              width: 40,
+                            ),
+                          ],
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
                 ),
               ),
             ),
@@ -87,7 +102,7 @@ class ControlsOverlay extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   context.pop();
-                  await context.read<VideoPlayerCubit>().disposeVideo();
+                  context.read<VideoPlayerCubit>().close();
                 },
                 child: const Center(
                   child: Icon(
@@ -101,28 +116,80 @@ class ControlsOverlay extends StatelessWidget {
 
             Align(
               alignment: Alignment.center,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(40),
-                onTap: () {
-                  context.read<VideoPlayerCubit>().togglePlayPause();
-                },
-                child: SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Center(
-                    child: state.isPlaying
-                        ? const Icon(
-                            CupertinoIcons.pause,
-                            size: 65,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().rewind10s();
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/replay_icon.svg',
+                          width: 40,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          '10',
+                          style: TextStyle(
                             color: Colors.white,
-                          )
-                        : const Icon(
-                            CupertinoIcons.play_fill,
-                            size: 65,
-                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().togglePlayPause();
+                    },
+                    child: SizedBox(
+                      width: 200,
+                      height: 80,
+                      child: Center(
+                        child: state.isPlaying
+                            ? const Icon(
+                                CupertinoIcons.pause,
+                                size: 65,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                CupertinoIcons.play_fill,
+                                size: 65,
+                                color: Colors.white,
+                              ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(40),
+                    onTap: () {
+                      context.read<VideoPlayerCubit>().forward10s();
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/forward_icon.svg',
+                          width: 40,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          '10',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -183,15 +250,15 @@ class ControlsOverlay extends StatelessWidget {
                     const Expanded(child: SmoothVideoProgressSlider()),
                     BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
                       buildWhen: (previous, current) {
-                        if (current is VideoPlayerReady &&
-                            previous is VideoPlayerReady) {
+                        if (current.status == VideoPlayerStatus.ready &&
+                            previous.status == VideoPlayerStatus.ready) {
                           return current.position.inSeconds !=
                               previous.position.inSeconds;
                         }
                         return true;
                       },
                       builder: (context, state) {
-                        if (state is VideoPlayerReady) {
+                        if (state.status == VideoPlayerStatus.ready) {
                           return Text(
                             state.position.toFormattedString(),
                             style: const TextStyle(

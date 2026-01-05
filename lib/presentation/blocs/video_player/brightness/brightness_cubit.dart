@@ -5,26 +5,48 @@ import 'package:vuiphim/core/native/brightness_native.dart';
 part 'brightness_state.dart';
 
 class BrightnessCubit extends Cubit<BrightnessState> {
-  BrightnessCubit() : super(BrightnessInitial());
-  double _brightness = 0.0;
-
-  void getBrightness() async {
-    emit(const BrightnessLoading());
+  BrightnessCubit() : super(const BrightnessState());
+  Future<void> getBrightness() async {
     try {
-      _brightness = await BrightnessNative.getBrightness();
-      emit(BrightnessLoaded(_brightness));
+      emit(state.copyWith(status: BrightnessStatus.loading));
+      final currentBrightness = await BrightnessNative.getBrightness();
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          status: BrightnessStatus.success,
+          brightness: currentBrightness,
+        ),
+      );
     } catch (e) {
-      emit(BrightnessError(e.toString()));
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          status: BrightnessStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> setBrightness(double brightness) async {
+    final clampedBrightness = brightness.clamp(0.0, 1.0);
     try {
-      await BrightnessNative.setBrightness(brightness);
-      _brightness = brightness;
-      emit(BrightnessLoaded(_brightness));
+      await BrightnessNative.setBrightness(clampedBrightness);
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          status: BrightnessStatus.success,
+          brightness: clampedBrightness,
+        ),
+      );
     } catch (e) {
-      emit(BrightnessError(e.toString()));
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          status: BrightnessStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

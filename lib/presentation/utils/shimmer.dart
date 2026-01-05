@@ -1,51 +1,43 @@
+import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class Shimmer extends StatelessWidget {
   final double borderRadius;
-  final bool showLoading;
   const Shimmer({
     super.key,
-    this.height,
-    this.width,
+    required this.height,
+    required this.width,
     this.borderRadius = 8,
-    this.showLoading = true,
+    this.baseColor,
   });
 
-  final double? height, width;
+  final double height, width;
+  final Color? baseColor;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return FadeShimmer(
       height: height,
       width: width,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xfff1f1f1),
-        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-      ),
-      child: showLoading
-          ? const Center(child: CupertinoActivityIndicator())
-          : const SizedBox.shrink(),
+      radius: borderRadius,
+      baseColor: baseColor ?? const Color(0xfff1f1f1),
+      fadeTheme: FadeTheme.dark,
     );
   }
 }
 
 class CircleShimmer extends StatelessWidget {
-  const CircleShimmer({super.key, this.size = 24});
-
-  final double? size;
+  const CircleShimmer({super.key, required this.height, required this.width});
+  final double height, width;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: size,
-      width: size,
-      decoration: const BoxDecoration(
-        color: Color(0xfff1f1f1),
-        shape: BoxShape.circle,
-      ),
-      child: const Center(child: CupertinoActivityIndicator(radius: 15)),
+    return FadeShimmer(
+      height: height,
+      width: width,
+      radius: 100,
+      baseColor: const Color(0xfff1f1f1),
+      fadeTheme: FadeTheme.dark,
     );
   }
 }

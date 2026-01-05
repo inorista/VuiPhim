@@ -1,9 +1,9 @@
+import 'package:uuid/uuid.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/category_entity/category_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/created_entity/created_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/imdb_entity/imdb_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/kkmovie_movie_entity/kkmovie_movie_entity.dart';
-import 'package:vuiphim/data/hive_database/hive_entities/kkmovie_source_entity/kkmovie_source_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/tmdb_entity/tmdb_entity.dart';
 
@@ -53,13 +53,6 @@ class KkMovieSourceDto {
     "movie": movie?.toJson(),
     "episodes": episodes.map((x) => x.toJson()).toList(),
   };
-
-  KkMovieSourceEntity toEntity() => KkMovieSourceEntity(
-    status: status,
-    msg: msg,
-    movie: movie?.toEntity(),
-    episodes: episodes.map((e) => e.toEntity()).toList(),
-  );
 }
 
 class EpisodeDto {
@@ -91,10 +84,13 @@ class EpisodeDto {
     "server_data": serverData.map((x) => x.toJson()).toList(),
   };
 
-  EpisodeEntity toEntity() => EpisodeEntity(
-    serverName: serverName,
-    serverData: serverData.map((e) => e.toEntity()).toList(),
-  );
+  EpisodeEntity toEntity(String episodeId, int movieId) {
+    return EpisodeEntity(
+      serverName: serverName,
+      movieId: movieId,
+      id: episodeId,
+    );
+  }
 }
 
 class ServerData {
@@ -146,12 +142,14 @@ class ServerData {
     "link_m3u8": linkM3U8,
   };
 
-  ServerDataEntity toEntity() => ServerDataEntity(
+  ServerDataEntity toEntity(String episodeId) => ServerDataEntity(
+    id: const Uuid().v4(),
     name: name,
     slug: slug,
     filename: filename,
     linkEmbed: linkEmbed,
     linkM3U8: linkM3U8,
+    episodeId: episodeId,
   );
 }
 

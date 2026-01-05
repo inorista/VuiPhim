@@ -107,7 +107,8 @@ class MovieDetailHeaderInfoWidget extends StatelessWidget {
                                 child: Shimmer(height: 40, width: 120),
                               );
                             } else if (sourceState.status ==
-                                MovieSourceStatus.success) {
+                                    MovieSourceStatus.success &&
+                                sourceState.sources.isNotEmpty) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 15),
                                 child: CustomButton(

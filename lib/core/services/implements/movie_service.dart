@@ -1,19 +1,24 @@
 import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/di/locator.dart';
+import 'package:vuiphim/core/services/interfaces/iepisode_service.dart';
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart';
 import 'package:vuiphim/core/utils/extensions.dart';
 import 'package:vuiphim/data/dtos/cast_response_dto/cast_response_dto.dart';
 import 'package:vuiphim/data/dtos/movie_detail_dto/movie_detail_dto.dart';
 import 'package:vuiphim/data/dtos/movie_response_dto/movie_response_dto.dart';
 import 'package:vuiphim/data/hive_database/hive_daos/movie_dao.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/server_data_dao.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/move_entity/movie_entity.dart';
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart';
 import 'package:dio/dio.dart';
+import 'package:vuiphim/data/hive_database/hive_entities/server_data_entity/server_data_entity.dart';
 
 @LazySingleton(as: IMovieService)
 class MovieService implements IMovieService {
   final _movieDao = locator<MovieDao>();
   final _networkService = locator<INetworkService>();
+  final _serverDataDao = locator<ServerDataDao>();
+  final _episodeService = locator<IEpisodeService>();
 
   @override
   Future<List<MovieEntity>> getAllMovies() async {
@@ -156,6 +161,34 @@ class MovieService implements IMovieService {
       );
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<Map<MovieEntity, List<ServerDataEntity>>> getDownloadedMovies() async {
+    final downloadedServerDatas = await _serverDataDao
+        .getDownloadedServerDatas();
+
+    if (downloadedServerDatas.isEmpty) {
+      return {};
+    } else {
+      final Map<MovieEntity, List<ServerDataEntity>> downloadedMoviesMap = {};
+
+      for (var serverData in downloadedServerDatas) {
+        final episodeEntity = await _episodeService.getEpisodeById(
+          serverData.episodeId ?? '',
+        );
+        if (episodeEntity == null) continue;
+        final movieEntity = await getMovieById(episodeEntity.movieId);
+        if (movieEntity == null) continue;
+        if (downloadedMoviesMap.containsKey(movieEntity)) {
+          downloadedMoviesMap[movieEntity]!.add(serverData);
+        } else {
+          downloadedMoviesMap[movieEntity] = [serverData];
+        }
+      }
+
+      return downloadedMoviesMap;
     }
   }
 }

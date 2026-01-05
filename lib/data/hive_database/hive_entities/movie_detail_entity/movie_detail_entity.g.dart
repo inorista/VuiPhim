@@ -8,7 +8,7 @@ part of 'movie_detail_entity.dart';
 
 class MovieDetailEntityAdapter extends TypeAdapter<MovieDetailEntity> {
   @override
-  final int typeId = 5;
+  final typeId = 5;
 
   @override
   MovieDetailEntity read(BinaryReader reader) {
@@ -19,35 +19,36 @@ class MovieDetailEntityAdapter extends TypeAdapter<MovieDetailEntity> {
     return MovieDetailEntity(
       adult: fields[0] as bool,
       backdropPath: fields[1] as String?,
-      budget: fields[2] as int,
+      budget: (fields[2] as num).toInt(),
       genres: (fields[3] as List).cast<GenreEntity>(),
       homepage: fields[4] as String,
-      id: fields[5] as int,
+      id: (fields[5] as num).toInt(),
       imdbId: fields[6] as String?,
       originCountry: (fields[7] as List).cast<String>(),
       originalLanguage: fields[8] as String,
       originalTitle: fields[9] as String,
       overview: fields[10] as String,
-      popularity: fields[11] as double,
+      popularity: (fields[11] as num).toDouble(),
       posterPath: fields[12] as String?,
       releaseDate: fields[13] as String,
-      revenue: fields[14] as int,
-      runtime: fields[15] as int,
+      revenue: (fields[14] as num).toInt(),
+      runtime: (fields[15] as num).toInt(),
       status: fields[16] as String,
       tagline: fields[17] as String,
       title: fields[18] as String,
       video: fields[19] as bool,
-      voteAverage: fields[20] as double,
-      voteCount: fields[21] as int,
-      episodes: (fields[22] as List).cast<EpisodeEntity>(),
-      casts: (fields[23] as List).cast<CastEntity>(),
+      voteAverage: (fields[20] as num).toDouble(),
+      voteCount: (fields[21] as num).toInt(),
+      casts: fields[22] == null
+          ? const []
+          : (fields[22] as List).cast<CastEntity>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, MovieDetailEntity obj) {
     writer
-      ..writeByte(24)
+      ..writeByte(23)
       ..writeByte(0)
       ..write(obj.adult)
       ..writeByte(1)
@@ -93,8 +94,6 @@ class MovieDetailEntityAdapter extends TypeAdapter<MovieDetailEntity> {
       ..writeByte(21)
       ..write(obj.voteCount)
       ..writeByte(22)
-      ..write(obj.episodes)
-      ..writeByte(23)
       ..write(obj.casts);
   }
 

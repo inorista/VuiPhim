@@ -3,10 +3,16 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/presentation/blocs/dash_board/dash_board_cubit.dart';
 import 'package:vuiphim/core/constants/app_text.dart';
+import 'package:vuiphim/presentation/blocs/downloaded_manager/downloaded_manager_cubit.dart';
 import 'package:vuiphim/presentation/blocs/explore/explore_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/profile/continue_watching/continue_watching_cubit.dart';
 import 'package:vuiphim/presentation/screens/explore_screen/explore_screen.dart';
 import 'package:vuiphim/presentation/screens/home_screen/home_screen.dart';
 import 'package:vuiphim/presentation/screens/main_screen/widgets/bottom_navigation_item.dart';
@@ -17,22 +23,51 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<DashBoardCubit>(
       create: (context) => DashBoardCubit(),
       child: Scaffold(
         extendBody: true,
         body: BlocBuilder<DashBoardCubit, DashBoardState>(
           builder: (context, state) {
             if (state is DashBoardLoaded) {
-              return IndexedStack(
+              return LazyLoadIndexedStack(
+                autoDisposeIndexes: const [2],
                 index: state.boardIndex,
                 children: [
-                  const HomeScreen(),
-                  BlocProvider(
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider<PopularMovieCubit>(
+                        create: (context) =>
+                            PopularMovieCubit()..fetchPopularMovies(),
+                      ),
+                      BlocProvider<TopRatedMovieCubit>(
+                        create: (context) =>
+                            TopRatedMovieCubit()..fetchTopRatedMovies(),
+                      ),
+                      BlocProvider<UpcomingMovieCubit>(
+                        create: (context) =>
+                            UpcomingMovieCubit()..fetchUpcomingMovies(),
+                      ),
+                    ],
+                    child: const HomeScreen(),
+                  ),
+                  BlocProvider<ExploreCubit>(
                     create: (context) => ExploreCubit()..loadNowPlayingMovies(),
                     child: const ExploreScreen(),
                   ),
-                  const ProfileScreen(),
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DownloadedManagerCubit>(
+                        create: (context) =>
+                            DownloadedManagerCubit()..initMovieDownloaded(),
+                      ),
+                      BlocProvider<ContinueWatchingCubit>(
+                        create: (context) =>
+                            ContinueWatchingCubit()..loadContinueWatchingList(),
+                      ),
+                    ],
+                    child: const ProfileScreen(),
+                  ),
                 ],
               );
             }
@@ -65,14 +100,14 @@ class MainScreen extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
             child: Container(
               color: Colors.black.withAlpha(150),
-              height: Platform.isIOS ? 100 : 80,
+              height: Platform.isAndroid ? 65 : 88,
               width: double.infinity,
             ),
           ),
         ),
         Container(
           padding: const EdgeInsets.only(top: 10),
-          height: Platform.isIOS ? 100 : 80,
+          height: Platform.isAndroid ? 100 : 88,
           color: Colors.transparent,
           child: SafeArea(
             child: Row(
@@ -109,7 +144,7 @@ class MainScreen extends StatelessWidget {
                     },
                     isSelected: state.boardIndex == 2,
                     label: AppText.settings,
-                    iconPath: 'assets/icons/setting_icon.svg',
+                    iconPath: 'assets/icons/profile_icon.svg',
                   ),
                 ),
               ],

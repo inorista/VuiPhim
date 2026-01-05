@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/cast_entity/cast_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/genre_entity/genre_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/move_entity/movie_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/movie_detail_entity/movie_detail_entity.dart';
-import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/category_entity/category_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/created_entity/created_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/episode_entity/episode_entity.dart';
@@ -51,4 +51,5 @@ class HiveBoxIds {
   static const createdBoxId = 11;
   static const imdbBoxId = 12;
   static const tmdbBoxId = 13;
+  static const watchingMovieBoxId = 14;
 }

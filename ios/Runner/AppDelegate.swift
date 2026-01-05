@@ -6,6 +6,7 @@ import UIKit
 @objc class AppDelegate: FlutterAppDelegate {
     private let brightnessService = BrightnessService()
     private let vibrationService = VibrationService()
+    private let instagramSharingService = InstagramSharingService()
     
     override func application(
         _ application: UIApplication,
@@ -15,6 +16,8 @@ import UIKit
         
         brightnessService.register(with: controller.binaryMessenger)
         vibrationService.register(with: controller.binaryMessenger)
+        instagramSharingService.register(with: controller.binaryMessenger)
+        
         
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

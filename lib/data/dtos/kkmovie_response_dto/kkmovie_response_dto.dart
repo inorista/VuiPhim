@@ -360,14 +360,14 @@ class Tmdb {
   final String? type;
   final String? id;
   final int? season;
-  final double? voteAverage;
+  final num? voteAverage;
   final int? voteCount;
 
   Tmdb copyWith({
     String? type,
     String? id,
     int? season,
-    double? voteAverage,
+    num? voteAverage,
     int? voteCount,
   }) {
     return Tmdb(

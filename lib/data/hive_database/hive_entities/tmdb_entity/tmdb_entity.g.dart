@@ -8,7 +8,7 @@ part of 'tmdb_entity.dart';
 
 class TmdbEntityAdapter extends TypeAdapter<TmdbEntity> {
   @override
-  final int typeId = 13;
+  final typeId = 13;
 
   @override
   TmdbEntity read(BinaryReader reader) {
@@ -20,8 +20,8 @@ class TmdbEntityAdapter extends TypeAdapter<TmdbEntity> {
       type: fields[0] as String?,
       id: fields[1] as String?,
       season: fields[2] as dynamic,
-      voteAverage: fields[3] as double?,
-      voteCount: fields[4] as int?,
+      voteAverage: (fields[3] as num?)?.toDouble(),
+      voteCount: (fields[4] as num?)?.toInt(),
     );
   }
 

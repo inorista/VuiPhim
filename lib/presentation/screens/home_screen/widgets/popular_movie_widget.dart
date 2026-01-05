@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -60,6 +59,7 @@ class PopularMovieWidget extends StatelessWidget {
                               errorWidget: (context, url, error) => Shimmer(
                                 height: height * 0.9,
                                 width: width * 0.9,
+                                borderRadius: 14,
                               ),
                             ),
                           ),
@@ -128,7 +128,14 @@ class PopularMovieWidget extends StatelessWidget {
                 },
               );
             } else if (state is PopularMovieLoading) {
-              return const Center(child: CupertinoActivityIndicator());
+              return Center(
+                child: Shimmer(
+                  height: height * 0.9,
+                  width: width * 0.9,
+                  borderRadius: 14,
+                  baseColor: Colors.grey[300],
+                ),
+              );
             }
             return const SizedBox();
           },

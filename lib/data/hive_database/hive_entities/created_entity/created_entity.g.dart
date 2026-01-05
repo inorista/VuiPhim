@@ -8,7 +8,7 @@ part of 'created_entity.dart';
 
 class CreatedEntityAdapter extends TypeAdapter<CreatedEntity> {
   @override
-  final int typeId = 11;
+  final typeId = 11;
 
   @override
   CreatedEntity read(BinaryReader reader) {
@@ -16,9 +16,7 @@ class CreatedEntityAdapter extends TypeAdapter<CreatedEntity> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CreatedEntity(
-      time: fields[0] as DateTime?,
-    );
+    return CreatedEntity(time: fields[0] as DateTime?);
   }
 
   @override

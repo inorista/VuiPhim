@@ -11,6 +11,7 @@ class CustomAnimationAppbar extends StatefulWidget {
   final ScrollController? scrollController;
   final double? appBarHeight;
   final bool isBackable;
+  final bool centerTitle;
   const CustomAnimationAppbar({
     super.key,
     this.title,
@@ -19,6 +20,7 @@ class CustomAnimationAppbar extends StatefulWidget {
     this.leading,
     this.actions,
     this.isBackable = true,
+    this.centerTitle = false,
   });
 
   @override
@@ -27,7 +29,7 @@ class CustomAnimationAppbar extends StatefulWidget {
 
 class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
   double get _appBarHeight =>
-      widget.appBarHeight ?? (Platform.isIOS ? 115.0 : 80.0);
+      widget.appBarHeight ?? (Platform.isIOS ? 120.0 : 80.0);
   double _opacity = 0.0;
 
   @override
@@ -75,55 +77,70 @@ class _CustomAnimationAppbarState extends State<CustomAnimationAppbar> {
           ),
         ),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+        SizedBox(
+          height: _appBarHeight,
           child: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                widget.leading != null
-                    ? widget.leading!
-                    : widget.isBackable
-                    ? InkWell(
-                        onTap: () {
-                          context.pop();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(150),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            CupertinoIcons.back,
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-                widget.title != null
-                    ? Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          child: Text(
-                            widget.title ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(_opacity),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14.0,
+                vertical: 5.0,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  widget.leading != null
+                      ? widget.leading!
+                      : widget.isBackable
+                      ? InkWell(
+                          onTap: () {
+                            context.pop();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withAlpha(150),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              CupertinoIcons.back,
+                              color: Colors.black,
                             ),
                           ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
+                        )
+                      : const SizedBox.shrink(),
+                  widget.title != null
+                      ? Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14),
+                            child: Text(
+                              widget.title ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(_opacity),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
 
-                if (widget.actions != null)
-                  Row(children: widget.actions!)
-                else
-                  const SizedBox(width: 14),
-              ],
+                  if (widget.actions != null)
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: widget.actions!,
+                      ),
+                    )
+                  else
+                    const SizedBox(width: 14),
+                ],
+              ),
             ),
           ),
         ),

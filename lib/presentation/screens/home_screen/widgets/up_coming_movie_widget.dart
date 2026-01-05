@@ -66,8 +66,12 @@ class UpComingMovieWidget extends StatelessWidget {
                             fadeInDuration: const Duration(milliseconds: 10),
                             fadeOutDuration: const Duration(milliseconds: 10),
                             width: 170,
-                            placeholder: (context, url) =>
-                                const Shimmer(width: 170, height: 220),
+                            height: 250,
+                            placeholder: (context, url) => const Shimmer(
+                              width: 170,
+                              height: 250,
+                              borderRadius: 14,
+                            ),
                           ),
                         ),
                       );
@@ -79,7 +83,13 @@ class UpComingMovieWidget extends StatelessWidget {
                   ),
                 );
               } else if (state is UpcomingMovieLoading) {
-                return const SizedBox(height: 250);
+                return const Row(
+                  spacing: 15,
+                  children: [
+                    Shimmer(width: 170, height: 250, borderRadius: 14),
+                    Shimmer(width: 170, height: 250, borderRadius: 14),
+                  ],
+                );
               }
               return const SizedBox();
             },

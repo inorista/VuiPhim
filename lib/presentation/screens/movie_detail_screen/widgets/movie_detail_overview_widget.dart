@@ -230,13 +230,13 @@ class _MovieDetailOverviewWidgetState extends State<MovieDetailOverviewWidget> {
               children: [
                 const Row(
                   children: [
-                    Expanded(child: Shimmer(height: 60)),
+                    Expanded(child: Shimmer(width: 500, height: 60)),
                     SizedBox(width: 10),
-                    Expanded(child: Shimmer(height: 60)),
+                    Expanded(child: Shimmer(width: 100, height: 60)),
                   ],
                 ),
                 const SizedBox(height: 20),
-                const Shimmer(height: 20, width: 120),
+                const Shimmer(height: 35, width: 120),
                 const SizedBox(height: 15),
                 Shimmer(height: 250, width: width),
               ],

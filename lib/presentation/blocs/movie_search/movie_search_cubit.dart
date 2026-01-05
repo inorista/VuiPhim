@@ -20,6 +20,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
       final movies = await _movieService.getNowPlayingMovies(
         page: _nowPlayingPage,
       );
+      if (isClosed) return;
       final movieEntities = movies.results
           .map((e) => MovieEntity.fromDto(e))
           .toList();
@@ -31,6 +32,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: MovieSearchStatus.failure,
@@ -49,6 +51,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
         keyword,
         page: _searchPage,
       );
+      if (isClosed) return;
       final movieEntities = movies.results
           .map((e) => MovieEntity.fromDto(e))
           .toList();
@@ -62,6 +65,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
       );
     } catch (e) {
       _searchPage--;
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: MovieSearchStatus.failure,
@@ -76,6 +80,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
     emit(state.copyWith(status: MovieSearchStatus.loading));
     try {
       final movies = await _movieService.searchMovieByKeyword(keyword, page: 1);
+      if (isClosed) return;
       if (movies.results.isNotEmpty) {
         final movieEntities = movies.results
             .map((e) => MovieEntity.fromDto(e))
@@ -98,6 +103,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
         );
       }
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: MovieSearchStatus.failure,
@@ -121,6 +127,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
       final movies = await _movieService.getNowPlayingMovies(
         page: _nowPlayingPage,
       );
+      if (isClosed) return;
       final movieEntities = movies.results
           .map((e) => MovieEntity.fromDto(e))
           .toList();
@@ -134,6 +141,7 @@ class MovieSearchCubit extends Cubit<MovieSearchState> {
       );
     } catch (e) {
       _nowPlayingPage--;
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: MovieSearchStatus.failure,

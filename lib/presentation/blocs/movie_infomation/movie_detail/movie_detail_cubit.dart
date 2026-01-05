@@ -28,6 +28,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
       );
 
       if (cachedMovie != null) {
+        if (isClosed) return;
         emit(
           state.copyWith(
             status: MovieDetailStatus.success,
@@ -42,6 +43,8 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
         _movieService.fetchMovieDetailFromId(movieId),
         _movieService.fetchMovieCreditsFromId(movieId),
       ]);
+
+      if (isClosed) return;
 
       final movieDetailDto = results[0] as MovieDetailDto;
       final castResponseDto = results[1] as CastResponseDto;
@@ -58,6 +61,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
         _castDao.updateAll({for (var cast in castEntities) cast.id: cast}),
       ]);
 
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: MovieDetailStatus.success,
@@ -66,6 +70,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: MovieDetailStatus.failure,

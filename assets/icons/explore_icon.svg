@@ -1,6 +1,6 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="3" y="3" width="7" height="7" rx="1" stroke="#33363F" stroke-width="2" stroke-linecap="round"/>
-<rect x="3" y="14" width="7" height="7" rx="1" stroke="#33363F" stroke-width="2" stroke-linecap="round"/>
-<rect x="14" y="3" width="7" height="7" rx="1" stroke="#33363F" stroke-width="2" stroke-linecap="round"/>
-<rect x="14" y="14" width="7" height="7" rx="1" stroke="#33363F" stroke-width="2" stroke-linecap="round"/>
+<svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.300537 8.95044H8.30054V0.950439H0.300537V8.95044Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.300537 19.9494H8.30054V11.9494H0.300537V19.9494Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M11.3005 19.9494H19.3005V11.9494H11.3005V19.9494Z" fill="black"/>
+<path opacity="0.4" fill-rule="evenodd" clip-rule="evenodd" d="M20.1996 2.12154L12.4716 0.0505371L10.4016 7.77854L18.1286 9.84854L20.1996 2.12154Z" fill="black"/>
 </svg>
