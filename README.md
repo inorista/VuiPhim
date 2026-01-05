@@ -5,169 +5,132 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Flutter-%5E3.8.0-blue.svg" alt="Flutter Version">
+  <img src="https://img.shields.io/badge/Flutter-%5E3.10.4-blue.svg" alt="Flutter Version">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
   <img src="https://img.shields.io/badge/Platform-iOS%20%7C%20Android-brightgreen.svg" alt="Platform">
+  <img src="https://img.shields.io/badge/State_Management-BLoC-purple.svg" alt="State Management">
 </p>
 
-**VuiPhim** là một ứng dụng xem phim hiện đại được xây dựng bằng Flutter, mang đến trải nghiệm xem phim mượt mà và trực quan trên thiết bị di động. Ứng dụng cung cấp thư viện phim phong phú với giao diện người dùng đẹp mắt và các tính năng tiên tiến.
+**VuiPhim** là một ứng dụng giải trí đa phương tiện được xây dựng bằng Flutter, tập trung vào trải nghiệm người dùng mượt mà, giao diện hiện đại và khả năng xem phim offline mạnh mẽ.
 
 ## 🌟 Tính năng nổi bật
 
-### 🎭 Giao diện người dùng hiện đại
-- **Thiết kế Material Design** tinh tế với dark theme
-- **Hiệu ứng chuyển động mượt mà** sử dụng Flutter Animation
-- **Responsive layout** phù hợp với mọi kích thước màn hình
+### 📱 Giao diện & Trải nghiệm (UI/UX)
+- **Glassmorphism Design:** Giao diện hiện đại với hiệu ứng blur và transparency (màn hình chính, player).
+- **Haptic Feedback:** Phản hồi rung nhẹ khi tương tác (sử dụng `VibrationNative`).
+- **Lazy Load Navigation:** Tối ưu hóa hiệu năng chuyển tab với `LazyLoadIndexedStack`.
+- **Hiệu ứng Shimmer:** Loading state đẹp mắt với `fade_shimmer`.
 
-### 🎥 Trải nghiệm xem phim cao cấp
-- **Trình phát video tùy chỉnh** với điều khiển đầy đủ
-- **Slider điều chỉnh âm lượng dọc** giống Netflix
-- **Hiệu ứng blur background** khi xem phim
-- **Tự động lưu vị trí xem** phim
+### 🎥 Trình phát video thông minh
+- **Custom Player:** Tích hợp đầy đủ các tính năng điều khiển.
+- **Gesture Control:**
+  - Vuốt dọc bên trái để chỉnh độ sáng (Brightness).
+  - Vuốt dọc bên phải để chỉnh âm lượng (Volume).
+- **Auto Resume:** Tự động lưu và phát tiếp vị trí đang xem dở (`ContinueWatching`).
+- **Chọn tập phim:** Dễ dàng chuyển đổi tập phim đối với phim bộ.
 
-### 🎯 Chức năng chính
-- **Khám phá phim** theo danh mục: Phim hot, Phim đề cử, Phim sắp ra mắt
-- **Tìm kiếm phim** nhanh chóng với gợi ý thông minh
-- **Chi tiết phim** với thông tin đầy đủ: Diễn viên, đạo diễn, thể loại
-- **Xem phim theo tập** cho phim bộ với danh sách tập phim
-- **Điều chỉnh độ sáng màn hình** trực tiếp trong trình phát
+### 💾 Tải xuống & Xem Offline
+- **Download Manager:** Quản lý tiến trình tải xuống chi tiết.
+- **Công nghệ FFmpeg:** Sử dụng `ffmpeg_kit_flutter_new` để xử lý và lưu trữ video chất lượng cao.
+- **Quản lý kho tải:** Xem lại các phim đã tải xuống trong mục Cá nhân.
 
-### 🔧 Công nghệ sử dụng
-- **Flutter Framework** với Dart language
-- **Bloc Pattern** để quản lý state
-- **Go Router** cho điều hướng giữa các màn hình
-- **Hive Database** lưu trữ dữ liệu local
-- **Firebase** cho authentication và data services
-- **Video Player** cho trải nghiệm xem phim mượt mà
-- **Custom Paint** để tạo hiệu ứng UI độc đáo
+### 🔍 Khám phá nội dung
+- **Home Feed:** Cập nhật liên tục Phim phổ biến (Popular), Được đánh giá cao (Top Rated), và Sắp ra mắt (Upcoming).
+- **Explore Tab:** Khám phá phim đang chiếu và tìm kiếm theo danh mục.
+- **Movie Details:** Thông tin chi tiết, diễn viên, và gợi ý phim liên quan.
 
-## 📱 Hình ảnh minh họa
+## 🛠 Công nghệ sử dụng
 
-<div align="center">
-  <table>
-    <tr>
-      <td><img src="screenshots/home_screen.png" alt="Home Screen" width="200"/></td>
-      <td><img src="screenshots/movie_detail.png" alt="Movie Detail" width="200"/></td>
-      <td><img src="screenshots/video_player.png" alt="Video Player" width="200"/></td>
-      <td><img src="screenshots/explore.png" alt="Explore" width="200"/></td>
-    </tr>
-    <tr>
-      <td align="center">Màn hình chính</td>
-      <td align="center">Chi tiết phim</td>
-      <td align="center">Trình phát video</td>
-      <td align="center">Khám phá</td>
-    </tr>
-  </table>
-</div>
+### Core Framework & Architecture
+- **Language:** Dart
+- **Framework:** Flutter
+- **Architecture:** Clean Architecture (Core, Data, Presentation)
+- **DI:** `get_it`, `injectable`
+- **Routing:** `go_router`
+
+### State Management & Logic
+- **Bloc/Cubit:** `flutter_bloc`
+- **Reactive:** `rxdart` (nếu có sử dụng stream phức tạp)
+
+### Data & Networking
+- **Local Database:** `hive`, `hive_ce` (lưu trữ cache, settings, user data).
+- **Networking:** `dio`, `retrofit` (gọi API TMDB & KKPhim).
+- **Firebase:** `firebase_core`, `cloud_firestore` (config, backend services).
+- **Images:** `cached_network_image` (tối ưu hóa hiển thị ảnh).
+
+### Media & Assets
+- **Video:** `video_player`, `ffmpeg_kit_flutter_new`.
+- **Assets:** `flutter_svg` (vector icons), `screenshot` (tạo ảnh chia sẻ).
 
 ## 🚀 Bắt đầu
 
 ### Yêu cầu
-- Flutter SDK >= 3.8.0
-- Dart SDK >= 3.0.0
-- Android Studio / Xcode
+- Flutter SDK: `^3.10.4`
+- Dart SDK: tương thích
+- Android Studio / VS Code
 
 ### Cài đặt
 
-```bash
-# Clone repository
-git clone https://github.com/yourusername/vuiphim.git
-cd vuiphim
+1. **Clone dự án:**
+   ```bash
+   git clone https://github.com/Inorista/vuiphim.git
+   cd vuiphim
+   ```
 
-# Cài đặt dependencies
-flutter pub get
+2. **Cài đặt dependencies:**
+   ```bash
+   flutter pub get
+   ```
 
-# Chạy ứng dụng
-flutter run
-```
+3. **Generate code (nếu cần):**
+   ```bash
+   flutter pub run build_runner build --delete-conflicting-outputs
+   ```
 
-### Cấu hình Firebase
-1. Tạo project Firebase mới
-2. Thêm file `google-services.json` vào `android/app/`
-3. Thêm file `GoogleService-Info.plist` vào `ios/Runner/`
+4. **Cấu hình Firebase:**
+   - Thêm `google-services.json` vào `android/app/`.
+   - Thêm `GoogleService-Info.plist` vào `ios/Runner/`.
 
-## 🏗️ Kiến trúc
+5. **Chạy ứng dụng:**
+   ```bash
+   flutter run
+   ```
 
-Ứng dụng sử dụng kiến trúc phân lớp rõ ràng:
+## 🏗️ Cấu trúc thư mục
+
+Dự án tuân thủ cấu trúc Clean Architecture phân tách rõ ràng nhiệm vụ:
 
 ```
 lib/
-├── core/                 # Core utilities và services
-│   ├── di/              # Dependency injection
-│   ├── router/          # App routing
-│   ├── services/        # Services
-│   └── utils/           # Utilities
-├── data/                # Data layer
-│   ├── dtos/            # Data Transfer Objects
-│   ├── hive_database/   # Local database
-│   └── repositories/    # Data repositories
-├── presentation/        # Presentation layer
-│   ├── blocs/           # Business Logic Components
-│   ├── screens/         # UI Screens
-│   └── utils/           # Custom widgets
-└── main.dart            # Entry point
+├── core/                 # Các thành phần cốt lõi dùng chung
+│   ├── constants/       # Hằng số (API keys, Strings, Colors)
+│   ├── di/              # Cấu hình Dependency Injection
+│   ├── native/          # Các module giao tiếp Native (Vibration...)
+│   ├── router/          # Cấu hình điều hướng (GoRouter)
+│   ├── services/        # Interfaces và Implementations các services
+│   └── utils/           # Tiện ích bổ trợ
+├── data/                # Lớp dữ liệu
+│   ├── dtos/            # Data Transfer Objects (nhận từ API)
+│   ├── hive_database/   # Cấu hình và Entity cho Hive DB
+│   └── resources/       # API Clients (Retrofit)
+├── presentation/        # Lớp giao diện người dùng
+│   ├── blocs/           # Quản lý trạng thái (Cubit/Bloc)
+│   ├── screens/         # Các màn hình UI (Home, Detail, Player...)
+│   └── utils/           # Widgets dùng chung và Helpers UI
+└── main.dart            # Điểm khởi chạy ứng dụng
 ```
 
-## 🎨 Widgets tùy chỉnh
-
-### Vertical Slider
-Slider dọc tùy chỉnh giống Netflix với hiệu ứng glow và gradient:
-
-```dart
-VerticalSlider(
-  value: _volume,
-  onChanged: (value) => setState(() => _volume = value),
-  activeColor: Colors.red,
-  thumbColor: Colors.white,
-)
-```
-
-### Smooth Progress Indicator
-Thanh tiến trình video mượt mà với animation:
-
-```dart
-SmoothVideoProgressSlider(
-  value: _progress,
-  onChanged: _onProgressChanged,
-)
-```
-
-## 🔐 Bảo mật
-
-- **Secure Storage** lưu trữ token và thông tin nhạy cảm
-- **HTTPS** cho tất cả API calls
-- **Input validation** tại cả client và server side
-
-## 📊 Performance
-
-- **Lazy loading** cho danh sách phim
-- **Cache hình ảnh** với CachedNetworkImage
-- **Shimmer loading** cho trải nghiệm chờ
-- **Optimized rebuilds** với Bloc buildWhen
+## 🔐 Bảo mật & Key Management
+- Sử dụng `flutter_secure_storage` hoặc `Keychain` service để bảo vệ các tokens và API Keys nhạy cảm.
+- API Keys được load động từ Remote Config hoặc Local Storage an toàn.
 
 ## 🤝 Đóng góp
-
-1. Fork repository
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Mở Pull Request
+Mọi đóng góp đều được hoan nghênh! Vui lòng tạo Pull Request hoặc mở Issue để thảo luận về các thay đổi.
 
 ## 📄 License
-
-Distributed under the MIT License. Xem `LICENSE` để biết thêm thông tin.
-
-## 👨‍💻 Tác giả
-
-**Your Name** - [your-email@example.com](mailto:your-email@example.com)
-
-## 🙏 Lời cảm ơn
-
-- Cảm ơn [TMDB](https://www.themoviedb.org/) đã cung cấp API phim
-- Cảm ơn cộng đồng Flutter đã tạo ra những thư viện tuyệt vời
+Dự án được phân phối dưới giấy phép MIT.
 
 ---
-
 <p align="center">
-  Made with ❤️ using Flutter
+  Developed with ❤️ by Inorista
 </p>

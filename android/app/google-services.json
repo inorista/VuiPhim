@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154816197400",
+    "project_id": "vuiphim",
+    "storage_bucket": "vuiphim.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154816197400:android:ed226e2774ccd4e53be46d",
+        "android_client_info": {
+          "package_name": "com.dev.vuiphim"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDB7flXjeplF9p3Oi3wK4PEgmqV-C4XIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
