@@ -19,12 +19,17 @@ class ExploreCubit extends Cubit<ExploreState> {
     await loadMoviesByGenre(state.selectedGenre!.id);
   }
 
-  Future<void> clearSelectedGenre() async {
+  void clearSelectedGenre() {
     emit(state.copyWith(selectedGenre: null));
   }
 
   Future<void> loadMoviesByGenre(int genreId) async {
-    emit(state.copyWith(status: ExploreStatus.loading));
+    emit(
+      state.copyWith(
+        status: ExploreStatus.loading,
+        selectedGenre: state.selectedGenre,
+      ),
+    );
     _currentGenrePage = 1;
     try {
       final movies = await _networkService.getMoviesByGenre(
@@ -38,6 +43,7 @@ class ExploreCubit extends Cubit<ExploreState> {
           status: ExploreStatus.success,
           movieByGenre: movieEntities,
           hasReachedMax: movies.results.isEmpty,
+          selectedGenre: state.selectedGenre,
         ),
       );
     } catch (e) {
@@ -46,6 +52,7 @@ class ExploreCubit extends Cubit<ExploreState> {
         state.copyWith(
           status: ExploreStatus.failure,
           errorMessage: e.toString(),
+          selectedGenre: state.selectedGenre,
         ),
       );
     }
@@ -53,7 +60,7 @@ class ExploreCubit extends Cubit<ExploreState> {
 
   Future<void> loadMoreMoviesByGenre() async {
     if (state.hasReachedMax) return;
-    emit(state.copyWith(loadingMore: true));
+    emit(state.copyWith(loadingMore: true, selectedGenre: state.selectedGenre));
     try {
       _currentGenrePage++;
       final movies = await _networkService.getMoviesByGenre(
@@ -69,6 +76,7 @@ class ExploreCubit extends Cubit<ExploreState> {
             status: ExploreStatus.success,
             hasReachedMax: true,
             loadingMore: false,
+            selectedGenre: state.selectedGenre,
           ),
         );
       } else {
@@ -78,6 +86,7 @@ class ExploreCubit extends Cubit<ExploreState> {
             movieByGenre: List.of(state.movieByGenre)..addAll(movieEntities),
             hasReachedMax: false,
             loadingMore: false,
+            selectedGenre: state.selectedGenre,
           ),
         );
       }
@@ -89,13 +98,19 @@ class ExploreCubit extends Cubit<ExploreState> {
           status: ExploreStatus.failure,
           errorMessage: e.toString(),
           loadingMore: false,
+          selectedGenre: null,
         ),
       );
     }
   }
 
   Future<void> loadNowPlayingMovies() async {
-    emit(state.copyWith(status: ExploreStatus.loading));
+    emit(
+      state.copyWith(
+        status: ExploreStatus.loading,
+        selectedGenre: state.selectedGenre,
+      ),
+    );
     _currentPage = 1;
     try {
       final movies = await _networkService.getNowPlayingMovies(
@@ -108,6 +123,7 @@ class ExploreCubit extends Cubit<ExploreState> {
           status: ExploreStatus.success,
           movies: movieEntities,
           hasReachedMax: movies.results.isEmpty,
+          selectedGenre: state.selectedGenre,
         ),
       );
     } catch (e) {
@@ -116,6 +132,7 @@ class ExploreCubit extends Cubit<ExploreState> {
         state.copyWith(
           status: ExploreStatus.failure,
           errorMessage: e.toString(),
+          selectedGenre: state.selectedGenre,
         ),
       );
     }
@@ -124,7 +141,7 @@ class ExploreCubit extends Cubit<ExploreState> {
   Future<void> loadMoreNowPlayingMovies() async {
     if (state.hasReachedMax) return;
 
-    emit(state.copyWith(loadingMore: true));
+    emit(state.copyWith(loadingMore: true, selectedGenre: state.selectedGenre));
 
     try {
       _currentPage++;
@@ -140,6 +157,7 @@ class ExploreCubit extends Cubit<ExploreState> {
             status: ExploreStatus.success,
             hasReachedMax: true,
             loadingMore: false,
+            selectedGenre: state.selectedGenre,
           ),
         );
       } else {
@@ -149,6 +167,7 @@ class ExploreCubit extends Cubit<ExploreState> {
             movies: List.of(state.movies)..addAll(movieEntities),
             hasReachedMax: false,
             loadingMore: false,
+            selectedGenre: state.selectedGenre,
           ),
         );
       }
@@ -160,6 +179,7 @@ class ExploreCubit extends Cubit<ExploreState> {
           status: ExploreStatus.failure,
           errorMessage: e.toString(),
           loadingMore: false,
+          selectedGenre: state.selectedGenre,
         ),
       );
     }

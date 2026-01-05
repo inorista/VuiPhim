@@ -34,4 +34,13 @@ class ServerDataDao extends BaseDao<ServerDataEntity> {
         )
         .toList();
   }
+
+  Future<List<ServerDataEntity>> getContinueWatchingList() async {
+    final allServerData = await getAll();
+    return allServerData
+        .where(
+          (item) => item.playingDuration != null && item.playingDuration! > 0,
+        )
+        .toList();
+  }
 }

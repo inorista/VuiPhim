@@ -178,7 +178,7 @@ class MovieService implements IMovieService {
         final episodeEntity = await _episodeService.getEpisodeById(
           serverData.episodeId ?? '',
         );
-
+        if (episodeEntity == null) continue;
         final movieEntity = await getMovieById(episodeEntity.movieId);
         if (movieEntity == null) continue;
         if (downloadedMoviesMap.containsKey(movieEntity)) {

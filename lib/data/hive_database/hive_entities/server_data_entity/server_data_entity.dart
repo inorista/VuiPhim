@@ -19,13 +19,15 @@ class ServerDataEntity extends Equatable {
   @HiveField(4)
   final String? linkM3U8;
   @HiveField(5)
-  int? playingDuration;
+  final int? playingDuration;
   @HiveField(6)
   final String id;
   @HiveField(7)
   final String? downloadPath;
   @HiveField(8)
   final String? episodeId;
+  @HiveField(9)
+  final int? runtime;
 
   ServerDataEntity({
     required this.name,
@@ -35,6 +37,7 @@ class ServerDataEntity extends Equatable {
     required this.linkM3U8,
     this.episodeId,
     this.playingDuration,
+    this.runtime,
     this.downloadPath,
     String? id,
   }) : id = id ?? const Uuid().v4();
@@ -46,6 +49,7 @@ class ServerDataEntity extends Equatable {
     String? linkEmbed,
     String? linkM3U8,
     int? playingDuration,
+    int? runtime,
     String? id,
     String? downloadPath,
     String? episodeId,
@@ -58,9 +62,18 @@ class ServerDataEntity extends Equatable {
       linkEmbed: linkEmbed ?? this.linkEmbed,
       linkM3U8: linkM3U8 ?? this.linkM3U8,
       playingDuration: playingDuration ?? this.playingDuration,
+      runtime: runtime ?? this.runtime,
       downloadPath: downloadPath ?? this.downloadPath,
       episodeId: episodeId ?? this.episodeId,
     );
+  }
+
+  double progress(double width) {
+    if (runtime == null || runtime == 0) {
+      return 0;
+    }
+    final progressWidth = (playingDuration ?? 0) * width / runtime!;
+    return progressWidth;
   }
 
   @override
@@ -73,5 +86,7 @@ class ServerDataEntity extends Equatable {
     downloadPath,
     id,
     episodeId,
+    playingDuration,
+    runtime,
   ];
 }

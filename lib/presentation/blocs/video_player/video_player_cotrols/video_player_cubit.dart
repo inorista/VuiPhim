@@ -141,12 +141,14 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
 
   Future<void> _startAutoSavePosition() async {
     if (_movieDetailEntity != null && _serverDataEntity != null) {
+      final runtime = _controller?.value.duration.inMilliseconds;
       final currentPosition = _controller?.value.position ?? Duration.zero;
       final existedServerData = await _serverDataService.getServerDataById(
         _serverDataEntity?.id ?? '',
       );
       if (existedServerData != null) {
         final updatedServerData = existedServerData.copyWith(
+          runtime: runtime,
           playingDuration: currentPosition.inMilliseconds,
         );
         await _serverDataService.updateServerData(

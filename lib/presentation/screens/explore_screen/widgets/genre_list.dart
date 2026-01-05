@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vuiphim/core/constants/value_constants.dart';
 import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/services/interfaces/igenre_service.dart';
@@ -74,6 +75,7 @@ class _GenreListState extends State<GenreList>
               return GestureDetector(
                 onTap: () {
                   widget.parrentContext.read<ExploreCubit>().selectGenre(genre);
+                  context.pop();
                 },
                 child: AnimatedBuilder(
                   animation: _controller,
