@@ -34,10 +34,11 @@
 - **Công nghệ FFmpeg:** Sử dụng `ffmpeg_kit_flutter_new` để xử lý và lưu trữ video chất lượng cao.
 - **Quản lý kho tải:** Xem lại các phim đã tải xuống trong mục Cá nhân.
 
-### 🔍 Khám phá nội dung
+### 🔍 Khám phá & Chia sẻ
 - **Home Feed:** Cập nhật liên tục Phim phổ biến (Popular), Được đánh giá cao (Top Rated), và Sắp ra mắt (Upcoming).
 - **Explore Tab:** Khám phá phim đang chiếu và tìm kiếm theo danh mục.
 - **Movie Details:** Thông tin chi tiết, diễn viên, và gợi ý phim liên quan.
+- **Instagram Sharing:** Tính năng chia sẻ phim độc đáo lên **Instagram Story** dưới dạng Sticker với hiệu ứng background blur chuyên nghiệp (sử dụng Native Channel).
 
 ## 🛠 Công nghệ sử dụng
 
