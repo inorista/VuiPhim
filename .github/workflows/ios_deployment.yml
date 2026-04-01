@@ -78,5 +78,6 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}
         run: |
+          gem install cocoapods
           bundle install
           bundle exec fastlane release
