@@ -21,10 +21,14 @@ import 'package:vuiphim/core/services/implements/firebase_service.dart'
 import 'package:vuiphim/core/services/implements/genre_service.dart' as _i134;
 import 'package:vuiphim/core/services/implements/keychain_storage_service.dart'
     as _i927;
+import 'package:vuiphim/core/services/implements/local_notification_service.dart'
+    as _i1022;
 import 'package:vuiphim/core/services/implements/movie_service.dart' as _i650;
 import 'package:vuiphim/core/services/implements/network_service.dart' as _i422;
 import 'package:vuiphim/core/services/implements/path_provider_service.dart'
     as _i162;
+import 'package:vuiphim/core/services/implements/push_notification_service.dart'
+    as _i359;
 import 'package:vuiphim/core/services/implements/server_data_service.dart'
     as _i29;
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart'
@@ -37,11 +41,15 @@ import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart'
 import 'package:vuiphim/core/services/interfaces/igenre_service.dart' as _i1053;
 import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart'
     as _i811;
+import 'package:vuiphim/core/services/interfaces/ilocal_notification_service.dart'
+    as _i407;
 import 'package:vuiphim/core/services/interfaces/imovie_service.dart' as _i52;
 import 'package:vuiphim/core/services/interfaces/inetwork_service.dart'
     as _i479;
 import 'package:vuiphim/core/services/interfaces/ipath_provider_service.dart'
     as _i537;
+import 'package:vuiphim/core/services/interfaces/ipush_notification_service.dart'
+    as _i536;
 import 'package:vuiphim/core/services/interfaces/iserver_data_service.dart'
     as _i302;
 import 'package:vuiphim/data/hive_database/hive_daos/cast_dao.dart' as _i584;
@@ -74,6 +82,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i575.IFirebaseService>(() => _i713.FirebaseService());
     gh.lazySingleton<_i52.IMovieService>(() => _i650.MovieService());
     gh.lazySingleton<_i404.IFFmpegService>(() => _i141.FFmpegService());
+    gh.lazySingleton<_i407.ILocalNotificationService>(
+      () => _i1022.LocalNotificationService(),
+    );
     gh.lazySingleton<_i302.IServerDataService>(() => _i29.ServerDataService());
     gh.lazySingleton<_i504.IBackgroundSync>(() => _i768.BackgroundSync());
     gh.lazySingleton<_i811.IKeychainStorageService>(
@@ -87,15 +98,19 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.provideKkphimDio(),
       instanceName: 'kkphimDio',
     );
-    await gh.factoryAsync<_i361.Dio>(
-      () => registerModule.provideTmdbDio(gh<_i811.IKeychainStorageService>()),
-      instanceName: 'tmdbDio',
-      preResolve: true,
+    gh.lazySingleton<_i536.IPushNotificationService>(
+      () =>
+          _i359.PushNotificationService(gh<_i407.ILocalNotificationService>()),
     );
     gh.lazySingleton<_i605.KKPhimRestClient>(
       () => registerModule.provideKKPhimRestClient(
         gh<_i361.Dio>(instanceName: 'kkphimDio'),
       ),
+    );
+    await gh.factoryAsync<_i361.Dio>(
+      () => registerModule.provideTmdbDio(gh<_i811.IKeychainStorageService>()),
+      instanceName: 'tmdbDio',
+      preResolve: true,
     );
     gh.lazySingleton<_i690.RestClient>(
       () => registerModule.provideRestClient(

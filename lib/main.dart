@@ -7,12 +7,17 @@ import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/router/app_router.dart';
 import 'package:vuiphim/core/services/interfaces/ibackground_sync.dart';
 import 'package:vuiphim/data/hive_database/hive_database.dart';
+import 'package:vuiphim/core/services/interfaces/ilocal_notification_service.dart';
+import 'package:vuiphim/core/services/interfaces/ipush_notification_service.dart';
 import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await configureDependencies();
+  await locator<ILocalNotificationService>().initialize();
+  await locator<ILocalNotificationService>().requestPermissions();
+  await locator<IPushNotificationService>().initialize();
   await HiveDatabase().setupHiveDatabase();
   await locator<IBackgroundSync>().syncGenres();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

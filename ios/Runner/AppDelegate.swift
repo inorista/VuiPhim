@@ -1,6 +1,7 @@
 import AudioToolbox
 import Flutter
 import UIKit
+import FirebaseCore
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -12,6 +13,8 @@ import UIKit
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        FirebaseApp.configure()
+        
         let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
         
         brightnessService.register(with: controller.binaryMessenger)

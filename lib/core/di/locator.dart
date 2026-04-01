@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:vuiphim/core/constants/api_constants.dart';
-import 'package:vuiphim/core/services/interfaces/ifirebase_service.dart';
+import 'package:vuiphim/core/di/env.dart';
 import 'package:vuiphim/core/services/interfaces/ikeychain_storage_service.dart';
 import 'package:vuiphim/data/resources/kkphim_rest_client.dart';
 import 'package:vuiphim/data/resources/rest_client.dart';
@@ -21,7 +21,7 @@ abstract class RegisterModule {
   ) async {
     final dio = Dio();
     String? apiKey = await keychainStorageService.getData(ApiConstants.tmdbKey);
-    apiKey ??= await locator<IFirebaseService>().getTmdbApiKey();
+    apiKey ??= Env.apiKey;
     dio.options = BaseOptions(
       baseUrl: ApiConstants.baseUrl,
       headers: {"Authorization": "Bearer $apiKey"},
