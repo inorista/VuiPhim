@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vuiphim/core/di/locator.dart';
-import 'package:vuiphim/core/services/interfaces/imovie_service.dart';
 
 class DownloadMovieWidget extends StatefulWidget {
   final String movieId;
@@ -11,11 +9,8 @@ class DownloadMovieWidget extends StatefulWidget {
 }
 
 class _DownloadMovieWidgetState extends State<DownloadMovieWidget> {
-  late IMovieService _movieService;
-
   @override
   void initState() {
-    _movieService = locator<IMovieService>();
     super.initState();
   }
 

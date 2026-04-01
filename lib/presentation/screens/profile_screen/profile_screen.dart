@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:vuiphim/core/di/locator.dart';
 import 'package:vuiphim/core/native/vibration_native.dart';
 import 'package:vuiphim/core/router/app_router.dart';
+import 'package:vuiphim/data/hive_database/hive_daos/movie_detail_dao.dart';
 import 'package:vuiphim/presentation/blocs/downloaded_manager/downloaded_manager_cubit.dart';
 import 'package:vuiphim/presentation/blocs/profile/continue_watching/continue_watching_cubit.dart';
 import 'package:vuiphim/presentation/utils/custom_animation_appbar.dart';
@@ -216,66 +216,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       itemBuilder: (context, index) {
                                         final item =
                                             state.continueWatchingList[index];
-                                        return ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                          child: SizedBox(
-                                            height: 250,
-                                            width: 180,
-                                            child: Stack(
-                                              clipBehavior: Clip.none,
-                                              children: [
-                                                Positioned.fill(
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        item.movie.posterUrl,
-                                                    fit: BoxFit.cover,
-                                                    fadeInDuration:
-                                                        const Duration(
-                                                          milliseconds: 10,
-                                                        ),
-                                                    fadeOutDuration:
-                                                        const Duration(
-                                                          milliseconds: 10,
-                                                        ),
-                                                    width: 180,
-                                                    height: 250,
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            const Shimmer(
-                                                              width: 180,
-                                                              height: 250,
-                                                              borderRadius: 14,
-                                                            ),
+                                        return InkWell(
+                                          onTap: () async {
+                                            final movieDetail =
+                                                await locator<MovieDetailDao>()
+                                                    .getMovieDetailById(
+                                                      item.movie.id,
+                                                    );
+                                            if (context.mounted == false) {
+                                              return;
+                                            }
+                                            if (movieDetail != null) {
+                                              context.push(
+                                                AppRouter.videoPlayer,
+                                                extra: {
+                                                  'movieDetail': movieDetail,
+                                                  'serverData': item.serverData,
+                                                },
+                                              );
+                                            }
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            child: SizedBox(
+                                              height: 250,
+                                              width: 180,
+                                              child: Stack(
+                                                clipBehavior: Clip.none,
+                                                children: [
+                                                  Positioned.fill(
+                                                    child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          item.movie.posterUrl,
+                                                      fit: BoxFit.cover,
+                                                      fadeInDuration:
+                                                          const Duration(
+                                                            milliseconds: 10,
+                                                          ),
+                                                      fadeOutDuration:
+                                                          const Duration(
+                                                            milliseconds: 10,
+                                                          ),
+                                                      width: 180,
+                                                      height: 250,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              const Shimmer(
+                                                                width: 180,
+                                                                height: 250,
+                                                                borderRadius:
+                                                                    14,
+                                                              ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Positioned(
-                                                  bottom: 0,
-                                                  left: 0,
-                                                  child: Container(
-                                                    height: 3,
-                                                    width: 180,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                          color: Colors.white,
-                                                        ),
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    child: Container(
+                                                      height: 3,
+                                                      width: 180,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                            color: Colors.white,
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Positioned(
-                                                  bottom: 0,
-                                                  left: 0,
-                                                  child: Container(
-                                                    height: 3,
-                                                    width: item.serverData
-                                                        .progress(180),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                          color: Colors.red,
-                                                        ),
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    child: Container(
+                                                      height: 3,
+                                                      width: item.serverData
+                                                          .progress(180),
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                            color: Colors.red,
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );
