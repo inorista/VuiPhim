@@ -1,0 +1,3 @@
+app_identifier(ENV["APP_IDENTIFIER"] || "com.inorista.vuiphim") # Update to your correct bundle ID
+apple_id(ENV["APPLE_ID"] || "your.apple.id@email.com") # Your Apple Account
+team_id(ENV["TEAM_ID"] || "XXXXXXXXXX") # Developer Portal Team ID

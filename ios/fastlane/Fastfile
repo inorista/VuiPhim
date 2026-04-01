@@ -1,0 +1,45 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new release build to the TestFlight / App Store"
+  lane :release do
+    setup_ci
+
+    # 1. Xác thực tới App Store Connect dựa trên API Key truyền qua Environment
+    # Yêu cầu cài đặt các biến này ở Github Actions Secrets
+    # (Reference: https://docs.fastlane.tools/app-store-connect-api/)
+    app_store_connect_api_key(
+      key_id: ENV["ASC_KEY_ID"],
+      issuer_id: ENV["ASC_ISSUER_ID"],
+      key_content: ENV["ASC_KEY_CONTENT"],
+      is_key_content_base64: true,
+      in_house: false
+    )
+
+    # 2. Quay về thư mục gốc để gọi lện build của pub
+    Dir.chdir("../..") do
+      sh("flutter clean")
+      sh("flutter pub get")
+      # Chạy pre-build/codegen steps
+      sh("dart run build_runner build --delete-conflicting-outputs")
+      # Xây dựng file ipa ở chế độ release (ko build appbundle vì đây là platform :ios)
+      sh("flutter build ipa --release --obfuscate --split-debug-info=build/app/outputs/symbols")
+    end
+
+    # 3. Lấy IPA vừa được biên dịch xong
+    ipa_path = Dir["../build/ios/ipa/*.ipa"].first
+
+    unless ipa_path
+      UI.user_error!("Không tìm thấy file IPA ở trong '../build/ios/ipa'.")
+    end
+
+    # 4. Đẩy file IPA lên App Store / Testflight
+    upload_to_app_store(
+      ipa: ipa_path,
+      submit_for_review: false, # Rất quan trọng: Không mở Review tự động (Nằm chờ ở Testflight)
+      force: true,              # Bỏ qua cửa sổ xác nhận metadata HTML report
+      skip_metadata: true,      # Chỉ push IPA, ko push metadata văn bản
+      skip_screenshots: true    # Bỏ qua bước update screenshots
+    )
+  end
+end

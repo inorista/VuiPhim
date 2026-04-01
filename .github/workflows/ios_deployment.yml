@@ -1,0 +1,82 @@
+name: Deploy iOS to TestFlight / App Store
+
+on:
+  push:
+    branches:
+      - 'release/vuiphim_v*' # Gắn hook: sẽ trigger khi push lên nhánh format là release/vuiphim_vXYZ
+
+jobs:
+  deploy_ios:
+    name: Build & Deploy iOS
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.4' # Điều chỉnh cho khớp với pubspec SDK requirement.
+          channel: 'stable'
+          cache: true
+
+      - name: Generate .env File
+        # Cần biến mội trường .env để build_runner build ra file env.g.dart của envied 
+        run: echo "API-KEY=${{ secrets.ENV_API_KEY }}" > .env
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Setup Ruby and Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Install Apple Certificate & Provisioning Profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }} # Nội dung P12 (Base64 Encode)
+          P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }} # Mật khẩu của file P12
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_BUILD_PROVISION_PROFILE_BASE64 }} # Nội dung Mobileprovision (Base64 Encode)
+          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }} # Ví dụ: string text ngẫu nhiên để GHA tạo temporary keychain
+        run: |
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # Import certificate and provisioning profile from base64 env vars
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # Create a temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Import the certificate into the temporary keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Install the provisioning profile 
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Execute Fastlane Deployment
+        id: fastlane-deploy
+        working-directory: ios
+        env:
+          # Thêm App Store Connect API Key config tại Github Secrets
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}
+        run: |
+          bundle install
+          bundle exec fastlane release
