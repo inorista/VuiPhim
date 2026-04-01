@@ -34,12 +34,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Setup Ruby and Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
-          working-directory: ios
+
 
       - name: Install Apple Certificate & Provisioning Profile
         env:
@@ -78,7 +73,5 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}
         run: |
-          rm -f /usr/local/bin/pod || true
-          gem install cocoapods
           bundle install
           bundle exec fastlane release
