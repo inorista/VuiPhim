@@ -40,6 +40,10 @@
 - **Movie Details:** Thông tin chi tiết, diễn viên, và gợi ý phim liên quan.
 - **Instagram Sharing:** Tính năng chia sẻ phim độc đáo lên **Instagram Story** dưới dạng Sticker với hiệu ứng background blur chuyên nghiệp (sử dụng Native Channel).
 
+### 🔔 Thông báo & Đồng bộ (Notifications & Sync)
+- **Push Notifications:** Nhận thông báo tức thì (Foreground & Background) bằng `firebase_messaging` và `flutter_local_notifications`.
+- **Background Sync:** Tự động đồng bộ ngầm thể loại và cập nhật phim để dữ liệu luôn tươi mới.
+
 ## 🛠 Công nghệ sử dụng
 
 ### Core Framework & Architecture
@@ -56,7 +60,7 @@
 ### Data & Networking
 - **Local Database:** `hive`, `hive_ce` (lưu trữ cache, settings, user data).
 - **Networking:** `dio`, `retrofit` (gọi API TMDB & KKPhim).
-- **Firebase:** `firebase_core`, `cloud_firestore` (config, backend services).
+- **Firebase:** `firebase_core`, `cloud_firestore`, `firebase_messaging` (config, backend, push notifications).
 - **Images:** `cached_network_image` (tối ưu hóa hiển thị ảnh).
 
 ### Media & Assets
