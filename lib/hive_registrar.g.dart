@@ -2,7 +2,7 @@
 // Do not modify
 // Check in to version control
 
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:vuiphim/core/utils/enum.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/cast_entity/cast_entity.dart';
 import 'package:vuiphim/data/hive_database/hive_entities/category_entity/category_entity.dart';
