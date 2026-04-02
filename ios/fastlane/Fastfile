@@ -3,7 +3,7 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new release build to the TestFlight / App Store"
   lane :release do
-    setup_ci
+    #setup_ci
 
     # 1. Xác thực tới App Store Connect dựa trên API Key truyền qua Environment
     # Yêu cầu cài đặt các biến này ở Github Actions Secrets
