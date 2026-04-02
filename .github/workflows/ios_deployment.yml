@@ -65,13 +65,12 @@ jobs:
           UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i $PP_PATH))
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
 
-          # Đổi PROVISIONING_PROFILE_SPECIFIER trỏ tới UUID này
-          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = \"\";/PROVISIONING_PROFILE_SPECIFIER = \"$UUID\";/g" ios/Runner.xcodeproj/project.pbxproj
-          # Và Update ExportOptions.plist với UUID này
-          sed -i '' "s/match AppStore com.dev.vuiphim/$UUID/g" ios/ExportOptions.plist
+          # Update ExportOptions.plist with the extracted UUID
+          sed -i '' "s/PROVISIONING_PROFILE_ID/$UUID/g" ios/ExportOptions.plist
 
           # Chuyển đổi CODE_SIGN_STYLE sang Manual và chỉ định Certificate là Distribution
           sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = \"\";/PROVISIONING_PROFILE_SPECIFIER = \"$UUID\";/g" ios/Runner.xcodeproj/project.pbxproj
           sed -i '' 's/CODE_SIGN_IDENTITY = "Apple Development";/CODE_SIGN_IDENTITY = "Apple Distribution";/g' ios/Runner.xcodeproj/project.pbxproj
           sed -i '' 's/"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = "iPhone Developer";/"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";/g' ios/Runner.xcodeproj/project.pbxproj
 

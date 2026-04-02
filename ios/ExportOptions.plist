@@ -7,7 +7,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.dev.vuiphim</key>
-		<string>match AppStore com.dev.vuiphim</string>
+		<string>PROVISIONING_PROFILE_ID</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
