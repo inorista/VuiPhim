@@ -17,6 +17,8 @@
 	<key>CFBundleName</key>
 	<string>vuiphim</string>
 	<key>CFBundlePackageType</key>
+	<key>NSCameraUsageDescription</key>
+    <string>Ứng dụng cần quyền truy cập máy ảnh để chụp ảnh đại diện hoặc quét mã QR.</string>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
