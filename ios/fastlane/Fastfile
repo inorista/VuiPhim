@@ -38,7 +38,8 @@ platform :ios do
       submit_for_review: false, # Rất quan trọng: Không mở Review tự động (Nằm chờ ở Testflight)
       force: true,              # Bỏ qua cửa sổ xác nhận metadata HTML report
       skip_metadata: true,      # Chỉ push IPA, ko push metadata văn bản
-      skip_screenshots: true    # Bỏ qua bước update screenshots
+      skip_screenshots: true,   # Bỏ qua bước update screenshots
+      run_precheck_before_submit: false  
     )
   end
 end
