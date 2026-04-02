@@ -60,9 +60,15 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
-          # Install the provisioning profile 
+          # Extract UUID from Provisioning Profile and Install it
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i $PP_PATH))
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
+
+          # Đổi PROVISIONING_PROFILE_SPECIFIER trỏ tới UUID này
+          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = \"\";/PROVISIONING_PROFILE_SPECIFIER = \"$UUID\";/g" ios/Runner.xcodeproj/project.pbxproj
+          # Và Update ExportOptions.plist với UUID này
+          sed -i '' "s/match AppStore com.dev.vuiphim/$UUID/g" ios/ExportOptions.plist
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
