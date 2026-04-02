@@ -71,9 +71,9 @@ jobs:
           bundler-cache: true
           working-directory: ios
 
-      - name: Update Xcode Project to Manual Code Signing
-        run: |
-          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' ios/Runner.xcodeproj/project.pbxproj
+      # - name: Update Xcode Project to Manual Code Signing
+      #   run: |
+      #     sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' ios/Runner.xcodeproj/project.pbxproj
 
       - name: Execute Fastlane Deployment
         id: fastlane-deploy
