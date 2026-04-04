@@ -10,6 +10,11 @@ import 'package:vuiphim/data/hive_database/hive_database.dart';
 import 'package:vuiphim/core/services/interfaces/ilocal_notification_service.dart';
 import 'package:vuiphim/core/services/interfaces/ipush_notification_service.dart';
 import 'package:vuiphim/presentation/blocs/download_manager/download_manager_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/popular_movie/popular_movie_cubit.dart'
+    show PopularMovieCubit;
+import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/top_rated_movie/top_rated_movie_cubit.dart';
+import 'package:vuiphim/presentation/blocs/home/upcoming_movie/upcoming_movie_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +43,15 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider<DownloadManagerCubit>(
           create: (context) => DownloadManagerCubit(),
+        ),
+        BlocProvider<PopularMovieCubit>(
+          create: (context) => PopularMovieCubit()..fetchPopularMovies(),
+        ),
+        BlocProvider<TopRatedMovieCubit>(
+          create: (context) => TopRatedMovieCubit()..fetchTopRatedMovies(),
+        ),
+        BlocProvider<UpcomingMovieCubit>(
+          create: (context) => UpcomingMovieCubit()..fetchUpcomingMovies(),
         ),
       ],
       child: MaterialApp.router(

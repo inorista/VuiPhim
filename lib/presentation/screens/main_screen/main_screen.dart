@@ -34,23 +34,7 @@ class MainScreen extends StatelessWidget {
                 autoDisposeIndexes: const [2],
                 index: state.boardIndex,
                 children: [
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider<PopularMovieCubit>(
-                        create: (context) =>
-                            PopularMovieCubit()..fetchPopularMovies(),
-                      ),
-                      BlocProvider<TopRatedMovieCubit>(
-                        create: (context) =>
-                            TopRatedMovieCubit()..fetchTopRatedMovies(),
-                      ),
-                      BlocProvider<UpcomingMovieCubit>(
-                        create: (context) =>
-                            UpcomingMovieCubit()..fetchUpcomingMovies(),
-                      ),
-                    ],
-                    child: const HomeScreen(),
-                  ),
+                  const HomeScreen(),
                   BlocProvider<ExploreCubit>(
                     create: (context) => ExploreCubit()..loadNowPlayingMovies(),
                     child: const ExploreScreen(),

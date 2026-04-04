@@ -138,6 +138,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           child: CachedNetworkImage(
                                             fit: BoxFit.cover,
                                             height: 270,
+                                            memCacheHeight: 700,
                                             fadeOutDuration: const Duration(
                                               microseconds: 1,
                                             ),

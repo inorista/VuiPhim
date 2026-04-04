@@ -56,6 +56,7 @@ class PopularMovieWidget extends StatelessWidget {
                                 height: height * 0.9,
                                 width: width * 0.9,
                               ),
+                              memCacheHeight: 750,
                               errorWidget: (context, url, error) => Shimmer(
                                 height: height * 0.9,
                                 width: width * 0.9,

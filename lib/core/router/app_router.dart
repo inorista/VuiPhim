@@ -9,14 +9,21 @@ import 'package:vuiphim/presentation/screens/main_screen/main_screen.dart';
 import 'package:vuiphim/presentation/screens/movie_detail_screen/movie_detail_screen.dart';
 import 'package:vuiphim/presentation/screens/search_screen/search_screen.dart';
 import 'package:vuiphim/presentation/screens/select_movie_episode_screen/select_movie_episode_screen.dart';
+import 'package:vuiphim/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:vuiphim/presentation/screens/sticker_screen/sticker_screen.dart';
 import 'package:vuiphim/presentation/screens/video_player_screen/video_player_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: AppRouter.main,
+  initialLocation: AppRouter.splash,
   routes: [
+    GoRoute(
+      path: AppRouter.splash,
+      builder: (context, state) {
+        return const SplashScreen();
+      },
+    ),
     GoRoute(
       path: AppRouter.main,
       builder: (context, state) {
@@ -84,6 +91,7 @@ final GoRouter router = GoRouter(
 GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
 
 class AppRouter {
+  static String splash = '/splash';
   static String main = '/main';
   static String movieDetail = '/movie_detail/:id';
   static String selectMovieEpisode = '/select_movie_episode';
