@@ -49,3 +49,6 @@ app.*.map.json
 
 # Environment
 .env
+
+# SKILLS
+.github/skills
