@@ -22,6 +22,8 @@
     <string>Ứng dụng cần quyền truy cập máy ảnh để chụp ảnh đại diện hoặc quét mã QR.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
