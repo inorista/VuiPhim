@@ -67,6 +67,8 @@ class UpComingMovieWidget extends StatelessWidget {
                             fadeOutDuration: const Duration(milliseconds: 10),
                             width: 170,
                             height: 250,
+                            memCacheHeight: 750,
+                            memCacheWidth: 500,
                             placeholder: (context, url) => const Shimmer(
                               width: 170,
                               height: 250,
